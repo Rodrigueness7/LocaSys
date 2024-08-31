@@ -49,9 +49,17 @@ module.exports = {
           key: 'idSupplier'
         }
       },
+      entryDate: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      deletionDate: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+
       },
       updatedAt: {
         allowNull: false,
