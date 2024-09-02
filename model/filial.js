@@ -39,7 +39,7 @@ class Filial {
                 throw new Error('Filial already exist')
             }
             await tbFilial.create(data)
-            res.send('Successfully filial')
+            res.send('Add successfully')
         } catch (error) {
             res.send(error.message)
         }
