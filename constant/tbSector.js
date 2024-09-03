@@ -20,14 +20,6 @@ const tbSector = db.define('Sectors', {
           key: 'idFilial'
         }
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
 })
 
 module.exports = tbSector;
