@@ -45,11 +45,17 @@ class Filial {
         }
     }
 
-    static async findFilial(res) {
+    static async findAllFilial(res) {
        const result =  (await tbFilial.findAll()).map(
-            filial => res.send(filial.dataValues)
+            filial => filial.dataValues
         )
-        return result;
+        res.send(result);
+    }
+
+    static async findFilial(req, res) {
+        await tbFilial.findByPk(req).then(
+            idFilial => res.send(idFilial.dataValues)
+        )  
     }
 
     async updateFilial(req, data) {
@@ -63,8 +69,8 @@ class Filial {
     }
 
    static async deleteFilial(req) {
-        const idFilial =  tbFilial.findByPk(req).then(
-            removerFilial => {
+        const idFilial = await tbFilial.findByPk(req).then(
+             removerFilial => {
                return removerFilial.destroy()
             }
         )

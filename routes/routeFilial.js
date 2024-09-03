@@ -4,6 +4,7 @@ const controller = require('../controller/controllerFilial')
 
 
 routeFilial.get('/findFilial', controller.findAllFilial)
+routeFilial.get('/findFilial/:id', controller.findFilial)
 routeFilial.post('/addFilial', controller.addFilial)
 routeFilial.put('/updateFilial/:id', controller.updateFilial)
 routeFilial.delete('/deleteFilial/:id', controller.removerFilial)

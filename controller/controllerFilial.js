@@ -8,11 +8,19 @@ const addFilial = async (req, res) => {
 
 const findAllFilial = async (req, res) => {
    try {
-     await Filial.findFilial(res)
+     await Filial.findAllFilial(res)
    } catch (error) {
       res.send(error.message)
    }
 } 
+
+const findFilial = async (req, res) => {
+   try {
+      Filial.findFilial(req.params.id, res)
+   } catch (error) {
+      res.send(error.message)
+   }
+}
 
 const updateFilial = async (req, res) => {
    try {
@@ -33,4 +41,4 @@ const removerFilial = async (req, res) => {
    }
 }
 
-module.exports = {addFilial, findAllFilial, updateFilial, removerFilial}
+module.exports = {addFilial, findAllFilial, updateFilial, removerFilial, findFilial}

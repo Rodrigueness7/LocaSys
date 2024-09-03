@@ -59,11 +59,37 @@ class Sector {
 
     static async findAllSector(res) {
         const result =  (await tbSector.findAll()).map(
-            sector => res.send(sector.dataValues)
+            sector => sector.dataValues
         )
-        return result
-    }
+        res.send(result)
+     }
 
+     static async findSector(req, res) {
+         await tbSector.findByPk(req).then(
+        idSector => res.send(idSector.dataValues)
+        )
+     }
+
+     async updateSector(req, data) {
+        const sectorById = await tbSector.findByPk(req)
+
+        sectorById.idSector = data.idSector
+        sectorById.sector = data.sector,
+        sectorById.idFilial = data.idFilial
+
+        await sectorById.save()
+
+     }
+
+     static async deleteSector(req) {
+        const sectorById = await tbSector.findByPk(req).then(
+            data => {
+                return data.destroy()
+            }
+        )
+        return sectorById
+     }
 }
 
 module.exports = Sector;
+
