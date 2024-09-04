@@ -16,18 +16,18 @@ class Sector {
     }
 
     set _idSector(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idSector = 0
         }
         return this.idSector = value
     }
 
     get _sector() {
-        return this.sector 
+        return this.sector
     }
 
     set _sector(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid sector')
         }
         return this.sector = value
@@ -38,57 +38,57 @@ class Sector {
     }
 
     set _idFilial(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idFilial')
         }
         return this.idFilial = value
     }
 
     async insertSector(data, res) {
-        const existSector = await tbSector.findOne({where: {sector: data.sector}})
+        const existSector = await tbSector.findOne({ where: { sector: data.sector } })
         try {
-            if(existSector) {
+            if (existSector) {
                 throw new Error('Sector already exist')
             }
             await tbSector.create(data)
             res.send('Add successfully')
         } catch (error) {
             res.send(error.message)
-        }  
+        }
     }
 
     static async findAllSector(res) {
-        const result =  (await tbSector.findAll()).map(
+        const result = (await tbSector.findAll()).map(
             sector => sector.dataValues
         )
         res.send(result)
-     }
+    }
 
-     static async findSector(req, res) {
-         await tbSector.findByPk(req).then(
-        idSector => res.send(idSector.dataValues)
+    static async findSector(req, res) {
+        await tbSector.findByPk(req).then(
+            idSector => res.send(idSector.dataValues)
         )
-     }
+    }
 
-     async updateSector(req, data) {
+    async updateSector(req, data) {
         const sectorById = await tbSector.findByPk(req)
 
         sectorById.idSector = data.idSector
-        sectorById.sector = data.sector,
+        sectorById.sector = data.sector
         sectorById.idFilial = data.idFilial
 
         await sectorById.save()
 
-     }
+    }
 
-     static async deleteSector(req) {
+    static async deleteSector(req) {
         const sectorById = await tbSector.findByPk(req).then(
             data => {
                 return data.destroy()
             }
         )
         return sectorById
-     }
+    }
 }
 
 module.exports = Sector;
