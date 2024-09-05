@@ -65,6 +65,7 @@ class User {
         if(value == undefined) {
             throw new Error('Invalid cpf')
         }
+        return this._cpf = value
     }
 
     get _username() {
