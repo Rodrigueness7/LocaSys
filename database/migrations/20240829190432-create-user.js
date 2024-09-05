@@ -9,7 +9,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user: {
+      firstName: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+      },
+      cpf: {
+        type:Sequelize.INTEGER,
+        allowNull:true
+      },
+      username: {
         type: Sequelize.STRING(80),
         allowNull: false
       },

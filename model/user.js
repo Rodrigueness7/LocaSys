@@ -1,8 +1,12 @@
+const { Op } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 
 class User {
     idUser
-    user
+    fisrtName
+    lastName
+    cpf
+    username
     password
     email
     idSector
@@ -10,7 +14,10 @@ class User {
 
     constructor(data) {
         this._idUser = data.idUser
-        this._user = data.user
+        this._fisrtName = data.fisrtName
+        this._lastName = data.lastName
+        this._cpf = data.cpf
+        this._username = data.username
         this._password = data.password
         this._email = data.email
         this._idSector = data.idSector
@@ -28,15 +35,47 @@ class User {
         return this.idUser = value
     }
 
-    get _user() {
-        return this.user
+    get _firstName() {
+        return this.fisrtName
     }
 
-    set _user(value) {
+    set _firstName(value) {
+        if(value == undefined) {
+            throw new Error('Invalid firstName')
+        }
+        return this.fisrtName = value
+    }
+
+    get _lastName() {
+        return this.lastName
+    }
+
+    set _lastName(value) {
+        if(value == undefined) {
+            throw new Error('Invalid lastname')
+        }
+        return this.lastName = value
+    }
+
+    get _cpf() {
+        return this.cpf
+    }
+
+    set _cpf(value) {
+        if(value == undefined) {
+            throw new Error('Invalid cpf')
+        }
+    }
+
+    get _username() {
+        return this.username
+    }
+
+    set _username(value) {
         if(value == undefined) {
             throw new Error('Invalid user')
         }
-        return this.user = value
+        return this.username = value
     }
 
     get _password() {
@@ -44,8 +83,18 @@ class User {
     }
 
     set _password(value) {
-        if(value == undefined) {
-            throw new Error('Invalid password')
+        
+        if (value.length < 8) {
+            throw new Error('our password must be at least 8 characters')
+        }
+        if (value.search(/[a-z]/i) < 0) {
+            throw new Error("Your password must contain at least one letter."); 
+        }
+        if (value.search(/[0-9]/) < 0) {
+            throw new Error("Your password must contain at least one digit.");
+        }
+        if(value.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
+            throw new Error('Your password must contain at least one Special symbol')
         }
         return this.password = value
     }
@@ -55,8 +104,8 @@ class User {
     }
 
     set _email(value) {
-        if(value == undefined) {
-            throw new Error('Invalid email')
+        if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+            throw new Error('Email is not valid')
         }
         return this.email = value
     }
@@ -81,6 +130,18 @@ class User {
             throw new Error('Invalid idProfile')
         }
         return this.idProfile = value
+    }
+
+   async insertUser(data, username, email, res) {
+       const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
+            if(existUser) {
+                throw new Error('User already exist')
+            }
+            await tbUser.create(data)
+            res.json({message: 'Add successfully'})
+      
+       
+       
     }
 }
 
