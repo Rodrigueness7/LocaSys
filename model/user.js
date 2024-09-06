@@ -1,9 +1,10 @@
-const { Op } = require('sequelize')
+const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
+const tbSector = require('../constant/tbSector')
 
 class User {
     idUser
-    fisrtName
+    firstName
     lastName
     cpf
     username
@@ -14,7 +15,7 @@ class User {
 
     constructor(data) {
         this._idUser = data.idUser
-        this._fisrtName = data.fisrtName
+        this._firstName = data.firstName
         this._lastName = data.lastName
         this._cpf = data.cpf
         this._username = data.username
@@ -36,14 +37,14 @@ class User {
     }
 
     get _firstName() {
-        return this.fisrtName
+        return this.firstName
     }
 
     set _firstName(value) {
         if(value == undefined) {
             throw new Error('Invalid firstName')
         }
-        return this.fisrtName = value
+        return this.firstName = value
     }
 
     get _lastName() {
@@ -65,7 +66,7 @@ class User {
         if(value == undefined) {
             throw new Error('Invalid cpf')
         }
-        return this._cpf = value
+        return this.cpf = value
     }
 
     get _username() {
@@ -139,11 +140,26 @@ class User {
                 throw new Error('User already exist')
             }
             await tbUser.create(data)
-            res.json({message: 'Add successfully'})
-      
-       
-       
+            res.json({message: 'Add successfully'})   
     }
+
+    static async findAllUser(res) {
+        const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 'email'],
+            include: {model: tbSector, attributes: ['sector']}})).map(
+            allUser => allUser.dataValues
+        )
+        res.json(result)
+    }
+
+    static async findUser(username, password, res) {
+        const existUser = await tbUser.findOne({where: {username: username, password: password}})
+        if(!existUser) {
+            throw new Error('Username or password invalid')
+        }
+        res.json({message: 'Logged in user'})
+        
+    }
+
 }
 
 module.exports = User

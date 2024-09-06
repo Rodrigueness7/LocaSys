@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false
       },
       cpf: {
-        type:Sequelize.INTEGER,
+        type:Sequelize.STRING(11),
         allowNull:true
       },
       username: {

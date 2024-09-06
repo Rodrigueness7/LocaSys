@@ -1,5 +1,6 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
+const tbFilial = require('./tbFilial')
 
 const tbSector = db.define('Sectors', {
     idSector: {
@@ -21,5 +22,7 @@ const tbSector = db.define('Sectors', {
         }
       },
 })
+
+tbSector.belongsTo(tbFilial, {foreignKey: 'idFilial'})
 
 module.exports = tbSector;
