@@ -45,6 +45,108 @@ class Supplier {
         }
         return this.supplier = value
     }
+
+    get _email() {
+        return this.email
+    }
+
+    set _email(value) {
+        if(value == undefined) {
+            throw new Error('Invalid email')
+        }
+        return this.email = value
+    }
+
+    get _contact() {
+        return this.contact  
+    }
+
+    set _contact(value) {
+        if(value == undefined) {
+            throw new Error('Invalid contact')
+        }
+        return this.contact = value
+    }
+
+    get _CNPJ() {
+        return this.CNPJ
+    }
+
+    set _CNPJ(value) {
+        if(value == undefined) {
+            throw new Error('Invalid CNPJ')
+        }
+        return this.CNPJ = value
+    }
+
+    get _address() {
+        return this.address
+    }
+
+    set _address(value) {
+        if(value == undefined) {
+            throw new Error('Invalid address')
+        }
+        return this.address = value
+    }
+
+    get _zipCode() {
+        return this.zipCode
+    }
+
+    set _zipCode(value) {
+        if(value == undefined) {
+            throw new Error('Invalid zipCode')
+        }
+        return this.zipCode = value
+    }
+
+    get _state() {
+        return this.state
+    }
+
+    set _state(value) {
+        if(value == undefined) {
+            throw new Error('Invalid state')
+        }
+        return this.state = value
+    }
+
+    get _city() {
+        return this.city
+    }
+
+    set _city(value) {
+        if(value == undefined) {
+            throw new Error('Invalid city')
+        }
+        return this.city = value    
+    }
+
+    async insertSupplier(data, res) {
+        const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier} })
+
+        if(existSupplier) {
+            throw new Error('Exist already supplier')
+        }
+        await tbSupplier.create(data)
+        res.json({message: 'Add successufully'})
+    }
+
+    static async findAllSupplier(res) {
+        const result = (await tbSupplier.findAll()).map(
+            allSupplier => allSupplier.dataValues 
+        )
+        res.json(result)
+    }
+
+    static async findSupplier(req, res) {
+        await tbSupplier.findByPk(req).then(
+            supplier => {
+                res.json(supplier.dataValues)
+            }
+        )
+    }
 }
 
 module.exports = Supplier;
