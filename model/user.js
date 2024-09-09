@@ -156,9 +156,32 @@ class User {
         if(!existUser) {
             throw new Error('Username or password invalid')
         }
-        res.json({message: 'Logged in user'})
-        
+        res.json({message: 'Logged in user'})  
     }
+
+    async updateUser(data, req, res) {
+        const userId = await tbUser.findByPk(req)
+
+        userId.firstName = data.firstName
+        userId.lastName = data.lastName
+        userId.cpf = data.cpf
+        userId.username = data.username
+        userId.password = data.password
+        userId.email = data.email
+        userId.idSector = data.idSector
+        userId.idProfile = data.idProfile
+
+        await userId.save()
+        res.json({message:'Update with successfully'})
+    }
+
+    static async removerUser(req, res) {
+        await tbUser.findByPk(req).then(
+            deleteUser => deleteUser.destroy()
+        )
+        res.json('Deleted user')
+    }
+
 
 }
 

@@ -25,4 +25,21 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = {addUser, findAllUser, login}
+const updateUser = async (req, res) => {
+    try {
+        const user = new User(req.body)
+        await user.updateUser(user, req.params.id, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        User.removerUser(req.params.id, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+module.exports = {addUser, findAllUser, login, updateUser, deleteUser}
