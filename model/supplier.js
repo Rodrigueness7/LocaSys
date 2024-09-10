@@ -147,6 +147,30 @@ class Supplier {
             }
         )
     }
+
+    async updateSupplier(data, req, res) {
+        const supplierId = await tbSupplier.findByPk(req)
+
+        supplierId.supplier = data.supplier
+        supplierId.email = data.email
+        supplierId.contact = data.contact
+        supplierId.CNPJ = data.CNPJ
+        supplierId.address = data.address
+        supplierId.zipCode = data.zipCode
+        supplierId.state = data.state
+        supplierId.city = data.city
+
+        await supplierId.save()
+        res.json({message: 'Update supplier'})
+
+    }
+
+    static async removeSupplier(req, res) {
+        await tbSupplier.findByPk(req).then(
+            supplier => supplier.destroy()
+        )
+        res.json({message: 'Delelte Supplier'})
+    }
 }
 
 module.exports = Supplier;

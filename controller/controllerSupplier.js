@@ -25,4 +25,21 @@ const findSupplier = async (req, res) => {
     }
 }
 
-module.exports = {addSupplier, findAll, findSupplier}
+const updateSupplier = async (req, res) => {
+    try {
+        const supplier = new Supplier(req.body)
+        supplier.updateSupplier(supplier, req.params.id, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+const deleteSupplier = async (req, res) => {
+    try {
+       await Supplier.removeSupplier(req.params.id, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+module.exports = {addSupplier, findAll, findSupplier, updateSupplier, deleteSupplier}
