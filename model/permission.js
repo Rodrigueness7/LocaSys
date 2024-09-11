@@ -24,17 +24,51 @@ class Permission {
         return this.permission
     }
 
-    set _perimission(value) {
+    set _permission(value) {
         if(value == undefined) {
             throw new Error('Invalid permission')
         }
         return this.permission = value
     }
 
-    async insertPermission(data) {
-        const existPermission = await tbPermission.findAll({where: {permission: data.permission}})
+    async insertPermission(data, res) {
+        const existPermission = await tbPermission.findOne({where: {permission: data.permission}})
 
-        console.log(existPermission)
+        if(existPermission) {
+            throw new Error('exist already permission')
+        }
+        await tbPermission.create(data)
+        res.json({message: 'Add successufully'})
+    }
+
+    static async findAllPermission(res) {
+        const result = (await tbPermission.findAll()).map(
+            permissions => permissions.dataValues
+        )
+        res.json(result)
+    }
+
+    static async findPermission(res, req) {
+        await tbPermission.findByPk(req).then(
+            permission => res.json(permission.dataValues)
+        )
+    }
+
+    async UpdatePermission(data, req, res) {
+        const permissionId = await tbPermission.findByPk(req)
+
+        permissionId.permission = data.permission
+
+        await permissionId.save()
+        res.json({message: 'updated successfully'})
+        
+    } 
+
+    static async removerPermission(req, res) {
+        await tbPermission.findByPk(req).then(
+            permission => permission.destroy()
+        )
+        res.json({message: 'Delete successfully'})
     }
 
 }

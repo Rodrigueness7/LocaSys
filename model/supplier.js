@@ -51,8 +51,8 @@ class Supplier {
     }
 
     set _email(value) {
-        if(value == undefined) {
-            throw new Error('Invalid email')
+        if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+            throw new Error('Email is not valid')
         }
         return this.email = value
     }
