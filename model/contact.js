@@ -57,10 +57,16 @@ class Contact {
     }
 
     set _email(value) {
-        if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+        if(value == undefined) {
+            return this.email = null
+
+        } else if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
             throw new Error('Email is not valid')
-        }
-        return this.email = value
+
+        } else{
+            return this.email = value
+        } 
+        
     }
 
     get _telephone() {
@@ -69,7 +75,7 @@ class Contact {
 
     set _telephone(value) {
         if(value == undefined) {
-            throw new Error('Invalid telephone')
+           return this.telephone = null
         }
         return this.telephone = value
     }
@@ -80,7 +86,7 @@ class Contact {
 
     set _cellPhone(value) {
         if(value == undefined) {
-            throw new Error('Invalid cellPhone')
+            return this.cellPhone = null
         }
         return this.cellPhone = value
     }
@@ -91,7 +97,7 @@ class Contact {
 
     set _address(value) {
         if(value == undefined) {
-            throw new Error('Invalid address')
+            return this.address = null
         }
         return this.address = value
     }
@@ -102,7 +108,7 @@ class Contact {
 
     set _number(value) {
         if(value == undefined) {
-            throw new Error('Invalid number')
+            return this.number = null
         }
         return this.number = value
     }
@@ -113,9 +119,9 @@ class Contact {
 
     set _zipCode(value) {
         if(value == undefined) {
-            throw new Error('Invalid number')
+            return this.zipCode = null
         }
-        return this.number = value
+        return this.zipCode = value
     }
 
     get _state() {
@@ -124,7 +130,7 @@ class Contact {
 
     set _state(value) {
         if(value == undefined) {
-            throw new Error('Invalid state')
+            return this.state = null
         }
         return this.state = value
     }
@@ -135,7 +141,7 @@ class Contact {
 
     set _county(value) {
         if(value == undefined) {
-            throw new Error('Invalid county')
+            return this.county = null
         }
         return this.county = value
     }
@@ -146,7 +152,7 @@ class Contact {
 
     set _district(value) {
         if(value == undefined) {
-            throw new Error('Invalid district')
+            return this.district = null
         }
         return this.district = value
     }
@@ -161,6 +167,57 @@ class Contact {
         }
         return this.idSupplier = value
     }
+
+    async insertContact(data, res) {
+        const existContact = await tbContact.findOne({where: {contact: data.contact}})
+        if(existContact) {
+            throw new Error('exist already contact')
+        }
+        await tbContact.create(data)
+        res.json({message: 'Add successfully'})
+    }
+
+    static async findAllContact(res) {
+        const allContact = (await tbContact.findAll()).map(
+            result => result.dataValues
+        )
+        res.json(allContact)
+    }
+
+    static async findContact(req, res) {
+        await tbContact.findByPk(req).then(
+            contact => res.json(contact.dataValues)
+        )
+    }
+
+    async updateContact(data, req, res) {
+        const contactId = await tbContact.findByPk(req)
+
+        contactId.contact = data.Contact
+        contactId.email = data.email
+        contactId.telephone = data.telephone
+        contactId.cellPhone = data.cellPhone
+        contactId.address = data.address
+        contactId.number = data.number
+        contactId.zipCode = data.zipCode
+        contactId.state = data.state
+        contactId.county = data.county
+        contactId.district = data.district
+        contactId.idSupplier = data.idSupplier
+
+        await contactId.save()
+        res.json({message: 'Updated successfully'})
+    }
+    
+    static async removerContact(req, res) {
+        await tbContact.findByPk(req).then(
+            result => result.destroy()
+        )
+        res.json({message: 'Delete successfully'})
+    } 
+
+    
 }
+
 
 module.exports = Contact
