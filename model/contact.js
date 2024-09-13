@@ -193,7 +193,7 @@ class Contact {
     async updateContact(data, req, res) {
         const contactId = await tbContact.findByPk(req)
 
-        contactId.contact = data.Contact
+        contactId.contact = data.contact
         contactId.email = data.email
         contactId.telephone = data.telephone
         contactId.cellPhone = data.cellPhone
