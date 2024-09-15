@@ -19,7 +19,7 @@ const findAllLog = async (req, res) => {
 
 const findLog = async (req, res) => {
     try {
-        await Log.findLogs(req.body.dateInit, req.body.dateFinish, res)
+        await Log.findLogsByDate(req.body.dateInit, req.body.dateFinish, res)
     } catch (error) {
         res.json({message: error.message})
     }

@@ -11,7 +11,7 @@ class Log {
     constructor(data) {
         this._idLog = data.idLog
         this._action = data.action
-        this._actionDate = data.actionDate
+        this._actionDate = new Date()
         this._idUser = data.idUser
     }
 
@@ -45,7 +45,10 @@ class Log {
         if(value == undefined ) {
             throw new Error('Invalid actionDate')
         }
-        return this.actionDate = value
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString()
+
+        return this.actionDate = localISOTime
     }
 
     get _idUser() {
@@ -72,10 +75,13 @@ class Log {
             res.json(result)
     }
 
-    static async findLogs(dateInit, dateFinish, res) {
+    static async findLogsByDate(dateInit, dateFinish, res) {
+        const dtInit = new Date(dateInit.split('/').reverse().join('-'))
+        const dtFinish = new Date(dateFinish.split('/').reverse().join('-'))
+
         const result = (await tbLog.findAll({attributes: ['action', 'actionDate'],
             include:{model:tbUser, attributes:['username']}, where:{actionDate: {
-                [Op.gte]: dateInit, [Op.lte]: dateFinish}}})).map(
+                [Op.gte]: dtInit, [Op.lte]: dtFinish}}})).map(
              value => value.dataValues
         )
         res.json(result)
