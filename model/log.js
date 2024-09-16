@@ -1,6 +1,7 @@
-const { Op, Model } = require('sequelize')
+const { Op } = require('sequelize')
 const tbLog = require('../constant/tbLog')
 const tbUser = require('../constant/tbUser')
+
 
 class Log {
     idLog
@@ -45,6 +46,7 @@ class Log {
         if(value == undefined ) {
             throw new Error('Invalid actionDate')
         }
+        //CONVERTE TIMEZONE PARA BRASIL
         var tzoffset = (new Date()).getTimezoneOffset() * 60000;
         var localISOTime = (new Date(Date.now() - tzoffset)).toISOString()
 
@@ -77,12 +79,22 @@ class Log {
 
     static async findLogsByDate(dateInit, dateFinish, res) {
         const dtInit = new Date(dateInit.split('/').reverse().join('-'))
-        const dtFinish = new Date(dateFinish.split('/').reverse().join('-'))
+        const dtFinish = new Date(dateFinish.split('/').reverse().join('-')).toISOString().split('T')[0] + 'T23:59:00.000Z'
 
         const result = (await tbLog.findAll({attributes: ['action', 'actionDate'],
             include:{model:tbUser, attributes:['username']}, where:{actionDate: {
-                [Op.gte]: dtInit, [Op.lte]: dtFinish}}})).map(
+               [Op.gte]: dtInit, [Op.lte]: dtFinish}}})).map(
              value => value.dataValues
+        )
+       
+        res.json(result)
+    }
+
+    static async findLogsByAction(data, res) {
+        const result = (await tbLog.findAll({attributes: ['action', 'actionDare'],
+            include: {model:tbUser, attributes: ['username']}, where: {action: data.action}
+        })).map(
+            value => value.dataValues
         )
         res.json(result)
     }

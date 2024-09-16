@@ -17,7 +17,7 @@ const findAllLog = async (req, res) => {
     }
 }
 
-const findLog = async (req, res) => {
+const findLogDate = async (req, res) => {
     try {
         await Log.findLogsByDate(req.body.dateInit, req.body.dateFinish, res)
     } catch (error) {
@@ -25,5 +25,12 @@ const findLog = async (req, res) => {
     }
 }
 
+const findLogAction = async (req, res) => {
+    try {
+        await Log.findLogsByAction(req.body.action, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
 
-module.exports = {addLog, findAllLog, findLog}
+module.exports = {addLog, findAllLog, findLogDate, findLogAction}
