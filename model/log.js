@@ -91,11 +91,12 @@ class Log {
     }
 
     static async findLogsByAction(data, res) {
-        const result = (await tbLog.findAll({attributes: ['action', 'actionDare'],
-            include: {model:tbUser, attributes: ['username']}, where: {action: data.action}
+        const result = (await tbLog.findAll({attributes: ['action', 'actionDate'],
+            include: {model:tbUser, attributes: ['username']}, where: {action: data}
         })).map(
             value => value.dataValues
         )
+       
         res.json(result)
     }
     
