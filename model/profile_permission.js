@@ -1,3 +1,5 @@
+const tbPermission = require('../constant/tbPermission')
+const tbProfile = require('../constant/tbProfile')
 const tbProfile_permission = require('../constant/tbProfile_permission')
 
 class Profile_permission {
@@ -64,9 +66,9 @@ class Profile_permission {
     }
 
     static async selectAllProfile_permission(res) {
-        const result = (await tbProfile_permission.findAll()).map(
-            allProfile_permission => allProfile_permission.dataValues
-        )
+        const result = (await tbProfile_permission.findAll({attributes: ['allwo'],
+            include: [{model: tbProfile, attributes: ['profile']},{model: tbPermission, attributes: ['permission']}]})).
+            map(data => data.dataValues)
         res.json(result)
     }
 }

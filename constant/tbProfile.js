@@ -1,5 +1,6 @@
 const db = require('../database/db')
-const {Sequelize} = require('sequelize')
+const {Sequelize} = require('sequelize');
+
 
 const tbProfile = db.define('Profiles', {
     idProfile: {
