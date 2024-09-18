@@ -71,6 +71,18 @@ class Profile_permission {
             map(data => data.dataValues)
         res.json(result)
     }
+
+    async updateProfile_permission(req, data, res) {
+        const valueId = await tbProfile_permission.findByPk(req)
+
+        valueId.idProfile_permission = data.idPermission
+        valueId.idProfile = data.idProfile
+        valueId.idPermission = data.idPermission
+        valueId.allwo = data.allwo
+
+        await valueId.save()
+        res.json({message: 'Updated successfully'})
+    }
 }
 
 module.exports = Profile_permission

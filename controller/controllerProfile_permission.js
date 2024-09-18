@@ -17,4 +17,13 @@ const findAllProfile_permission = async (req, res) => {
     }
 }
 
-module.exports = {addProfile_permission, findAllProfile_permission}
+const updateProfile_permission = async(req, res) => {
+    try {
+        const profile_permission = new Profile_permission(req.body)
+        await profile_permission.updateProfile_permission(req.params.id, profile_permission, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+module.exports = {addProfile_permission, findAllProfile_permission, updateProfile_permission}
