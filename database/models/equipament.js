@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Equipament.init({
     codProd: DataTypes.INTEGER,
     equipament: DataTypes.STRING,
+    type: DataTypes.STRING,
     idUser: DataTypes.INTEGER,
     value: DataTypes.DECIMAL,
     idFilial: DataTypes.INTEGER,

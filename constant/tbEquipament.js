@@ -1,9 +1,12 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Equipaments', {
-      codProd: {
+const db = require('../database/db')
+const {Sequelize} = require('sequelize')
+const tbuser = require('./tbUser')
+const tbFilial = require('./tbFilial')
+const tbSector = require('./tbSector')
+const tbSupplier = require('./tbSupplier')
+
+const tbEquipament = db.define('Equipaments', {
+    codProd: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -59,19 +62,12 @@ module.exports = {
       },
       deletionDate: {
         type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
-    });
-  },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Equipaments');
-  }
-};
+})
+
+tbEquipament.belongsTo(tbuser, {foreignKey: 'idUser'})
+tbEquipament.belongsTo(tbFilial, {foreignKey: 'idFilial'})
+tbEquipament.belongsTo(tbSector, {foreignKey: 'idSector'})
+tbEquipament.belongsTo(tbSupplier, {foreignKey: 'idSupplier'})
+
+module.exports = tbEquipament;

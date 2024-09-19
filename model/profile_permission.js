@@ -66,7 +66,7 @@ class Profile_permission {
     }
 
     static async selectAllProfile_permission(res) {
-        const result = (await tbProfile_permission.findAll({attributes: ['allwo'],
+        const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission', 'allwo'],
             include: [{model: tbProfile, attributes: ['profile']},{model: tbPermission, attributes: ['permission']}]})).
             map(data => data.dataValues)
         res.json(result)
@@ -82,6 +82,13 @@ class Profile_permission {
 
         await valueId.save()
         res.json({message: 'Updated successfully'})
+    }
+
+    static async deleteProfile_permission(req, res) {
+        await tbProfile_permission.findByPk(req).then(
+            removerProfile_permission => removerProfile_permission.destroy()
+        )
+        res.json({message: 'Deleted successfully'})
     }
 }
 

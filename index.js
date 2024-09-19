@@ -10,7 +10,7 @@ const routePermission = require('./routes/routePermission')
 const routeContact = require('./routes/routeContact')
 const routeLog = require('./routes/routeLog')
 const routeProfile_permission = require('./routes/routeProfile_permission')
-
+const routeEquipament = require('./routes/routeEquipament')
 
 app.use(express.urlencoded({extended: true}), express.json(), routeFilial)
 app.use(express.urlencoded({extended: true}), express.json(), routeSector)
@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended: true}), express.json(), routePermission)
 app.use(express.urlencoded({extended: true}), express.json(), routeContact)
 app.use(express.urlencoded({extended: true}), express.json(), routeLog)
 app.use(express.urlencoded({extended: true}), express.json(), routeProfile_permission)
-
+app.use(express.urlencoded({extended: true}), express.json(), routeEquipament)
 
 app.listen(process.env.PORT, (error) => {
     try {
