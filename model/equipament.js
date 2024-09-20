@@ -1,4 +1,8 @@
 const tbEquipament = require('../constant/tbEquipament')
+const tbfilial = require('../constant/tbFilial')
+const tbSector = require('../constant/tbSector')
+const tbSupplier = require('../constant/tbSupplier')
+const tbUser = require('../constant/tbUser')
 
 class Equipament {
     codProd
@@ -121,7 +125,8 @@ class Equipament {
         if(value == undefined){
             throw new Error('Invalid entryDate')
         }
-        return this.entryDate = value
+
+        return this.entryDate = new Date(value).toISOString()
     }
 
     get _deletionDate() {
@@ -132,12 +137,27 @@ class Equipament {
         if(value == undefined) {
             throw new Error('Invalid deletionDate')
         }
-        return this.deletionDate = value
+        return this.deletionDate = new Date(value).toISOString()
     }
 
     async insertEquipament(data, res) {
-        console.log(data)
+        const existEquipament = await tbEquipament.findOne({where: {codProd: data.codProd}})
+        
+        if(existEquipament) {
+            throw new Error('exist already equipament')
+        }
+        await tbEquipament.create(data)
         res.json({message: 'OK'})
+    }
+
+    static async selectEquipament(res) {
+        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'value','entryDate', 'deletionDate'], 
+            include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']}, 
+            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
+        })).map(
+            equipament => equipament.dataValues
+        )
+        res.json(result)
     }
 }
 
