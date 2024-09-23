@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const tbEquipament = require('../constant/tbEquipament')
 const tbfilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
@@ -46,7 +47,7 @@ class Equipament {
 
     set _equipament(value) {
         if(value == undefined) {
-            throw new Error('Invalid equipament')
+            return this.equipament = null
         }
         return this.equipament = value
     }
@@ -126,7 +127,7 @@ class Equipament {
             throw new Error('Invalid entryDate')
         }
 
-        return this.entryDate = new Date(value).toISOString()
+        return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
     get _deletionDate() {
@@ -137,7 +138,7 @@ class Equipament {
         if(value == undefined) {
             throw new Error('Invalid deletionDate')
         }
-        return this.deletionDate = new Date(value).toISOString()
+        return this.deletionDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
     async insertEquipament(data, res) {
@@ -158,6 +159,19 @@ class Equipament {
             equipament => equipament.dataValues
         )
         res.json(result)
+    }
+
+    static async selectOneEquipament(data, res) {
+        let codProd = data.codProd ? data.codProd : null
+        let equipament = data.equipament ? data.equipament : null
+        await tbEquipament.findAll({where:{[Op.or]: [{codProd: codProd}, {equipament: equipament}]}}, 
+            {attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
+            include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']},
+            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
+        }).then(
+            values => res.json(values.dataValues)
+        )
+    
     }
 }
 

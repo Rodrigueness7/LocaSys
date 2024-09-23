@@ -17,5 +17,13 @@ const findAllEquipament = async (req, res) => {
     }
 }
 
+const findOneEquipament = async (req, res) => {
+    try {
+        await Equipament.selectOneEquipament(req.body, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
 
-module.exports = {addEquipament, findAllEquipament}
+
+module.exports = {addEquipament, findAllEquipament, findOneEquipament}
