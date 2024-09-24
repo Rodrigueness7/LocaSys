@@ -151,8 +151,8 @@ class Equipament {
         res.json({message: 'OK'})
     }
 
-    static async selectEquipament(res) {
-        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'value','entryDate', 'deletionDate'], 
+    static async selectAllEquipament(res) {
+        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'type', 'value','entryDate', 'deletionDate'], 
             include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']}, 
             {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
         })).map(
@@ -161,17 +161,24 @@ class Equipament {
         res.json(result)
     }
 
-    static async selectOneEquipament(data, res) {
+    static async selectEquipament(data, res) {
         let codProd = data.codProd ? data.codProd : null
         let equipament = data.equipament ? data.equipament : null
-        await tbEquipament.findAll({where:{[Op.or]: [{codProd: codProd}, {equipament: equipament}]}}, 
-            {attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
+        let type = data.type ? data.type : null
+        let idUser = data.idUser ? data.idUser : null
+        let idFilial = data.idFilial ? data.idFilial : null
+
+
+        const result = (await tbEquipament.findAll({where: {[Op.or]: [{codProd: codProd},{equipament: equipament}, 
+            {type: type}, {idUser: idUser}, {idFilial: idFilial}]},
+            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
             include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']},
-            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
-        }).then(
-            values => res.json(values.dataValues)
+            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]}
+        )).map(
+            value => value.dataValues
         )
-    
+        res.json(result) 
+           
     }
 }
 

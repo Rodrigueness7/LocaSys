@@ -11,19 +11,19 @@ const addEquipament = async (req, res) => {
 
 const findAllEquipament = async (req, res) => {
     try {
-       await Equipament.selectEquipament(res)
+       await Equipament.selectAllEquipament(res)
     } catch (error) {
         res,json({message: error.message})
     }
 }
 
-const findOneEquipament = async (req, res) => {
+const findEquipament = async (req, res) => {
     try {
-        await Equipament.selectOneEquipament(req.body, res)
+        await Equipament.selectEquipament(req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
 
-module.exports = {addEquipament, findAllEquipament, findOneEquipament}
+module.exports = {addEquipament, findAllEquipament, findEquipament}

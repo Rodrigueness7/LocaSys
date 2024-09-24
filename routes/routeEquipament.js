@@ -3,7 +3,7 @@ const routeEquipament = express.Router()
 const controllerEquipament = require('../controller/controllerEquipament')
 
 routeEquipament.get('/findAllEquipament', controllerEquipament.findAllEquipament)
-routeEquipament.get('/findOneEquipament', controllerEquipament.findOneEquipament)
+routeEquipament.get('/findEquipament', controllerEquipament.findEquipament)
 routeEquipament.post('/addEquipament', controllerEquipament.addEquipament)
 
 
