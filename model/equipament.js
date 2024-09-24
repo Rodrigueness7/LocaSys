@@ -136,7 +136,7 @@ class Equipament {
 
     set _deletionDate(value) {
         if(value == undefined) {
-            throw new Error('Invalid deletionDate')
+            return this.deletionDate = null
         }
         return this.deletionDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
@@ -152,7 +152,7 @@ class Equipament {
     }
 
     static async selectAllEquipament(res) {
-        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'type', 'value','entryDate', 'deletionDate'], 
+        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'type', 'value','entryDate'], 
             include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']}, 
             {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
         })).map(
@@ -162,24 +162,42 @@ class Equipament {
     }
 
     static async selectEquipament(data, res) {
-        let codProd = data.codProd ? data.codProd : null
-        let equipament = data.equipament ? data.equipament : null
-        let type = data.type ? data.type : null
-        let idUser = data.idUser ? data.idUser : null
-        let idFilial = data.idFilial ? data.idFilial : null
 
+        let codProd = data.codProd ? data.codProd : '%'
+        let equipament = data.equipament ? data.equipament : '%'
+        let type = data.type ? data.type : '%'
+        let idUser = data.idUser ? data.idUser : '%'
+        let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipament.findAll({where: {[Op.or]: [{codProd: codProd},{equipament: equipament}, 
-            {type: type}, {idUser: idUser}, {idFilial: idFilial}]},
-            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
+        const result = (await tbEquipament.findAll({where: {[Op.and]: [{codProd:{[Op.like]:codProd}}, {equipament: {[Op.like]: equipament}}, 
+            {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
+            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate'],
             include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']},
             {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]}
         )).map(
             value => value.dataValues
         )
-        res.json(result) 
-           
+        res.json(result)
     }
+
+    async updateEquipament(req, data, res) {
+        let pk = await tbEquipament.findByPk(req)
+
+        pk.codprod = data.codProd
+        pk.equipament = data.equipament
+        pk.type = data.type
+        pk.idUser = data.idUser
+        pk.value = data.value
+        pk.idFilial = data.idFilial
+        pk.idSector = data.idSector
+        pk.idSupplier = data.idSupplier
+        pk.entryDate = data.entryDate
+        pk.deletionDate = data.deletionDate
+
+        await pk.save()
+        res.json({message: 'Updated successfully'})
+    }
+
 }
 
 module.exports = Equipament

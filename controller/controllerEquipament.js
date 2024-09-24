@@ -25,5 +25,14 @@ const findEquipament = async (req, res) => {
     }
 }
 
+const updateEquipament = async (req, res) => {
+    try {
+        const equipament = new Equipament(req.body)
+        await equipament.updateEquipament(req.params.codProd, equipament, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
 
-module.exports = {addEquipament, findAllEquipament, findEquipament}
+
+module.exports = {addEquipament, findAllEquipament, findEquipament, updateEquipament}
