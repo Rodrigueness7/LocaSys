@@ -11,15 +11,23 @@ const addUser = async (req, res) => {
 
 const findAllUser = async (req, res) => {
    try {
-    await User.findAllUser(res)
+    await User.selectAllUser(res)
    } catch (error) {
     res.json({message: error.message})
    }
 }
 
+const findUser = async (req, res) => {
+    try {
+        await User.selectUser(req.body, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
 const login = async (req, res) => {
     try {
-        await User.findUser(req.body.username, req.body.password, res)
+        await User.login(req.body.username, req.body.password, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -42,4 +50,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {addUser, findAllUser, login, updateUser, deleteUser}
+module.exports = {addUser, findAllUser, findUser, login, updateUser, deleteUser}

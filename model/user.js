@@ -143,7 +143,7 @@ class User {
             res.json({message: 'Add successfully'})   
     }
 
-    static async findAllUser(res) {
+    static async selectAllUser(res) {
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 'email'],
             include: {model: tbSector, attributes: ['sector']}})).map(
             allUser => allUser.dataValues
@@ -151,7 +151,24 @@ class User {
         res.json(result)
     }
 
-    static async findUser(username, password, res) {
+    static async selectUser(data, res) {
+        
+        let username = data.username? data.username : '%'
+        let firstName = data.firstName ? data.firstName : '%'
+        let lastName = data.lastName ? data.lastName : '%'
+        let email = data.email ? data.email : '%'
+       
+        const result = (await tbUser.findAll({where: {[Op.and]: [{username: {[Op.like]: username}}, 
+            {firstName: {[Op.like]: firstName}},{lastName: {[Op.like]: lastName}}, {email: {[Op.like]: email}}]},
+            attributes: ['idUser', 'username', 'firstName', 'lastName', 'email'],
+            include: {model: tbSector, attributes: ['sector']}})).map(
+                users => users.dataValues
+            )
+            res.json(result)
+       
+    }
+
+    static async login(username, password, res) {
         const existUser = await tbUser.findOne({where: {username: username, password: password}})
         if(!existUser) {
             throw new Error('Username or password invalid')
