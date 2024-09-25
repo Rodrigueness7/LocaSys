@@ -1,6 +1,7 @@
 const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
+const tbProfile = require('../constant/tbProfile')
 
 class User {
     idUser
@@ -9,7 +10,9 @@ class User {
     cpf
     username
     password
+    confirmationPassword
     email
+    confirmationEmail
     idSector
     idProfile
 
@@ -19,8 +22,10 @@ class User {
         this._lastName = data.lastName
         this._cpf = data.cpf
         this._username = data.username
-        this._password = data.password
+        this._password = data.password 
+        this._confirmationPassword = data.confirmationPassword
         this._email = data.email
+        this._confirmationEmail = data.confirmationEmail
         this._idSector = data.idSector
         this._idProfile = data.idProfile 
     }
@@ -84,6 +89,7 @@ class User {
         return this.password
     }
 
+   
     set _password(value) {
         
         if (value.length < 8) {
@@ -101,6 +107,17 @@ class User {
         return this.password = value
     }
 
+    get _confirmationPassword() {
+        return this.confirmationPassword
+    }
+
+    set _confirmationPassword(value) {
+        if(value !== this._password){
+            throw new Error('Password do not match')
+        }
+        return this.confirmationPassword = value
+    }
+
     get _email() {
         return this.email
     }
@@ -110,6 +127,17 @@ class User {
             throw new Error('Email is not valid')
         }
         return this.email = value
+    }
+
+    get _confirmationEmail() {
+        return this.confirmationEmail
+    }
+
+    set _confirmationEmail(value) {
+        if(value !== this._email) {
+            throw new Error('Email do not match')
+        }
+        return this.confirmationEmail = value
     }
 
     get _idSector() {
@@ -137,15 +165,16 @@ class User {
    async insertUser(data, username, email, res) {
        const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
             if(existUser) {
-                throw new Error('User already exist')
+                throw new Error('Username or email already registered')
             }
             await tbUser.create(data)
             res.json({message: 'Add successfully'})   
     }
 
     static async selectAllUser(res) {
-        const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 'email'],
-            include: {model: tbSector, attributes: ['sector']}})).map(
+        const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
+            'cpf', 'email', 'password'],
+            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]})).map(
             allUser => allUser.dataValues
         )
         res.json(result)
@@ -160,12 +189,11 @@ class User {
        
         const result = (await tbUser.findAll({where: {[Op.and]: [{username: {[Op.like]: username}}, 
             {firstName: {[Op.like]: firstName}},{lastName: {[Op.like]: lastName}}, {email: {[Op.like]: email}}]},
-            attributes: ['idUser', 'username', 'firstName', 'lastName', 'email'],
-            include: {model: tbSector, attributes: ['sector']}})).map(
+            attributes: ['idUser', 'username', 'firstName', 'lastName', 'cpf','email'],
+            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]})).map(
                 users => users.dataValues
             )
-            res.json(result)
-       
+            res.json(result)   
     }
 
     static async login(username, password, res) {
@@ -198,7 +226,6 @@ class User {
         )
         res.json('Deleted user')
     }
-
 
 }
 
