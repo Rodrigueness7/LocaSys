@@ -46,9 +46,8 @@ class Log {
         if(value == undefined ) {
             throw new Error('Invalid actionDate')
         }
-        //CONVERTE TIMEZONE PARA BRASIL
-        var tzoffset = (new Date()).getTimezoneOffset() * 60000;
-        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString()
+        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        let localISOTime = (new Date(Date.now() - tzoffset)).toISOString()
 
         return this.actionDate = localISOTime
     }
@@ -77,29 +76,16 @@ class Log {
             res.json(result)
     }
 
-    static async findLogsByDate(dateInit, dateFinish, res) {
-        const dtInit = new Date(dateInit.split('/').reverse().join('-'))
-        const dtFinish = new Date(dateFinish.split('/').reverse().join('-')).toISOString().split('T')[0] + 'T23:59:00.000Z'
+    static async findLog(dateInit, dateFinish, action, res) {
+       const dtInitCov = dateInit ? new Date(dateInit.split('/').reverse().join('-')) : '2001-01-01T00:00:00.000Z'
+       const dtFinishCov = dateFinish ? new Date(dateFinish.split('/').reverse().join('-')).toISOString().split('T')[0] + 'T23:59:59.000Z': new Date().toISOString().split('T')[0] + 'T23:59:59.000Z'
+       const valueAction = action ? action : '%'
 
-        const result = (await tbLog.findAll({attributes: ['action', 'actionDate'],
-            include:{model:tbUser, attributes:['username']}, where:{actionDate: {
-               [Op.gte]: dtInit, [Op.lte]: dtFinish}}})).map(
-             value => value.dataValues
-        )
-       
-        res.json(result)
-    }
-
-    static async findLogsByAction(data, res) {
-        const result = (await tbLog.findAll({attributes: ['action', 'actionDate'],
-            include: {model:tbUser, attributes: ['username']}, where: {action: data}
-        })).map(
-            value => value.dataValues
-        )
-       
-        res.json(result)
-    }
-    
+       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}})).map(
+            values => values.dataValues
+       )
+      res.json(result)
+    }    
 }
 
 module.exports = Log

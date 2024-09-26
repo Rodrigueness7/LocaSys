@@ -17,20 +17,14 @@ const findAllLog = async (req, res) => {
     }
 }
 
-const findLogDate = async (req, res) => {
+const findLog = async (req, res) => {
     try {
-        await Log.findLogsByDate(req.body.dateInit, req.body.dateFinish, res)
+        await Log.findLog(req.body.dateInit, req.body.dateFinish, req.body.action, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findLogAction = async (req, res) => {
-    try {
-        await Log.findLogsByAction(req.body.action, res)
-    } catch (error) {
-        res.json({message: error.message})
-    }
-}
 
-module.exports = {addLog, findAllLog, findLogDate, findLogAction}
+
+module.exports = {addLog, findAllLog, findLog}
