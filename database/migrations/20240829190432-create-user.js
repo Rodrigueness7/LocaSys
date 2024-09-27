@@ -26,10 +26,12 @@ module.exports = {
         allowNull: false
       },
       password: {
-        type: Sequelize.STRING(22)
+        type: Sequelize.STRING(22),
+        allowNull: true
       },
       email: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(50),
+        allowNull: true
       },
       idSector: {
         type: Sequelize.INTEGER,

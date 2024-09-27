@@ -14,17 +14,20 @@ module.exports = {
         allowNull: false
       },
       email: {
-        type: Sequelize.STRING(80)
+        type: Sequelize.STRING(80),
+        allowNull: true
       },
       contact: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       CNPJ: {
         type: Sequelize.STRING(45),
         allowNull: false
       },
       address: {
-        type: Sequelize.STRING(80)
+        type: Sequelize.STRING(80),
+        allowNull: true
       },
       zipCode: {
         type: Sequelize.STRING(45),

@@ -152,9 +152,9 @@ class Equipament {
     }
 
     static async selectAllEquipament(res) {
-        const result = (await tbEquipament.findAll({attributes: ['codProd', 'equipament', 'type', 'value','entryDate'], 
-            include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']}, 
-            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]
+        const result = (await tbEquipament.findAll({ where: {deletionDate: null}, attributes: ['codProd', 'equipament', 'type', 'value','entryDate', 'deletionDate'], 
+            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, 
+            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]
         })).map(
             equipament => equipament.dataValues
         )
@@ -169,11 +169,11 @@ class Equipament {
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipament.findAll({where: {[Op.and]: [{codProd:{[Op.like]:codProd}}, {equipament: {[Op.like]: equipament}}, 
+        const result = (await tbEquipament.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}}, {equipament: {[Op.like]: equipament}}, 
             {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
-            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate'],
-            include: [{model: tbUser, attributes: ['username']}, {model: tbfilial, attributes: ['filial']},
-            {model: tbSector, attributes: ['sector']}, {model: tbSupplier, attributes: ['supplier']}]}
+            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
+            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
+            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
         )).map(
             value => value.dataValues
         )

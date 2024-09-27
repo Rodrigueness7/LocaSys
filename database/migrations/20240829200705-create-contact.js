@@ -14,31 +14,40 @@ module.exports = {
         allowNull: false
       },
       email: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       telephone: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       cellPhone: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       address: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       number: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       zipCode: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       state: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       county: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       district: {
-        type: Sequelize.STRING(45)
+        type: Sequelize.STRING(45),
+        allowNull: true
       },
       idSupplier: {
         type: Sequelize.INTEGER,
