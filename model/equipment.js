@@ -1,13 +1,14 @@
 const { Op } = require('sequelize')
-const tbEquipament = require('../constant/tbEquipament')
+const tbEquipment = require('../constant/tbEquipment')
 const tbfilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
 const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
 
-class Equipament {
+class Equipment {
+    idEquipment
     codProd
-    equipament
+    equipment
     type
     idUser
     value
@@ -18,8 +19,9 @@ class Equipament {
     deletionDate
 
     constructor(data) {
+        this._idEquipment = data.Equipment
         this._codProd = data.codProd
-        this._equipament = data.equipament
+        this._equipment = data.equipment
         this._type = data.type
         this._idUser = data.idUser
         this._value = data.value
@@ -28,6 +30,17 @@ class Equipament {
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
         this._deletionDate = data.deletionDate
+    }
+
+    get _idEquipment() {
+        return this.idEquipment
+    }
+
+    set _idEquipment(value) {
+        if(value == undefined) {
+            return this.idEquipment = 0
+        }
+        return this.idEquipment = value
     }
 
     get _codProd() {
@@ -41,15 +54,15 @@ class Equipament {
         return this.codProd = value
     }
 
-    get _equipament() {
-        return this.equipament
+    get _equipment() {
+        return this.equipment
     }
 
-    set _equipament(value) {
+    set _equipment(value) {
         if(value == undefined) {
-            return this.equipament = null
+            return this.equipment = null
         }
-        return this.equipament = value
+        return this.equipment = value
     }
 
     get _type() {
@@ -141,37 +154,37 @@ class Equipament {
         return this.deletionDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
-    async insertEquipament(data, res) {
-        const existEquipament = await tbEquipament.findOne({where: {codProd: data.codProd}})
+    async insertEquipment(data, res) {
+        const existEquipment = await tbEquipment.findOne({where: {codProd: data.codProd}})
         
-        if(existEquipament) {
-            throw new Error('exist already equipament')
+        if(existEquipment) {
+            throw new Error('exist already equipment')
         }
-        await tbEquipament.create(data)
+        await tbEquipment.create(data)
         res.json({message: 'OK'})
     }
 
-    static async selectAllEquipament(res) {
-        const result = (await tbEquipament.findAll({ where: {deletionDate: null}, attributes: ['codProd', 'equipament', 'type', 'value','entryDate', 'deletionDate'], 
+    static async selectAllEquipment(res) {
+        const result = (await tbEquipment.findAll({ where: {deletionDate: null}, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'deletionDate'], 
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, 
             {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]
         })).map(
-            equipament => equipament.dataValues
+            equipment => equipment.dataValues
         )
         res.json(result)
     }
 
-    static async selectEquipament(data, res) {
+    static async selectEquipment(data, res) {
 
         let codProd = data.codProd ? data.codProd : '%'
-        let equipament = data.equipament ? data.equipament : '%'
+        let equipment = data.equipment ? data.equipment : '%'
         let type = data.type ? data.type : '%'
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipament.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}}, {equipament: {[Op.like]: equipament}}, 
+        const result = (await tbEquipment.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}}, {equipment: {[Op.like]: equipment}}, 
             {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
-            attributes: ['codProd', 'equipament', 'type', 'value', 'entryDate', 'deletionDate'],
+            attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate'],
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
             {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
         )).map(
@@ -180,11 +193,11 @@ class Equipament {
         res.json(result)
     }
 
-    async updateEquipament(req, data, res) {
-        let pk = await tbEquipament.findByPk(req)
+    async updateEquipment(req, data, res) {
+        let pk = await tbEquipment.findByPk(req)
 
         pk.codprod = data.codProd
-        pk.equipament = data.equipament
+        pk.equipment = data.equipment
         pk.type = data.type
         pk.idUser = data.idUser
         pk.value = data.value
@@ -200,4 +213,4 @@ class Equipament {
 
 }
 
-module.exports = Equipament
+module.exports = Equipment

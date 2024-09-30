@@ -5,14 +5,18 @@ const tbFilial = require('./tbFilial')
 const tbSector = require('./tbSector')
 const tbSupplier = require('./tbSupplier')
 
-const tbEquipament = db.define('Equipaments', {
-    codProd: {
+const tbEquipment = db.define('Equipments', {
+      idEquipment: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      equipament: {
+      codProd: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      equipment: {
         type: Sequelize.STRING(80),
         allowNull: false
       },
@@ -66,9 +70,9 @@ const tbEquipament = db.define('Equipaments', {
       }
 })
 
-tbEquipament.belongsTo(tbuser, {foreignKey: 'idUser'})
-tbEquipament.belongsTo(tbFilial, {foreignKey: 'idFilial'})
-tbEquipament.belongsTo(tbSector, {foreignKey: 'idSector'})
-tbEquipament.belongsTo(tbSupplier, {foreignKey: 'idSupplier'})
+tbEquipment.belongsTo(tbuser, {foreignKey: 'idUser'})
+tbEquipment.belongsTo(tbFilial, {foreignKey: 'idFilial'})
+tbEquipment.belongsTo(tbSector, {foreignKey: 'idSector'})
+tbEquipment.belongsTo(tbSupplier, {foreignKey: 'idSupplier'})
 
-module.exports = tbEquipament;
+module.exports = tbEquipment;

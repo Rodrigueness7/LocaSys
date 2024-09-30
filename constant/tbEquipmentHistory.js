@@ -1,20 +1,20 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
-const tbEquipament = require('./tbEquipament')
+const tbEquipment = require('./tbEquipment')
 
-const historyEquipament = db.define('historyEquipaments', {
-    idHistory: {
+const equipmentHistory = db.define('equipmentHistorys', {
+    idEquipmentHistory: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      codProd: {
+      idEquipment: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Equipaments',
-          key: 'codProd'
+          model: 'Equipments',
+          key: 'idEquipment'
         }
       },
       reason: {
@@ -31,6 +31,6 @@ const historyEquipament = db.define('historyEquipaments', {
       }
 })
 
-historyEquipament.belongsTo(tbEquipament, {foreignKey: 'codProd'})
+equipmentHistory.belongsTo(tbEquipment, {foreignKey: 'idEquipmentHistory'})
 
-module.exports = historyEquipament
+module.exports = equipmentHistory
