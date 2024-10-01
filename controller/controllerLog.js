@@ -1,4 +1,4 @@
-const Log = require('../model/log')
+const Log = require('../model/Log')
 
 const addLog = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const addLog = async (req, res) => {
 
 const findAllLog = async (req, res) => {
     try {
-        await Log.findAllLog(res)
+        await Log.selectAllLog(res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -19,7 +19,7 @@ const findAllLog = async (req, res) => {
 
 const findLog = async (req, res) => {
     try {
-        await Log.findLog(req.body.dateInit, req.body.dateFinish, req.body.action, res)
+        await Log.selectLog(req.body.dateInit, req.body.dateFinish, req.body.action, res)
     } catch (error) {
         res.json({message: error.message})
     }

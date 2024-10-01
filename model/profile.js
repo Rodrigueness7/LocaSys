@@ -33,46 +33,42 @@ class Profile {
 
     async insertProfile(data, res) {
         const existProfile = await tbProfile.findOne({ where: { profile: data.profile } })
-        try {
             if (existProfile) {
                 throw new Error('Profile already exist')
             }
             await tbProfile.create(data)
-            res.send('Add successfully')
-        } catch (error) {
-            res.send(error.message)
-        }
+            res.json({message: 'Add successfully'})
+       
     }
 
-    static async findAllProfile(res) {
+    static async selectAllProfile(res) {
         const result = (await tbProfile.findAll()).map(
             profile => profile.dataValues
         )
-        res.send(result)
+        res.json(result)
     }
 
-    static async findProfileById(req, res) {
+    static async selectProfile(req, res) {
         await tbProfile.findByPk(req).then(
-            values => res.send(values.dataValues)
+            values => res.json(values.dataValues)
         )
     }
 
-    async updateProfile(req, data) {
+    async updateProfile(req, data, res) {
         const profileById = await tbProfile.findByPk(req)
 
         profileById.idProfile = data.idProfile
         profileById.profile = data.profile
 
         await profileById.save()
+        res.json({message: 'Updated successfully'})
     }
 
     static async deleteProfile(req, res) {
-        const profileById = await tbProfile.findByPk(req).then(
-            data => {
-                return data.destroy()
-            }
+        await tbProfile.findByPk(req).then(
+            data =>  data.destroy()   
         )
-        return profileById
+        res.json({message: 'Delete profile'})
     }
 
 }

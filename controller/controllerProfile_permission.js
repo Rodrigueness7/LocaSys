@@ -1,4 +1,4 @@
-const Profile_permission = require('../model/profile_permission')
+const Profile_permission = require('../model/Profile_permission')
 
 const addProfile_permission = async (req, res) => {
     try {

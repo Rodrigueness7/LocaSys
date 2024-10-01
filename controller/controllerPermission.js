@@ -1,4 +1,4 @@
-const Permission = require('../model/permission')
+const Permission = require('../model/Permission')
 
 const addPermission = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const addPermission = async (req, res) => {
 
 const findAllPermission = async (req, res) => {
     try {
-        await Permission.findAllPermission(res)
+        await Permission.selectAllPermission(res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -19,7 +19,7 @@ const findAllPermission = async (req, res) => {
 
 const findPermission = async (req, res) => {
     try {
-        await Permission.findPermission(res, req.params.id)
+        await Permission.selectPermission(res, req.params.id)
     } catch (error) {
         res.json({message: error.message})
     }

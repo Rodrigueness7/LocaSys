@@ -1,42 +1,44 @@
-const Profile = require('../model/profile')
+const Profile = require('../model/Profile')
 
 const addProfile = async (req, res) => {
-    const profile = new Profile(req.body)
-   await profile.insertProfile(profile, res)
+    try {
+        const profile = new Profile(req.body)
+        await profile.insertProfile(profile, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
 }
 
 const findAllProfile = async (req, res) => {
     try {
-        await Profile.findAllProfile(res)
+        await Profile.selectAllProfile(res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 }
 
 const findProfile = async (req, res) => {
     try {
-        await Profile.findProfileById(req.params.id, res)
+        await Profile.selectProfile(req.params.id, res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 }
 
 const updateProfile = async (req, res) => {
     try {
         const profile = new Profile(req.body)
-        await profile.updateProfile(req.params.id, profile)
-        res.send('Profile update')
+        await profile.updateProfile(req.params.id, profile, res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 } 
 
 const deleteProfile = async (req, res) => {
     try {
        await Profile.deleteProfile(req.params.id, res)
-        res.send('Profile delete')
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 }
 

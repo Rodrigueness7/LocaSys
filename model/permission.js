@@ -41,14 +41,14 @@ class Permission {
         res.json({message: 'Add successufully'})
     }
 
-    static async findAllPermission(res) {
+    static async selectAllPermission(res) {
         const result = (await tbPermission.findAll()).map(
             permissions => permissions.dataValues
         )
         res.json(result)
     }
 
-    static async findPermission(res, req) {
+    static async selectPermission(res, req) {
         await tbPermission.findByPk(req).then(
             permission => res.json(permission.dataValues)
         )

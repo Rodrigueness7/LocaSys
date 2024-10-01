@@ -1,15 +1,19 @@
-const Sector = require('../model/sector')
+const Sector = require('../model/Sector')
 
 const addSector = async (req, res) => {
+  try {
     const sector = new Sector(req.body)
-    sector.insertSector(sector, res)
+    await sector.insertSector(sector, res)
+  } catch (error) {
+    res.json({message: error.message})
+  }
 }
 
 const findAllSector = async (req, res) => {
     try {
         await Sector.findAllSector(res)
     } catch (error) {
-        res.send(error.message)
+       res.json({message: error.message})
     }
 }
 
@@ -17,26 +21,24 @@ const findSectorById = async (req, res) => {
     try {
        await Sector.findSector(req.params.id, res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 }
 
 const updateSector = async (req, res) => {
     try {
         const sector = new Sector(req.body)
-        await sector.updateSector(req.params.id, sector)
-        res.send('Sector update')
+        await sector.updateSector(req.params.id, sector, res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 }
 
-const removerSector = (req, res) => {
+const removerSector = async (req, res) => {
     try {
-        Sector.deleteSector(req.params.id)
-        res.send('Delete Sector')
+       await Sector.deleteSector(req.params.id, res)
     } catch (error) {
-        res.send(error.message)
+        res.json({message: error.message})
     }
 } 
 

@@ -1,4 +1,4 @@
-const Equipment = require('../model/equipment')
+const Equipment = require('../model/Equipment')
 
 const addEquipment = async (req, res) => {
     try {

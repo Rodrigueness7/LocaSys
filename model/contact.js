@@ -1,7 +1,6 @@
 const tbContact = require('../constant/tbContact')
 
 class Contact {
-
     idContact
     contact
     email
@@ -177,14 +176,14 @@ class Contact {
         res.json({message: 'Add successfully'})
     }
 
-    static async findAllContact(res) {
+    static async selectAllContact(res) {
         const allContact = (await tbContact.findAll()).map(
             result => result.dataValues
         )
         res.json(allContact)
     }
 
-    static async findContact(req, res) {
+    static async selectContact(req, res) {
         await tbContact.findByPk(req).then(
             contact => res.json(contact.dataValues)
         )

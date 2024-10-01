@@ -117,7 +117,7 @@ class Supplier {
     }
 
     set _city(value) {
-        if(value == undefined) {
+        if(value == undefined) { 
             throw new Error('Invalid city')
         }
         return this.city = value    
@@ -133,14 +133,14 @@ class Supplier {
         res.json({message: 'Add successufully'})
     }
 
-    static async findAllSupplier(res) {
+    static async selectAllSupplier(res) {
         const result = (await tbSupplier.findAll()).map(
             allSupplier => allSupplier.dataValues 
         )
         res.json(result)
     }
 
-    static async findSupplier(req, res) {
+    static async selectSupplier(req, res) {
         await tbSupplier.findByPk(req).then(
             supplier => {
                 res.json(supplier.dataValues)

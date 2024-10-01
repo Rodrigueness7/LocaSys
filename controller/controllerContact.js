@@ -1,4 +1,4 @@
-const Contact = require('../model/contact')
+const Contact = require('../model/Contact')
 
 const addContact = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const addContact = async (req, res) => {
 
 const findAllContact = async(req, res) => {
     try {
-        await Contact.findAllContact(res)
+        await Contact.selectAllContact(res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -19,7 +19,7 @@ const findAllContact = async(req, res) => {
 
 const findContact = async (req, res) => {
     try {
-        await Contact.findContact(req.params.id, res)
+        await Contact.selectContact(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }

@@ -68,7 +68,7 @@ class Log {
         res.json({message: 'Add successfully'})
     }
 
-    static async findAllLog(res) {
+    static async selectAllLog(res) {
         const result = (await tbLog.findAll({attributes: ['action', 'actionDate'], 
             include:{model: tbUser, attributes: ['username']}})).map(
                 data => data.dataValues
@@ -76,7 +76,7 @@ class Log {
             res.json(result)
     }
 
-    static async findLog(dateInit, dateFinish, action, res) {
+    static async selectLog(dateInit, dateFinish, action, res) {
        const dtInitCov = dateInit ? new Date(dateInit.split('/').reverse().join('-')) : '2001-01-01T00:00:00.000Z'
        const dtFinishCov = dateFinish ? new Date(dateFinish.split('/').reverse().join('-')).toISOString().split('T')[0] + 'T23:59:59.000Z': new Date().toISOString().split('T')[0] + 'T23:59:59.000Z'
        const valueAction = action ? action : '%'

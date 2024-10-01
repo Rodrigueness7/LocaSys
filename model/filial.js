@@ -33,48 +33,43 @@ class Filial {
 
    async insertFilial(data, res) {
         const existFilial = await tbFilial.findOne({where: {filial: data.filial}})
-        
-        try {
             if(existFilial) {
                 throw new Error('Filial already exist')
             }
             await tbFilial.create(data)
-            res.send('Add successfully')
-        } catch (error) {
-            res.send(error.message)
-        }
+            res.json({message:'Add successfully'})
+        
     }
 
-    static async findAllFilial(res) {
+    static async selectAllFilial(res) {
        const result =  (await tbFilial.findAll()).map(
             filial => filial.dataValues
         )
-        res.send(result);
+        res.json(result)
     }
 
-    static async findFilial(req, res) {
+    static async selectFilial(req, res) {
         await tbFilial.findByPk(req).then(
-            idFilial => res.send(idFilial.dataValues)
+            idFilial => res.json(idFilial.dataValues)
         )  
     }
 
-    async updateFilial(req, data) {
+    async updateFilial(req, data, res) {
         const newFilial = await tbFilial.findByPk(req) 
 
         newFilial.idFilial = data.idFilial,
         newFilial.filial = data.filial 
 
-        return await newFilial.save();
+        await newFilial.save()
+        res.json({message: 'Update successfully'})
         
     }
 
    static async deleteFilial(req) {
-        const idFilial = await tbFilial.findByPk(req).then(
-             removerFilial => {
-               return removerFilial.destroy()
-            }
+        await tbFilial.findByPk(req).then(
+             removerFilial => removerFilial.destroy()
         )
-        return idFilial;
+        res.json({message: 'Delete successfuly'})
     }
 }
 

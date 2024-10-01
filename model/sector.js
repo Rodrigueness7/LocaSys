@@ -46,15 +46,12 @@ class Sector {
 
     async insertSector(data, res) {
         const existSector = await tbSector.findOne({ where: { sector: data.sector } })
-        try {
             if (existSector) {
                 throw new Error('Sector already exist')
             }
             await tbSector.create(data)
-            res.send('Add successfully')
-        } catch (error) {
-            res.send(error.message)
-        }
+            res.json({message:'Add successfully'})
+        
     }
 
     static async findAllSector(res) {
@@ -66,11 +63,11 @@ class Sector {
 
     static async findSector(req, res) {
         await tbSector.findByPk(req).then(
-            idSector => res.send(idSector.dataValues)
+            idSector => res.json(idSector.dataValues)
         )
     }
 
-    async updateSector(req, data) {
+    async updateSector(req, data, res) {
         const sectorById = await tbSector.findByPk(req)
 
         sectorById.idSector = data.idSector
@@ -78,16 +75,15 @@ class Sector {
         sectorById.idFilial = data.idFilial
 
         await sectorById.save()
+        res.json({message: 'Update successfully'})
 
     }
 
-    static async deleteSector(req) {
-        const sectorById = await tbSector.findByPk(req).then(
-            data => {
-                return data.destroy()
-            }
+    static async deleteSector(req, res) {
+         await tbSector.findByPk(req).then(
+            data => data.destroy()
         )
-        return sectorById
+        res.json({message: 'Delete successfully'})  
     }
 }
 
