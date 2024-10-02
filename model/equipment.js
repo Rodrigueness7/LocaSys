@@ -182,7 +182,7 @@ class Equipment {
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipment.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}}, {equipment: {[Op.like]: equipment}}, 
+        const result = (await tbEquipment.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
             {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
             attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate'],
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},

@@ -31,6 +31,6 @@ const equipmentHistory = db.define('equipmentHistorys', {
       }
 })
 
-equipmentHistory.belongsTo(tbEquipment, {foreignKey: 'idEquipmentHistory'})
+equipmentHistory.belongsTo(tbEquipment, {foreignKey: 'idEquipment'})
 
 module.exports = equipmentHistory

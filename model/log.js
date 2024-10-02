@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 const tbLog = require('../constant/tbLog')
 const tbUser = require('../constant/tbUser')
+const locaTime = require('../constant/localTime')
 
 
 class Log {
@@ -46,10 +47,8 @@ class Log {
         if(value == undefined ) {
             throw new Error('Invalid actionDate')
         }
-        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-        let localISOTime = (new Date(Date.now() - tzoffset)).toISOString()
-
-        return this.actionDate = localISOTime
+        
+        return this.actionDate = locaTime
     }
 
     get _idUser() {
