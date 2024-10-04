@@ -19,7 +19,7 @@ class Equipment {
     deletionDate
 
     constructor(data) {
-        this._idEquipment = data.Equipment
+        this._idEquipment = data.idEquipment
         this._codProd = data.codProd
         this._equipment = data.equipment
         this._type = data.type
@@ -137,8 +137,9 @@ class Equipment {
 
     set _entryDate(value) {
         if(value == undefined){
-            return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
+           throw new Error('Invalid entryDate')
         } 
+        return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
     get _deletionDate() {
@@ -159,7 +160,7 @@ class Equipment {
             throw new Error('exist already equipment')
         }
         await tbEquipment.create(data)
-        res.json({message: 'OK'})
+        res.json({message: 'Add successfully'})
     }
 
     static async selectAllEquipment(res) {
@@ -194,7 +195,7 @@ class Equipment {
     async updateEquipment(req, data, res) {
         let pk = await tbEquipment.findByPk(req)
 
-        pk.codprod = data.codProd
+        pk.codProd = data.codProd
         pk.equipment = data.equipment
         pk.type = data.type
         pk.idUser = data.idUser
@@ -205,7 +206,7 @@ class Equipment {
         pk.entryDate = data.entryDate
         pk.deletionDate = data.deletionDate
 
-        await pk.save()
+        await pk.save() 
         res.json({message: 'Updated successfully'})
     }
 

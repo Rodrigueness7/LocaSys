@@ -90,12 +90,38 @@ class EquipmentHistory {
         let entryDateInit = localTime.initConv(data.entryDateInit)
         let entryDateFinish = localTime.finishConv(data.entryDateFinish)
        
-        const result = (await tbEquipmentHistory.findAll({where:{entryDate: {[Op.gte]: entryDateInit, [Op.lte]: entryDateFinish}},
+        let conditions = (dtInit, dtFinish) => {
+            if(dtInit || dtFinish ) {
+                return {returnDate:{[Op.gte]: new Date(dtInit.split('/').reverse().join('-')).toISOString()}, returnDate: {[Op.lte]: new Date(dtFinish.split('/').reverse().join('-')).toISOString().split('T')[0] + 'T23:59:59.000Z'}}
+            } else {
+                return [{returnDate: {[Op.ne]: null}}, {returnDate:{[Op.is]: null}}]
+            }
+        }
+
+        const result = (await tbEquipmentHistory.findAll({where:{entryDate: {[Op.gte]: entryDateInit, [Op.lte]: entryDateFinish},
+            [Op.or]: conditions(data.returnDateInit, data.returnDateFinish)},
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
             include: {model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: {codProd: {[Op.like]: codProd}}}
         })).map(values => values.dataValues)
         res.json(result)
-    }
+        
+        }
+
+        async UpdateEquipamentHistory(data, req, res) {
+            const pkEquipmentHistory = await tbEquipmentHistory.findByPk(req)
+
+            pkEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
+            pkEquipmentHistory.idEquipment = data.idEquipment
+            pkEquipmentHistory.reason = data.reason
+            pkEquipmentHistory.entryDate = data.entryDate
+            pkEquipmentHistory.returnDate = data.returnDate
+
+            await pkEquipmentHistory.save()
+            res.json({message: 'Updated successfully'})
+
+        }
+
+    
 }
 
 module.exports = EquipmentHistory

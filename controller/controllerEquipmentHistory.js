@@ -17,7 +17,7 @@ const findAllEquipmentHistory = async (req, res) => {
     }
 }
 
-const findEquipamentHistory = async (req, res) => {
+const findEquipmentHistory = async (req, res) => {
     try {
         await EquipmentHistory.selectEquipmentHistory(req.body, res)
     } catch (error) {
@@ -25,4 +25,13 @@ const findEquipamentHistory = async (req, res) => {
     }
 }
 
-module.exports = {addEquipmentHistory, findAllEquipmentHistory, findEquipamentHistory}
+const updateEquipmentHistory = async (req, res) => {
+    try {
+        const equipmentHistory = new EquipmentHistory(req.body)
+        await equipmentHistory.UpdateEquipamentHistory(equipmentHistory, req.params.idEquipmentHistory, res) 
+    } catch (error) {
+        res.json({message: error.message})
+    }
+} 
+
+module.exports = {addEquipmentHistory, findAllEquipmentHistory, findEquipmentHistory, updateEquipmentHistory}

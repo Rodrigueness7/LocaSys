@@ -4,8 +4,9 @@ const controllerEquipmentHistory = require('../controller/controllerEquipmentHis
 
 
 routeEquipmentHistory.get('/findAllEquipmentHistory', controllerEquipmentHistory.findAllEquipmentHistory)
-routeEquipmentHistory.get('/findEquipmentHistory', controllerEquipmentHistory.findEquipamentHistory)
+routeEquipmentHistory.get('/findEquipmentHistory', controllerEquipmentHistory.findEquipmentHistory)
 routeEquipmentHistory.post('/addEquipmentHistory', controllerEquipmentHistory.addEquipmentHistory)
+routeEquipmentHistory.put('/updateEquipmentHistory/:idEquipmentHistory', controllerEquipmentHistory.updateEquipmentHistory)
 
 
 

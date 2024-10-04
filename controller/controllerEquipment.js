@@ -28,7 +28,7 @@ const findEquipment = async (req, res) => {
 const updateEquipment = async (req, res) => {
     try {
         const equipment = new Equipment(req.body)
-        await equipment.updateEquipment(req.params.codProd, equipment, res)
+        await equipment.updateEquipment(req.params.idEquipment, equipment, res)
     } catch (error) {
         res.json({message: error.message})
     }
