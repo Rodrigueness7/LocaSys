@@ -13,6 +13,7 @@ const routeProfile_permission = require('./routes/routeProfile_permission')
 const routeEquipment = require('./routes/routeEquipment')
 const routeEquipmentHistory = require('./routes/routeEquipmentHistory')
 
+
 app.use(express.urlencoded({extended: true}), express.json(), routeFilial)
 app.use(express.urlencoded({extended: true}), express.json(), routeSector)
 app.use(express.urlencoded({extended: true}), express.json(), routeProfile)
