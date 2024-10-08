@@ -57,8 +57,9 @@ class EquipmentHistory {
 
     set _entryDate(value) {
         if(value == undefined) {
-            return this.entryDate = localTime.dateLocalTime()
+            return this.entryDate = null
         }
+        return this.entryDate = value
     }
 
     get _returnDate() {
@@ -69,7 +70,7 @@ class EquipmentHistory {
         if(value == undefined) {
             return this.returnDate = null
         }
-        return this.returnDate = localTime.dateLocalTime()
+        return this.returnDate = value
     }
 
     async insertEquipmentHistory(data, res) {
