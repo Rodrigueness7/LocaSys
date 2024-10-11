@@ -1,9 +1,11 @@
 const fs = require('fs').promises
 const xlsx = require('xlsx')
+const { changeKeyObejct } = require('../../constant/changeKeyObejct')
 
 
-const readXlsx = async (res) => {
-    file = []
+const readXlsx = async (res, cell1, cell2) => {
+    let file = []
+    let newFile = []
     const dados = await fs.readdir('./uploads')
     dados.map(values => {
         file.push(values)
@@ -11,9 +13,27 @@ const readXlsx = async (res) => {
     const workbook = xlsx.readFile(`./uploads/${file[0]}`)
     const sheetName = workbook.SheetNames[0]
     const sheet = workbook.Sheets[sheetName]
-    const jsonData = xlsx.utils.sheet_to_json(sheet)
+    const jsonData = xlsx.utils.sheet_to_json(sheet, {range: `${cell1}:${cell2}`})
 
-    res.json(jsonData)
+    jsonData.map(data => {
+        changeKeyObejct(data, 'codProd', ['Nº K&M'])
+        changeKeyObejct(data, 'proposal', ['Proposta'])
+        changeKeyObejct(data, 'description', ['Descrição'])
+        changeKeyObejct(data, 'init', ['Início'])
+        changeKeyObejct(data, 'finish', ['Fim'])
+        changeKeyObejct(data, 'entry', ['Entrada'])
+        changeKeyObejct(data, 'output', ['Saída'])
+        changeKeyObejct(data, 'value', ['Valor'])
+        
+        const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+        data.init = !regex.test(data.init) ? null : data.init
+        data.finish = !regex.test(data.finish) ? null : data.finish
+        data.entry = !regex.test(data.entry) ? null : data.entry
+        data.output = !regex.test(data.output) ? null : data.output
+        
+        newFile.push(data)
+    })
+    res.json(newFile)
 }
 
 module.exports = { readXlsx }
