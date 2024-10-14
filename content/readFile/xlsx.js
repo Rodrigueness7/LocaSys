@@ -1,11 +1,11 @@
 const fs = require('fs').promises
 const xlsx = require('xlsx')
 const { changeKeyObejct } = require('../../constant/changeKeyObejct')
+const EquipmentRental = require('../../model/EquipmentRental')
 
 
 const readXlsx = async (res, cell1, cell2) => {
     let file = []
-    let newFile = []
     const dados = await fs.readdir('./uploads')
     dados.map(values => {
         file.push(values)
@@ -31,9 +31,14 @@ const readXlsx = async (res, cell1, cell2) => {
         data.entry = !regex.test(data.entry) ? null : data.entry
         data.output = !regex.test(data.output) ? null : data.output
         
-        newFile.push(data)
+        const equipmentRental = new EquipmentRental(data)
+        res.json(equipmentRental.insertEquipmentRental(equipmentRental))
     })
-    res.json(newFile)
+  
+    
+    
+    
+  
 }
 
 module.exports = { readXlsx }
