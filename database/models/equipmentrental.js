@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   EquipmentRental.init({
+    idEquipmentRental: DataTypes.INTEGER,
     codProd: DataTypes.INTEGER,
     proposal: DataTypes.STRING,
     description: DataTypes.STRING,

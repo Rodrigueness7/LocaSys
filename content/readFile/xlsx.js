@@ -3,8 +3,7 @@ const xlsx = require('xlsx')
 const { changeKeyObejct } = require('../../constant/changeKeyObejct')
 const EquipmentRental = require('../../model/EquipmentRental')
 
-
-const readXlsx = async (res, cell1, cell2) => {
+const readXlsx = async (cell1, cell2) => {
     let file = []
     const dados = await fs.readdir('./uploads')
     dados.map(values => {
@@ -15,7 +14,7 @@ const readXlsx = async (res, cell1, cell2) => {
     const sheet = workbook.Sheets[sheetName]
     const jsonData = xlsx.utils.sheet_to_json(sheet, {range: `${cell1}:${cell2}`})
 
-    jsonData.map(data => {
+    jsonData.map(async data => {
         changeKeyObejct(data, 'codProd', ['Nº K&M'])
         changeKeyObejct(data, 'proposal', ['Proposta'])
         changeKeyObejct(data, 'description', ['Descrição'])
@@ -30,15 +29,12 @@ const readXlsx = async (res, cell1, cell2) => {
         data.finish = !regex.test(data.finish) ? null : data.finish
         data.entry = !regex.test(data.entry) ? null : data.entry
         data.output = !regex.test(data.output) ? null : data.output
-        
+
         const equipmentRental = new EquipmentRental(data)
-        res.json(equipmentRental.insertEquipmentRental(equipmentRental))
+        await equipmentRental.insertEquipmentRental(equipmentRental)
+       
     })
-  
-    
-    
-    
-  
+     
 }
 
 module.exports = { readXlsx }

@@ -1,5 +1,9 @@
+const { Op } = require('sequelize')
+const tbEquipmentRental = require('../constant/tbEquipmentRental')
+const condition = require('../constant/conditionDate')
 
 class EquipmentRental {
+    idEquipmentRental
     codProd
     proposal
     description
@@ -10,6 +14,7 @@ class EquipmentRental {
     value
 
     constructor(data) {
+        this.idEquipmentRental = 0
         this._codProd = data.codProd
         this._proposal = data.proposal
         this._description = data.description
@@ -108,8 +113,20 @@ class EquipmentRental {
         return this.value = value
     }
 
-     insertEquipmentRental(data) {
-        console.log(data)
+     async insertEquipmentRental(data) {
+       await tbEquipmentRental.create(data)
+    }
+    
+    static async selectEquipmentRental(data, res) {
+        let codProd = data.codProd ? data.codProd : '%'
+
+        const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd}}, attributes: ['idEquipmentRental', 'codProd',
+           'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value' 
+        ]})).map(
+            data => data.dataValues
+        )
+        res.json(result)
+        
     }
 }
 

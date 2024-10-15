@@ -13,7 +13,7 @@ const routeProfile_permission = require('./routes/routeProfile_permission')
 const routeEquipment = require('./routes/routeEquipment')
 const routeEquipmentHistory = require('./routes/routeEquipmentHistory')
 const routeUploadFile = require('./routes/routeUploadFile')
-const routeFile = require('./routes/routeFile')
+const routeEquipmentRental = require('./routes/routeEquipmentRental')
 const cors = require('cors')
 
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeFilial)
@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended: true}), express.json(), cors(), routeProfi
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipment)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentHistory)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUploadFile)
-app.use(express.urlencoded({extended: true}), express.json(), cors(), routeFile)
+app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentRental)
 
 app.listen(process.env.PORT, (error) => {
     try {
