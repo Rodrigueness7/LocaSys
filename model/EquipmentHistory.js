@@ -91,9 +91,10 @@ class EquipmentHistory {
         let codProd = data.codProd ? data.codProd : '%'
         let entryDateInit = localTime.initConv(data.entryDateInit)
         let entryDateFinish = localTime.finishConv(data.entryDateFinish)
+        
 
         const result = (await tbEquipmentHistory.findAll({where:{entryDate: {[Op.gte]: entryDateInit, [Op.lte]: entryDateFinish},
-            [Op.or]: condition.conditionRuturnDate(data.returnDateInit, data.returnDateFinish)},
+            [Op.and]: condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish)},
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
             include: {model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: {codProd: {[Op.like]: codProd}}}
         })).map(values => values.dataValues)

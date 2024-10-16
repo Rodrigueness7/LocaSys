@@ -119,10 +119,13 @@ class EquipmentRental {
     
     static async selectEquipmentRental(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
+        let value = data.value ? data.value : '%'
 
-        const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd}}, attributes: ['idEquipmentRental', 'codProd',
-           'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value' 
-        ]})).map(
+        const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd},
+            [Op.and]: [condition.conditionDate('init', data.initI, data.initF), condition.conditionDate('finish', data.finishI, data.finishF),
+                condition.conditionDate('entry', data.entryI, data.entryF), condition.conditionDate('output', data.outputI, data.outputF)]}, 
+            attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value' ], 
+          })).map(
             data => data.dataValues
         )
         res.json(result)
