@@ -4,6 +4,6 @@ const controllerEquipmentRental = require('../controller/controllerEquipmentRent
 
 routeEquipmentRental.get('/findEquipmentRental', controllerEquipmentRental.findEquipmentRental)
 routeEquipmentRental.post('/addEquipmentRental', controllerEquipmentRental.addFile)
-
+routeEquipmentRental.delete('/deleteAllEquipmentRental', controllerEquipmentRental.removerAllEquipmentRental)
 
 module.exports = routeEquipmentRental

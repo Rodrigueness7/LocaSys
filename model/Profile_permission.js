@@ -75,7 +75,7 @@ class Profile_permission {
     async updateProfile_permission(req, data, res) {
         const valueId = await tbProfile_permission.findByPk(req)
 
-        valueId.idProfile_permission = data.idPermission
+        valueId.idProfile_permission = data.idPermission_permission
         valueId.idProfile = data.idProfile
         valueId.idPermission = data.idPermission
         valueId.allwo = data.allwo

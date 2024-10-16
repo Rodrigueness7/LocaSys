@@ -60,7 +60,7 @@ class EquipmentHistory {
         if(value == undefined) {
             return this.entryDate = null
         }
-        return this.entryDate = value
+        return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString()
     }
 
     get _returnDate() {
@@ -71,7 +71,7 @@ class EquipmentHistory {
         if(value == undefined) {
             return this.returnDate = null
         }
-        return this.returnDate = value
+        return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString()
     }
 
     async insertEquipmentHistory(data, res) {
@@ -89,12 +89,9 @@ class EquipmentHistory {
 
     static async selectEquipmentHistory(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
-        let entryDateInit = localTime.initConv(data.entryDateInit)
-        let entryDateFinish = localTime.finishConv(data.entryDateFinish)
-        
-
-        const result = (await tbEquipmentHistory.findAll({where:{entryDate: {[Op.gte]: entryDateInit, [Op.lte]: entryDateFinish},
-            [Op.and]: condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish)},
+      
+        const result = (await tbEquipmentHistory.findAll({where:{[Op.and]: [condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish),
+            condition.conditionDate('entryDate', data.entryDateInit, data.entryDateFinish)]},
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
             include: {model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: {codProd: {[Op.like]: codProd}}}
         })).map(values => values.dataValues)

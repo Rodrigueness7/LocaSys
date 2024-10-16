@@ -18,4 +18,12 @@ const findEquipmentRental = async (req, res) => {
     }
 }
 
-module.exports = {addFile, findEquipmentRental}
+const removerAllEquipmentRental = async (req, res) => {
+    try {
+        await EquipmentRental.deleteAllEquipmentRental(res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+module.exports = {addFile, findEquipmentRental, removerAllEquipmentRental}
