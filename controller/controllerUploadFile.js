@@ -11,7 +11,7 @@ const uploadFile = (req, res) => {
 
 const deleteFile = (req, res) => {
     try {
-        storage.deleteFiles(res)
+        storage.deleteFile(res)
     } catch (error) {
         res.status(200).json({message: error.message })
     }

@@ -1,7 +1,24 @@
 const fs = require('fs').promises
 const multer = require('multer')
 
+const deleteFile = async (res) => {
+    const file = []
+    const dados = await fs.readdir('./uploads')
+    dados.map(values => {
+        file.push(values)
+    })
+    file.map(files =>
+        fs.unlink(`./uploads/${files}`)
+    )
+    if (file.length == 0) {
+        return res.json({ message: 'There is no file' })
+    }
+    res.json({ message: 'files was deleted successfully' })
+}
+
+
 const uploadFiles = () => {
+
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, 'uploads/')
@@ -15,21 +32,5 @@ const uploadFiles = () => {
 }
 
 
-const deleteFiles = async (res) => {
-    const file = []
-    const dados = await fs.readdir('./uploads')
-    dados.map(values => {
-        file.push(values)
-    })
 
-    if (file.length == 0) {
-        return res.json({ message: 'There is no file' })
-    }
-
-    await fs.unlink(`./uploads/${file[0]}`)
-    res.json({ message: 'file was deleted successfully' })
-}
-
-
-
-module.exports = { uploadFiles, deleteFiles }
+module.exports = { uploadFiles, deleteFile }
