@@ -2,6 +2,7 @@ const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
+const jwt = require('jsonwebtoken')
 
 class User {
     idUser
@@ -201,7 +202,11 @@ class User {
         if(!existUser) {
             throw new Error('Username or password invalid')
         }
-        res.json({message: 'Logged in user'})  
+        let idUser = existUser.dataValues.idUser
+        let user = existUser.dataValues.username
+        const token = jwt.sign({idUser, user}, process.env.secret_key, {expiresIn: '5m'}) 
+        
+        res.json({message: 'Logged in user', token})  
     }
 
     async updateUser(data, req, res) {

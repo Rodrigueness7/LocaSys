@@ -1,13 +1,13 @@
 const express = require('express')
 const routeSupplier = express.Router()
 const controllerSupplier = require('../controller/controllerSupplier')
+const auth = require('../controller/auth')
 
-
-routeSupplier.get('/findAllSupplier', controllerSupplier.findAll)
-routeSupplier.get('/findSupplier/:id', controllerSupplier.findSupplier)
-routeSupplier.post('/addSupplier', controllerSupplier.addSupplier)
-routeSupplier.put('/updateSupplier/:id', controllerSupplier.updateSupplier)
-routeSupplier.delete('/deleteSupplier/:id', controllerSupplier.deleteSupplier)
+routeSupplier.get('/findAllSupplier', auth.verifyToken, controllerSupplier.findAll)
+routeSupplier.get('/findSupplier/:id', auth.verifyToken, controllerSupplier.findSupplier)
+routeSupplier.post('/addSupplier', auth.verifyToken, controllerSupplier.addSupplier)
+routeSupplier.put('/updateSupplier/:id', auth.verifyToken, controllerSupplier.updateSupplier)
+routeSupplier.delete('/deleteSupplier/:id', auth.verifyToken, controllerSupplier.deleteSupplier)
 
 
 module.exports = routeSupplier

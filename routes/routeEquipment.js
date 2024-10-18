@@ -1,11 +1,12 @@
 const express = require('express')
 const routeEquipment = express.Router()
 const controllerEquipment = require('../controller/controllerEquipment')
+const auth = require('../controller/auth')
 
-routeEquipment.get('/findAllEquipment', controllerEquipment.findAllEquipment)
-routeEquipment.get('/findEquipment', controllerEquipment.findEquipment)
-routeEquipment.post('/addEquipment', controllerEquipment.addEquipment)
-routeEquipment.put('/updateEquipment/:idEquipment', controllerEquipment.updateEquipment)
+routeEquipment.get('/findAllEquipment', auth.verifyToken, controllerEquipment.findAllEquipment)
+routeEquipment.get('/findEquipment', auth.verifyToken, controllerEquipment.findEquipment)
+routeEquipment.post('/addEquipment', auth.verifyToken, controllerEquipment.addEquipment)
+routeEquipment.put('/updateEquipment/:idEquipment', auth.verifyToken, controllerEquipment.updateEquipment)
 
 
 module.exports = routeEquipment

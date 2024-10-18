@@ -1,12 +1,13 @@
 const express = require('express')
 const routeContact = express.Router()
 const controllerContact = require('../controller/controllerContact')
+const auth = require('../controller/auth')
 
-routeContact.get('/findAllContact', controllerContact.findAllContact)
-routeContact.get('/findContact/:id', controllerContact.findContact)
-routeContact.post('/addContact', controllerContact.addContact)
-routeContact.put('/updateContact/:id', controllerContact.updateContact)
-routeContact.delete('/deleteContact/:id', controllerContact.deleteContact)
+routeContact.get('/findAllContact', auth.verifyToken, controllerContact.findAllContact)
+routeContact.get('/findContact/:id', auth.verifyToken, controllerContact.findContact)
+routeContact.post('/addContact', auth.verifyToken, controllerContact.addContact)
+routeContact.put('/updateContact/:id', auth.verifyToken, controllerContact.updateContact)
+routeContact.delete('/deleteContact/:id', auth.verifyToken, controllerContact.deleteContact)
 
 
 
