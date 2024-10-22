@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const tbEquipmentRental = require('../constant/tbEquipmentRental')
 const condition = require('../constant/conditionDate')
 
+
 class EquipmentRental {
     idEquipmentRental
     codProd
@@ -134,6 +135,7 @@ class EquipmentRental {
         await tbEquipmentRental.destroy({truncate: true})
         res.json({message: 'Deleted all equipment rental '})
     }
+
 }
 
 

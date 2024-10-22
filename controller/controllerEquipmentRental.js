@@ -26,4 +26,6 @@ const removerAllEquipmentRental = async (req, res) => {
     }
 }
 
+
+
 module.exports = {addFile, findEquipmentRental, removerAllEquipmentRental}
