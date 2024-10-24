@@ -37,10 +37,19 @@ const updateEquipment = async (req, res) => {
 const exportFileXlsx = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.xlsx'
-        Equipment.exportEquipmentlXlsx(address, res)
+        await Equipment.exportEquipmentlXlsx(address, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addEquipment, findAllEquipment, findEquipment, updateEquipment, exportFileXlsx}
+const exportFilePdf = async (req, res) => {
+    try {
+        let address = req.body.address + '\\equipment.pdf'
+        await Equipment.exportEquipmentPdf(address, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+module.exports = {addEquipment, findAllEquipment, findEquipment, updateEquipment, exportFileXlsx, exportFilePdf}

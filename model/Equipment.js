@@ -5,6 +5,7 @@ const tbSector = require('../constant/tbSector')
 const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
 const exportXlsx = require('../content/export/fileXlsx')
+const exportPdf = require('../content/export/filePdf')
 
 class Equipment {
     idEquipment
@@ -216,6 +217,14 @@ class Equipment {
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
+        res.json({message: 'File generated successfully'})
+    }
+
+    static async exportEquipmentPdf(req, res) {
+        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate']})).map(
+            data => data.dataValues
+        )
+        exportPdf.filePdf(result, req)
         res.json({message: 'File generated successfully'})
     }
 

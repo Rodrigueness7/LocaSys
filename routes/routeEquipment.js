@@ -6,7 +6,8 @@ const auth = require('../controller/auth')
 routeEquipment.get('/findAllEquipment', auth.verifyToken, controllerEquipment.findAllEquipment)
 routeEquipment.get('/findEquipment', auth.verifyToken, controllerEquipment.findEquipment)
 routeEquipment.post('/addEquipment', auth.verifyToken, controllerEquipment.addEquipment)
-routeEquipment.post('/exportFileXlsx', controllerEquipment.exportFileXlsx)
+routeEquipment.post('/exportFileXlsx', auth.verifyToken ,controllerEquipment.exportFileXlsx)
+routeEquipment.post('/exportFilePdf', auth.verifyToken ,controllerEquipment.exportFilePdf)
 routeEquipment.put('/updateEquipment/:idEquipment', auth.verifyToken, controllerEquipment.updateEquipment)
 
 
