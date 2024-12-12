@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Filial.init({
     idFilial: DataTypes.INTEGER,
-    filial: DataTypes.INTEGER
+    filial: DataTypes.STRING,
+    CNPJ: DataTypes.STRING,
+    corporateName: DataTypes.STRING, 
+    uniqueIdentifier: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Filial',

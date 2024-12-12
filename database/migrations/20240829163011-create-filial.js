@@ -10,6 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       filial: {
+        type: Sequelize.STRING(80),
+        allowNull: false
+      },
+      CNPJ: {
+        type: Sequelize.STRING(14),
+        allowNull: true
+      },
+      corporateName: {
+        type: Sequelize.STRING(80),
+        allowNull: true
+      },
+      uniqueIdentifier: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
