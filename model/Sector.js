@@ -1,3 +1,4 @@
+const tbfilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
 
 class Sector {
@@ -55,7 +56,7 @@ class Sector {
     }
 
     static async findAllSector(res) {
-        const result = (await tbSector.findAll()).map(
+        const result = (await tbSector.findAll({attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}})).map(
             sector => sector.dataValues
         )
         res.send(result)
