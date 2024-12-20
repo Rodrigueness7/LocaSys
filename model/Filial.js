@@ -109,7 +109,7 @@ class Filial {
         
     }
 
-   static async deleteFilial(req) {
+   static async deleteFilial(req, res) {
         await tbFilial.findByPk(req).then(
              removerFilial => removerFilial.destroy()
         )
