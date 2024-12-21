@@ -72,6 +72,12 @@ class Profile_permission {
         res.json(result)
     }
 
+    static async selectIdProfile_permission(req, res) {
+        await tbProfile_permission.findByPk(req, {attributes: ['idProfile_permission', 'allwo'], include: [{model: tbProfile, attributes: ['profile']}, {model: tbPermission, attributes: ['permission']}]}).then(
+            idPermission_permission => res.json(idPermission_permission.dataValues)
+        )
+    }
+
     async updateProfile_permission(req, data, res) {
         const valueId = await tbProfile_permission.findByPk(req)
 

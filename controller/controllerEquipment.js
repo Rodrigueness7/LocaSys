@@ -17,6 +17,14 @@ const findAllEquipment = async (req, res) => {
     }
 }
 
+const findEquipmentId = async (req, res) => {
+    try {
+        await Equipment.selectEquipmentId(req.params.idEquipment, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+} 
+
 const findEquipment = async (req, res) => {
     try {
         await Equipment.selectEquipment(req.body, res)
@@ -52,4 +60,4 @@ const exportFilePdf = async (req, res) => {
     }
 }
 
-module.exports = {addEquipment, findAllEquipment, findEquipment, updateEquipment, exportFileXlsx, exportFilePdf}
+module.exports = {addEquipment, findAllEquipment, findEquipment, findEquipmentId, updateEquipment, exportFileXlsx, exportFilePdf}

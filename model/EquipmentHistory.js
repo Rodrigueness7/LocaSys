@@ -87,6 +87,14 @@ class EquipmentHistory {
         res.json(result)
     }
 
+    static async selectEquipmentHistoryId(req, res) {
+        await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
+            include: {model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}
+        }).then(
+            idEquipmentHistory => res.json(idEquipmentHistory.dataValues)
+        )
+    }
+
     static async selectEquipmentHistory(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
       

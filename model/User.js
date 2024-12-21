@@ -172,6 +172,13 @@ class User {
             res.json({message: 'Add successfully'})   
     }
 
+    static async selectIdUser(req, res) {
+        await tbUser.findByPk(req, {attributes: ['idUser', 'username', 'firstName', 'lastName', 
+            'cpf', 'email', 'password'], include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]}).then(
+                idUser => res.json(idUser.dataValues)
+            )
+    }
+
     static async selectAllUser(res) {
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password'],

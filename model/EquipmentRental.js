@@ -118,6 +118,14 @@ class EquipmentRental {
        await tbEquipmentRental.create(data)
     }
     
+    static async selectAllEquipmentRental(res) {
+        let result = (await tbEquipmentRental.findAll({attributes:['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']})).map(
+            equipmentRental => equipmentRental.dataValues
+        )
+        res.json(result)
+        
+    }
+
     static async selectEquipmentRental(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
         
@@ -129,6 +137,12 @@ class EquipmentRental {
             data => data.dataValues
         )
         res.json(result)
+    }
+
+    static async selectEquipmentRentalId(req, res) {
+        await tbEquipmentRental.findByPk(req, {attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']}).then(
+            equipmentRentalId => equipmentRentalId.dataValues
+        )
     }
 
     static async deleteAllEquipmentRental(res) {

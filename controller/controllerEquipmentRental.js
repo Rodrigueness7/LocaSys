@@ -10,9 +10,25 @@ const addFile = async (req, res) => {
     }
 }
 
+const findAllEquipmentRental = async (req, res) => {
+    try {
+        await EquipmentRental.selectAllEquipmentRental(res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
 const findEquipmentRental = async (req, res) => {
     try {
         await EquipmentRental.selectEquipmentRental(req.body, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+const findEquipmentRentalId = async (req, res) => {
+    try {
+        await EquipmentRental.selectEquipmentRentalId(req.params.idEquipmentRental, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -28,4 +44,4 @@ const removerAllEquipmentRental = async (req, res) => {
 
 
 
-module.exports = {addFile, findEquipmentRental, removerAllEquipmentRental}
+module.exports = {addFile, findAllEquipmentRental ,findEquipmentRental, findEquipmentRentalId, removerAllEquipmentRental}

@@ -4,6 +4,8 @@ const controllerEquipmentRental = require('../controller/controllerEquipmentRent
 const auth = require('../controller/auth')
 
 routeEquipmentRental.get('/findEquipmentRental', auth.verifyToken, controllerEquipmentRental.findEquipmentRental)
+routeEquipmentRental.get('/findAllEquipmentRental', auth.verifyToken, controllerEquipmentRental.findAllEquipmentRental)
+routeEquipmentRental.get('/findEquipmentRentalId/:idEquipmentRental', auth.verifyToken, controllerEquipmentRental.findEquipmentRentalId)
 routeEquipmentRental.post('/addEquipmentRental', auth.verifyToken, controllerEquipmentRental.addFile)
 routeEquipmentRental.delete('/deleteAllEquipmentRental', auth.verifyToken, controllerEquipmentRental.removerAllEquipmentRental)
 

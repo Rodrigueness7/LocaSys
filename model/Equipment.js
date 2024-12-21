@@ -175,6 +175,12 @@ class Equipment {
         res.json(result)
     }
 
+    static async selectEquipmentId(req, res) {
+        await tbEquipment.findByPk(req, {attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'deletionDate'], include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, {model: tbSector, attributes:['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}).then(
+            idEquipment => res.json(idEquipment.dataValues)
+        )
+    }
+
     static async selectEquipment(data, res) {
 
         let codProd = data.codProd ? data.codProd : '%'

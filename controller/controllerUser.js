@@ -17,6 +17,14 @@ const findAllUser = async (req, res) => {
    }
 }
 
+const findIdUser = async (req, res) => {
+    try {
+        await User.selectIdUser(req.params.id, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
 const findUser = async (req, res) => {
     try {
         await User.selectUser(req.body, res)
@@ -50,4 +58,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {addUser, findAllUser, findUser, login, updateUser, deleteUser}
+module.exports = {addUser, findAllUser, findIdUser, findUser, login, updateUser, deleteUser}

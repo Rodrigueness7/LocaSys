@@ -59,11 +59,11 @@ class Sector {
         const result = (await tbSector.findAll({attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}})).map(
             sector => sector.dataValues
         )
-        res.send(result)
+        res.json(result)
     }
 
     static async findSector(req, res) {
-        await tbSector.findByPk(req).then(
+        await tbSector.findByPk(req, {attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}}).then(
             idSector => res.json(idSector.dataValues)
         )
     }
