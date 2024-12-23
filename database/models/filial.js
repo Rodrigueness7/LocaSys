@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     filial: DataTypes.STRING,
     CNPJ: DataTypes.STRING,
     corporateName: DataTypes.STRING, 
-    uniqueIdentifier: DataTypes.INTEGER
+    uniqueIdentifier: DataTypes.INTEGER,
+    deletionDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Filial',

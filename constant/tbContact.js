@@ -56,6 +56,10 @@ const tbContact = db.define('Contacts', {
       model: 'Suppliers',
       key: 'idSupplier'
     }
+  },
+  deletionDate: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 })
 

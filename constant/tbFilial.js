@@ -24,13 +24,9 @@ const tbfilial = db.define('Filials', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  createdAt: {
-    allowNull: false,
-    type: Sequelize.DATE
-  },
-  updatedAt: {
-    allowNull: false,
-    type: Sequelize.DATE
+  deletionDate: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 })
 

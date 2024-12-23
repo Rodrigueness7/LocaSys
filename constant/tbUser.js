@@ -49,6 +49,10 @@ const tbUser = db.define('Users', {
       model: 'Profiles',
       key: 'idProfile'
     }
+  },
+  deletionDate: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 })
 

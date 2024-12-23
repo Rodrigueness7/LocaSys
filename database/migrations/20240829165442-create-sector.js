@@ -21,6 +21,10 @@ module.exports = {
           key: 'idFilial'
         }
       },
+      deletionDate: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

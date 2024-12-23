@@ -218,6 +218,7 @@ class Equipment {
         res.json({message: 'Updated successfully'})
     }
 
+    static async 
     static async exportEquipmentlXlsx(req, res) {
         const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate']})).map(
             data => data.dataValues

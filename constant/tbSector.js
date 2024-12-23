@@ -3,24 +3,28 @@ const {Sequelize} = require('sequelize')
 const tbFilial = require('./tbFilial')
 
 const tbSector = db.define('Sectors', {
-    idSector: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      sector: {
-        type: Sequelize.STRING(80),
-        allowNull: false
-      },
-      idFilial: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Filials',
-          key: 'idFilial'
-        }
-      },
+  idSector: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER
+  },
+  sector: {
+    type: Sequelize.STRING(80),
+    allowNull: false
+  },
+  idFilial: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Filials',
+      key: 'idFilial'
+    }
+  },
+  deletionDate: {
+    type: Sequelize.DATE,
+    allowNull: true
+  }
 })
 
 tbSector.belongsTo(tbFilial, {foreignKey: 'idFilial'})

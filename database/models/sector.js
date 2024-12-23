@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Sector.init({
     idSector: DataTypes.INTEGER,
     sector: DataTypes.STRING,
-    idFilial: DataTypes.INTEGER
+    idFilial: DataTypes.INTEGER,
+    deletionDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Sector',

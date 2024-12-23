@@ -39,6 +39,10 @@ const tbSupplier = db.define('Suppliers', {
   city: {
     type: Sequelize.STRING(45),
     allowNull: false
+  },
+  deletionDate: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 })
 

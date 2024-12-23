@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     state: DataTypes.STRING,
     county: DataTypes.STRING,
     district: DataTypes.STRING,
-    idSupplier: DataTypes.INTEGER
+    idSupplier: DataTypes.INTEGER,
+    deletionDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Contact',
