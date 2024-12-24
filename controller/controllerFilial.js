@@ -35,12 +35,12 @@ const updateFilial = async (req, res) => {
    }
 } 
 
-const removerFilial = async (req, res) => {
+const inactivateFilial = async (req, res) => {
    try {
-     await Filial.deleteFilial(req.params.id, res)
+     await Filial.inactivateFilial(req.params.id, req.body.deletionDate, res)
    } catch (error) {
       res.json({message: error.message})
    }
 }
 
-module.exports = {addFilial, findAllFilial, updateFilial, removerFilial, findFilial}
+module.exports = {addFilial, findAllFilial, updateFilial, inactivateFilial, findFilial}

@@ -42,6 +42,7 @@ const updateEquipment = async (req, res) => {
     }
 }
 
+
 const exportFileXlsx = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.xlsx'

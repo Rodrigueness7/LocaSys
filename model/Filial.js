@@ -6,6 +6,7 @@ class Filial {
     CNPJ
     corporateName
     uniqueIdentifier
+    deletionDate
 
 
     constructor(data) {
@@ -14,6 +15,7 @@ class Filial {
         this._CNPJ = data.CNPJ
         this._coporateName = data.corporateName
         this._uniqueIdentifier = data.uniqueIdentifier
+        this._deletionDate = data.deletionDate
 
     }
 
@@ -72,6 +74,17 @@ class Filial {
         return this.uniqueIdentifier = value
     }
 
+    get _deletionDate() {
+        return this.deletionDate
+    }
+
+    set _deletionDate(value) {
+        if(value == undefined) {
+            return this.deletionDate = null
+        }
+        return this.deletionDate = value
+    }
+
 
    async insertFilial(data, res) {
         const existFilial = await tbFilial.findOne({where: {filial: data.filial}})
@@ -83,7 +96,7 @@ class Filial {
     }
 
     static async selectAllFilial(res) {
-       const result =  (await tbFilial.findAll()).map(
+       const result =  (await tbFilial.findAll({where: {deletionDate: null}})).map(
             filial => filial.dataValues
         )
         res.json(result)
@@ -109,11 +122,13 @@ class Filial {
         
     }
 
-   static async deleteFilial(req, res) {
-        await tbFilial.findByPk(req).then(
-             removerFilial => removerFilial.destroy()
-        )
-        res.json({message: 'Delete successfuly'})
+   static async inactivateFilial(req, data, res) {
+        const dataFilial = await tbFilial.findByPk(req)
+
+        dataFilial.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+        
+        await dataFilial.save()
+        res.json({message: 'Successfully inactivated'})
     }
 }
 

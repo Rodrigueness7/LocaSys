@@ -218,7 +218,15 @@ class Equipment {
         res.json({message: 'Updated successfully'})
     }
 
-    static async 
+    static async inactivateEquipment(req, data, res) {
+        let dataEquipment = await tbEquipment.findByPk(req)
+
+        dataEquipment.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+
+       await dataEquipment.save()
+       res.json({message: 'Successfully inactivated'})
+    }
+
     static async exportEquipmentlXlsx(req, res) {
         const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate']})).map(
             data => data.dataValues

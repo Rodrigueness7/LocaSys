@@ -7,6 +7,6 @@ routeFilial.get('/findAllFilial', auth.verifyToken, controller.findAllFilial)
 routeFilial.get('/findFilial/:id', auth.verifyToken, controller.findFilial)
 routeFilial.post('/addFilial', controller.addFilial)
 routeFilial.put('/updateFilial/:id', auth.verifyToken, controller.updateFilial)
-routeFilial.delete('/deleteFilial/:id', auth.verifyToken, controller.removerFilial)
+routeFilial.put('/inactivateFilial/:id', auth.verifyToken, controller.inactivateFilial)
 
 module.exports = routeFilial;

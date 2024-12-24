@@ -1,3 +1,4 @@
+const { DATE } = require('sequelize')
 const tbContact = require('../constant/tbContact')
 
 class Contact {
@@ -13,6 +14,7 @@ class Contact {
     county
     district
     idSupplier
+    deletionDate
 
     constructor(data) {
         this._idContact = data.idContact
@@ -27,6 +29,7 @@ class Contact {
         this._county = data.county
         this._district = data.district
         this._idSupplier = data.idSupplier
+        this._deletionDate = data.deletionDate
     }
 
     get _idContact() {
@@ -35,9 +38,9 @@ class Contact {
 
     set _idContact(value) {
         if(value == undefined) {
-            return this.contact = 0
+            return this.idContact = 0
         }
-        return this.contact = value
+        return this.idContact = value
     }
 
     get _contact() {
@@ -167,6 +170,17 @@ class Contact {
         return this.idSupplier = value
     }
 
+    get _deletionDate() {
+        return this.deletionDate
+    }
+
+    set _deletionDate(value) {
+        if(value == undefined) {
+            return this.deletionDate = null
+        }
+        return this.deletionDate = value
+    }
+
     async insertContact(data, res) {
         const existContact = await tbContact.findOne({where: {contact: data.contact}})
         if(existContact) {
@@ -177,7 +191,7 @@ class Contact {
     }
 
     static async selectAllContact(res) {
-        const allContact = (await tbContact.findAll()).map(
+        const allContact = (await tbContact.findAll({where: {deletionDate: null}})).map(
             result => result.dataValues
         )
         res.json(allContact)
@@ -192,6 +206,7 @@ class Contact {
     async updateContact(data, req, res) {
         const contactId = await tbContact.findByPk(req)
 
+
         contactId.contact = data.contact
         contactId.email = data.email
         contactId.telephone = data.telephone
@@ -203,16 +218,20 @@ class Contact {
         contactId.county = data.county
         contactId.district = data.district
         contactId.idSupplier = data.idSupplier
+        contactId.deletionDate = data.deletionDate
 
         await contactId.save()
+
         res.json({message: 'Updated successfully'})
     }
     
-    static async removerContact(req, res) {
-        await tbContact.findByPk(req).then(
-            result => result.destroy()
-        )
-        res.json({message: 'Delete successfully'})
+    static async inactivateContact(req, data, res) {
+        const dataContact = await tbContact.findByPk(req)
+
+        dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+       
+        await dataContact.save()
+        res.json({message: 'Successfully inactivated'})
     } 
 
     

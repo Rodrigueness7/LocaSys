@@ -7,7 +7,7 @@ routeContact.get('/findAllContact', auth.verifyToken, controllerContact.findAllC
 routeContact.get('/findContact/:id', auth.verifyToken, controllerContact.findContact)
 routeContact.post('/addContact', auth.verifyToken, controllerContact.addContact)
 routeContact.put('/updateContact/:id', auth.verifyToken, controllerContact.updateContact)
-routeContact.delete('/deleteContact/:id', auth.verifyToken, controllerContact.deleteContact)
+routeContact.put('/inactivateContact/:id', auth.verifyToken, controllerContact.inactivateContact)
 
 
 

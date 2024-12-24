@@ -28,18 +28,18 @@ const findContact = async (req, res) => {
 const updateContact = async (req, res) => {
     try {
         const contact = new Contact(req.body)
-        contact.updateContact(contact, req.params.id, res)
+       await contact.updateContact(contact, req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const deleteContact = async(req, res) => {
+const inactivateContact = async(req, res) => {
     try {
-        await Contact.removerContact(req.params.id, res)
+        await Contact.inactivateContact(req.params.id, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addContact, findAllContact, deleteContact, findContact, updateContact}
+module.exports = {addContact, findAllContact, inactivateContact, findContact, updateContact}
