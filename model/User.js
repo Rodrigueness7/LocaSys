@@ -16,6 +16,7 @@ class User {
     confirmationEmail
     idSector
     idProfile
+    deletionDate
 
     constructor(data) {
         this._idUser = data.idUser
@@ -29,6 +30,7 @@ class User {
         this._confirmationEmail = data.confirmationEmail
         this._idSector = data.idSector
         this._idProfile = data.idProfile 
+        this._deletionDate = data.deletetionDate
     }
 
     get _idUser() {
@@ -163,6 +165,17 @@ class User {
         return this.idProfile = value
     }
 
+    get _deletionDate() {
+        return this.deletionDate
+    }
+
+    set _deletionDate(value) {
+        if(value == undefined) {
+            return this.deletionDate = null
+        }
+        return this.deletionDate = value
+    }
+
    async insertUser(data, username, email, res) {
        const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
             if(existUser) {
@@ -181,8 +194,8 @@ class User {
 
     static async selectAllUser(res) {
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
-            'cpf', 'email', 'password'],
-            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]})).map(
+            'cpf', 'email', 'password', 'deletionDate'],
+            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
             allUser => allUser.dataValues
         )
         res.json(result)
@@ -232,11 +245,13 @@ class User {
         res.json({message:'Update with successfully'})
     }
 
-    static async removerUser(req, res) {
-        await tbUser.findByPk(req).then(
-            deleteUser => deleteUser.destroy()
-        )
-        res.json('Deleted user')
+    static async inactivateUser(req, data, res) {
+        const dataUser = await tbUser.findByPk(req)
+
+        dataUser.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+
+        await dataUser.save()
+        res.json({message: 'Successfully inactivated'})
     }
 
 }

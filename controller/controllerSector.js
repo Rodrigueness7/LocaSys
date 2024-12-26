@@ -34,12 +34,12 @@ const updateSector = async (req, res) => {
     }
 }
 
-const removerSector = async (req, res) => {
+const inactivateSector = async (req, res) => {
     try {
-       await Sector.deleteSector(req.params.id, res)
+       await Sector.inactivateSector(req.params.id, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 } 
 
-module.exports = {addSector, findAllSector, findSectorById, updateSector, removerSector}
+module.exports = {addSector, findAllSector, findSectorById, updateSector, inactivateSector}

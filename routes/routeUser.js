@@ -9,6 +9,6 @@ routeUser.get('/findIdUser/:id', auth.verifyToken, controllerUser.findIdUser)
 routeUser.post('/login', controllerUser.login)
 routeUser.post('/addUser', controllerUser.addUser)
 routeUser.put('/updateUser/:id', auth.verifyToken, controllerUser.updateUser)
-routeUser.delete('/deleteUser/:id', auth.verifyToken, controllerUser.deleteUser)
+routeUser.put('/inactivateUser/:id', auth.verifyToken, controllerUser.inactivateUser)
 
 module.exports = routeUser

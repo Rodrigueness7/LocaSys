@@ -50,12 +50,12 @@ const updateUser = async (req, res) => {
     }
 }
 
-const deleteUser = async (req, res) => {
+const inactivateUser = async (req, res) => {
     try {
-        User.removerUser(req.params.id, res)
+        User.inactivateUser(req.params.id, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addUser, findAllUser, findIdUser, findUser, login, updateUser, deleteUser}
+module.exports = {addUser, findAllUser, findIdUser, findUser, login, updateUser, inactivateUser}

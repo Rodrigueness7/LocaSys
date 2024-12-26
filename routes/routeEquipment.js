@@ -10,6 +10,7 @@ routeEquipment.post('/addEquipment', auth.verifyToken, controllerEquipment.addEq
 routeEquipment.post('/exportFileXlsx', auth.verifyToken ,controllerEquipment.exportFileXlsx)
 routeEquipment.post('/exportFilePdf', auth.verifyToken ,controllerEquipment.exportFilePdf)
 routeEquipment.put('/updateEquipment/:idEquipment', auth.verifyToken, controllerEquipment.updateEquipment)
+routeEquipment.put('/inactivateEquipment/:idEquipment', auth.verifyToken, controllerEquipment.inactivateEquipment)
 
 
 module.exports = routeEquipment

@@ -34,12 +34,12 @@ const updateSupplier = async (req, res) => {
     }
 }
 
-const deleteSupplier = async (req, res) => {
+const inactivateSupplier = async (req, res) => {
     try {
-       await Supplier.removeSupplier(req.params.id, res)
+       await Supplier.inactivateSupplier(req.params.id, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addSupplier, findAll, findSupplier, updateSupplier, deleteSupplier}
+module.exports = {addSupplier, findAll, findSupplier, updateSupplier, inactivateSupplier}

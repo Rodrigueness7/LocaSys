@@ -5,11 +5,13 @@ class Sector {
     idSector
     sector
     idFilial
+    deletionDate
 
     constructor(data) {
         this._idSector = data.idSector,
         this._sector = data.sector,
         this._idFilial = data.idFilial
+        this._deletionDate = data.deletionDate
     }
 
     get _idSector() {
@@ -45,6 +47,17 @@ class Sector {
         return this.idFilial = value
     }
 
+    get _deletionDate() {
+        return this.deletionDate
+    }
+
+    set _deletionDate(value) {
+        if(value == undefined) {
+            return this.deletionDate = null
+        }
+        return this.deletionDate = value
+    }
+
     async insertSector(data, res) {
         const existSector = await tbSector.findOne({ where: { sector: data.sector } })
             if (existSector) {
@@ -56,7 +69,7 @@ class Sector {
     }
 
     static async findAllSector(res) {
-        const result = (await tbSector.findAll({attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}})).map(
+        const result = (await tbSector.findAll({attributes: ['idSector','sector', 'deletionDate'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}, where: {deletionDate: null}})).map(
             sector => sector.dataValues
         )
         res.json(result)
@@ -80,11 +93,13 @@ class Sector {
 
     }
 
-    static async deleteSector(req, res) {
-         await tbSector.findByPk(req).then(
-            data => data.destroy()
-        )
-        res.json({message: 'Delete successfully'})  
+    static async inactivateSector(req, data, res) {
+        const dataSector = await tbSector.findByPk(req)
+
+        dataSector.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+
+        await dataSector.save()
+        res.json({message: 'Successfully inactivated'})  
     }
 }
 

@@ -42,6 +42,13 @@ const updateEquipment = async (req, res) => {
     }
 }
 
+const inactivateEquipment = async (req, res) => {
+    try {
+        await Equipment.inactivateEquipment(req.params.idEquipment, req.body.deletionDate, res)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
 
 const exportFileXlsx = async (req, res) => {
     try {
@@ -61,4 +68,4 @@ const exportFilePdf = async (req, res) => {
     }
 }
 
-module.exports = {addEquipment, findAllEquipment, findEquipment, findEquipmentId, updateEquipment, exportFileXlsx, exportFilePdf}
+module.exports = {addEquipment, findAllEquipment, findEquipment, findEquipmentId, updateEquipment, inactivateEquipment ,exportFileXlsx, exportFilePdf}

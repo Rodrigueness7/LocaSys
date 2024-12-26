@@ -7,6 +7,6 @@ routeSector.get('/findAllSector', auth.verifyToken, controllerSector.findAllSect
 routeSector.get('/findSector/:id', auth.verifyToken, controllerSector.findSectorById)
 routeSector.post('/addSector', controllerSector.addSector)
 routeSector.put('/updateSector/:id', auth.verifyToken, controllerSector.updateSector)
-routeSector.delete('/deleteSector/:id', auth.verifyToken, controllerSector.removerSector)
+routeSector.put('/inactivateSector/:id', auth.verifyToken, controllerSector.inactivateSector)
 
 module.exports = routeSector

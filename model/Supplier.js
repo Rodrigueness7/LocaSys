@@ -11,6 +11,7 @@ class Supplier {
     zipCode
     state
     city
+    deletionDate
 
     constructor(data) {
         this._idSupplier = data.idSupplier
@@ -22,6 +23,7 @@ class Supplier {
         this._zipCode = data.zipCode
         this._state = data.state
         this._city = data.city
+        this._deletionDate = data.deletionDate
     }
 
     get _idSupplier() {
@@ -123,6 +125,17 @@ class Supplier {
         return this.city = value    
     }
 
+    get _deletionDate() {
+        return this.deletionDate
+    }
+
+    set _deletionDate(value) {
+        if(value == undefined) {
+            return this.deletionDate = null
+        }
+        return this.deletionDate = value
+    }
+
     async insertSupplier(data, res) {
         const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier} })
 
@@ -134,7 +147,7 @@ class Supplier {
     }
 
     static async selectAllSupplier(res) {
-        const result = (await tbSupplier.findAll()).map(
+        const result = (await tbSupplier.findAll({where: {deletionDate: null}})).map(
             allSupplier => allSupplier.dataValues 
         )
         res.json(result)
@@ -165,11 +178,13 @@ class Supplier {
 
     }
 
-    static async removeSupplier(req, res) {
-        await tbSupplier.findByPk(req).then(
-            supplier => supplier.destroy()
-        )
-        res.json({message: 'Delelte Supplier'})
+    static async inactivateSupplier(req, data, res) {
+       const dataSupplier = await tbSupplier.findByPk(req)
+ 
+       dataSupplier.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+
+       await dataSupplier.save() 
+       res.json({message: 'Successfully inactivated'})
     }
 }
 
