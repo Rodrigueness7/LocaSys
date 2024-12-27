@@ -18,7 +18,7 @@ class Equipment {
     idSector
     idSupplier
     entryDate
-    deletionDate
+    returnDate
 
     constructor(data) {
         this._idEquipment = data.idEquipment
@@ -31,7 +31,7 @@ class Equipment {
         this._idSector = data.idSector
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
-        this._deletionDate = data.deletionDate
+        this._returnDate = data.returnDate
     }
 
     get _idEquipment() {
@@ -144,15 +144,15 @@ class Equipment {
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
-    get _deletionDate() {
-        return this.deletionDate
+    get _returnDate() {
+        return this.returnDate
     }
 
-    set _deletionDate(value) {
+    set _returnDate(value) {
         if(value == undefined) {
-            return this.deletionDate = null
+            return this.returnDate = null
         }
-        return this.deletionDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
+        return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
     async insertEquipment(data, res) {
@@ -166,7 +166,7 @@ class Equipment {
     }
 
     static async selectAllEquipment(res) {
-        const result = (await tbEquipment.findAll({ where: {deletionDate: null}, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'deletionDate'], 
+        const result = (await tbEquipment.findAll({ where: {returnDate: null}, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], 
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, 
             {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]
         })).map(
@@ -176,7 +176,7 @@ class Equipment {
     }
 
     static async selectEquipmentId(req, res) {
-        await tbEquipment.findByPk(req, {attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'deletionDate'], include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, {model: tbSector, attributes:['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}).then(
+        await tbEquipment.findByPk(req, {attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, {model: tbSector, attributes:['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}).then(
             idEquipment => res.json(idEquipment.dataValues)
         )
     }
@@ -189,9 +189,9 @@ class Equipment {
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipment.findAll({where: {deletionDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
+        const result = (await tbEquipment.findAll({where: {returnDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
             {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
-            attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate'],
+            attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
             {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
         )).map(
@@ -212,23 +212,23 @@ class Equipment {
         pk.idSector = data.idSector
         pk.idSupplier = data.idSupplier
         pk.entryDate = data.entryDate
-        pk.deletionDate = data.deletionDate
+        pk.returnDate = data.returnDate
 
         await pk.save() 
         res.json({message: 'Updated successfully'})
     }
 
-    static async inactivateEquipment(req, data, res) {
+    static async returnEquipment(req, data, res) {
         let dataEquipment = await tbEquipment.findByPk(req)
 
-        dataEquipment.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+        dataEquipment.returnDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
        await dataEquipment.save()
-       res.json({message: 'Successfully inactivated'})
+       res.json({message: 'Returned successfully'})
     }
 
     static async exportEquipmentlXlsx(req, res) {
-        const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate']})).map(
+        const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
@@ -236,7 +236,7 @@ class Equipment {
     }
 
     static async exportEquipmentPdf(req, res) {
-        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'deletionDate']})).map(
+        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
             data => data.dataValues
         )
         exportPdf.filePdf(result, req)

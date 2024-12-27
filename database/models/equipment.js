@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     idSector: DataTypes.INTEGER,
     idSupplier: DataTypes.INTEGER,
     entryDate: DataTypes.DATE,
-    deletionDate: DataTypes.DATE
+    returnDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Equipment',
