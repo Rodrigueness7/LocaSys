@@ -36,7 +36,7 @@ const updateContact = async (req, res) => {
 
 const inactivateContact = async(req, res) => {
     try {
-        await Contact.inactivateContact(req.params.id, req.body.deletionDate, res)
+        await Contact.inactivateContact(req.params.idContact, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

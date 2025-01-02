@@ -1,4 +1,3 @@
-const { DATE } = require('sequelize')
 const tbContact = require('../constant/tbContact')
 
 class Contact {
@@ -227,7 +226,7 @@ class Contact {
     
     static async inactivateContact(req, data, res) {
         const dataContact = await tbContact.findByPk(req)
-
+       
         dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
        
         await dataContact.save()

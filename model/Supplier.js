@@ -1,4 +1,6 @@
 const tbSupplier = require('../constant/tbSupplier')
+const tbContact = require('../constant/tbContact')
+const tbEquipment = require('../constant/tbEquipment')
 
 class Supplier {
 
@@ -180,6 +182,16 @@ class Supplier {
 
     static async inactivateSupplier(req, data, res) {
        const dataSupplier = await tbSupplier.findByPk(req)
+       const countSupplierInContact = await tbContact.count({where: {idSupplier: req}}) 
+       const countSupplierInEquipment = await tbEquipment.count({where: {idSupplier: req}})
+
+       if(countSupplierInContact > 0) {
+            throw new Error('You cannot delete a Supplier, as it is registered in the Contact table')
+       }
+
+       if(countSupplierInEquipment > 0) {
+            throw new Error('You cannot delete a Supplier, as it is registered in the Equipment table')
+       }
  
        dataSupplier.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 

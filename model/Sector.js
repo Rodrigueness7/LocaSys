@@ -1,5 +1,7 @@
 const tbfilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
+const tbUser = require('../constant/tbUser')
+const tbEquipment = require('../constant/tbEquipment')
 
 class Sector {
     idSector
@@ -59,7 +61,7 @@ class Sector {
     }
 
     async insertSector(data, res) {
-        const existSector = await tbSector.findOne({ where: { sector: data.sector } })
+        const existSector = await tbSector.findOne({ where: { sector: data.sector} })
             if (existSector) {
                 throw new Error('Sector already exist')
             }
@@ -95,6 +97,17 @@ class Sector {
 
     static async inactivateSector(req, data, res) {
         const dataSector = await tbSector.findByPk(req)
+        const countSectorInUser = await tbUser.count({where: {idSector: req}})
+        const countSectorInEquipment = await tbEquipment.count({where: {idSector: req}})
+
+
+        if(countSectorInEquipment > 0) {
+            throw new Error('You cannot delete a Sector, as it is registered in the Equipment table')
+        }
+        
+        if(countSectorInUser > 0) {
+            throw new Error('You cannot delete a Sector, as it is registered in the User table')
+        }
 
         dataSector.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 

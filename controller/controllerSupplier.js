@@ -36,7 +36,7 @@ const updateSupplier = async (req, res) => {
 
 const inactivateSupplier = async (req, res) => {
     try {
-       await Supplier.inactivateSupplier(req.params.id, req.body.deletionDate, res)
+       await Supplier.inactivateSupplier(req.params.idSupplier, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

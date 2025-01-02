@@ -36,7 +36,7 @@ const updateSector = async (req, res) => {
 
 const inactivateSector = async (req, res) => {
     try {
-       await Sector.inactivateSector(req.params.id, req.body.deletionDate, res)
+       await Sector.inactivateSector(req.params.idSector, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

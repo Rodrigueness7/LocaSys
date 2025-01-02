@@ -1,4 +1,6 @@
 const tbFilial = require('../constant/tbFilial')
+const tbSector = require('../constant/tbSector')
+const tbEquipment = require('../constant/tbEquipment')
 
 class Filial {
     idFilial
@@ -124,12 +126,25 @@ class Filial {
 
    static async inactivateFilial(req, data, res) {
         const dataFilial = await tbFilial.findByPk(req)
+        const countFilialInSector = await tbSector.count({where: {idFilial: req}})
+        const countFilialInEquipment = await tbEquipment.count({where: {idFilial: req}})
+
+
+        if(countFilialInEquipment > 0) {
+            throw new Error('You cannot delete a Filial, as it is registered in the Equipment table')
+        }
+
+        if(countFilialInSector > 0) {
+            throw new Error('You cannot delete a Filial, as it is registered in the Sector table')
+        }
 
         dataFilial.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
         
         await dataFilial.save()
         res.json({message: 'Successfully inactivated'})
     }
+
+   
 }
 
 module.exports = Filial;

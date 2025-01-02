@@ -7,7 +7,7 @@ routeSupplier.get('/findAllSupplier', auth.verifyToken, controllerSupplier.findA
 routeSupplier.get('/findSupplier/:id', auth.verifyToken, controllerSupplier.findSupplier)
 routeSupplier.post('/addSupplier', auth.verifyToken, controllerSupplier.addSupplier)
 routeSupplier.put('/updateSupplier/:id', auth.verifyToken, controllerSupplier.updateSupplier)
-routeSupplier.put('/inactivateSupplier/:id', auth.verifyToken, controllerSupplier.inactivateSupplier)
+routeSupplier.put('/inactivateSupplier/:idSupplier', auth.verifyToken, controllerSupplier.inactivateSupplier)
 
 
 module.exports = routeSupplier
