@@ -60,13 +60,15 @@ class Sector {
         return this.deletionDate = value
     }
 
-    async insertSector(data, res) {
-        const existSector = await tbSector.findOne({ where: { sector: data.sector} })
-            if (existSector) {
+    async insertSector(data, uniqueIdentifier,res) {
+        const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbfilial, where: {uniqueIdentifier: uniqueIdentifier}}})
+       
+        if (existSector) {
                 throw new Error('Sector already exist')
             }
             await tbSector.create(data)
-            res.json({message:'Add successfully'})
+       
+        res.json({message:'Add successfully'})
         
     }
 
