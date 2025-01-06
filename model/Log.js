@@ -68,7 +68,7 @@ class Log {
     }
 
     static async selectAllLog(res) {
-        const result = (await tbLog.findAll({attributes: ['action', 'actionDate'], 
+        const result = (await tbLog.findAll({attributes: ['idLog','action', 'actionDate'], 
             include:{model: tbUser, attributes: ['username']}})).map(
                 data => data.dataValues
             )
@@ -80,7 +80,8 @@ class Log {
        const dtFinishCov = locaTime.finishConv(dateFinish)
        const valueAction = action ? action : '%'
 
-       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}})).map(
+       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}, attributes: ['idLog', 'action', 'actionDate'], include: {model: tbUser, attributes: ['username']}}
+       )).map(
             values => values.dataValues
        )
       res.json(result)
