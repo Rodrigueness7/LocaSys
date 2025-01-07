@@ -7,12 +7,14 @@ const locaTime = require('../constant/localTime')
 class Log {
     idLog
     action
+    description
     actionDate
     idUser
 
     constructor(data) {
         this._idLog = data.idLog
         this._action = data.action
+        this._description = data.description
         this._actionDate = new Date()
         this._idUser = data.idUser
     }
@@ -37,6 +39,17 @@ class Log {
             throw new Error('Invalid action')
         }
         return this.action = value
+    }
+
+    get _description() {
+        return this.description
+    }
+
+    set _description(value) {
+        if(value == undefined) {
+            throw new Error('Invalid description')
+        }
+        return this.description = value
     }
 
     get _actionDate() {
@@ -68,7 +81,7 @@ class Log {
     }
 
     static async selectAllLog(res) {
-        const result = (await tbLog.findAll({attributes: ['idLog','action', 'actionDate'], 
+        const result = (await tbLog.findAll({attributes: ['idLog','action','description','actionDate'], 
             include:{model: tbUser, attributes: ['username']}})).map(
                 data => data.dataValues
             )
@@ -80,7 +93,7 @@ class Log {
        const dtFinishCov = locaTime.finishConv(dateFinish)
        const valueAction = action ? action : '%'
 
-       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}, attributes: ['idLog', 'action', 'actionDate'], include: {model: tbUser, attributes: ['username']}}
+       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}, attributes: ['idLog', 'action','description','actionDate'], include: {model: tbUser, attributes: ['username']}}
        )).map(
             values => values.dataValues
        )

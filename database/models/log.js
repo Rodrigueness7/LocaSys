@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Log.init({
     idLog: DataTypes.INTEGER,
     action: DataTypes.STRING,
+    description: DataTypes.STRING,
     actionDate: DataTypes.DATE,
     idUser: DataTypes.INTEGER
   }, {
