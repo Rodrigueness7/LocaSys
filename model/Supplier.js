@@ -1,6 +1,7 @@
 const tbSupplier = require('../constant/tbSupplier')
 const tbContact = require('../constant/tbContact')
 const tbEquipment = require('../constant/tbEquipment')
+const AddLog = require('../constant/addLog')
 
 class Supplier {
 
@@ -138,13 +139,14 @@ class Supplier {
         return this.deletionDate = value
     }
 
-    async insertSupplier(data, res) {
+    async insertSupplier(data, res, req) {
         const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier} })
 
         if(existSupplier) {
             throw new Error('Exist already supplier')
         }
         await tbSupplier.create(data)
+        AddLog.CreateLog(data.supplier, 'Adicionado', 'Adicionado Fornecedor', req)
         res.json({message: 'Add successufully'})
     }
 
@@ -164,7 +166,7 @@ class Supplier {
     }
 
     async updateSupplier(data, req, res) {
-        const supplierId = await tbSupplier.findByPk(req)
+        const supplierId = await tbSupplier.findByPk(req.params.id)
 
         supplierId.supplier = data.supplier
         supplierId.email = data.email
@@ -176,14 +178,15 @@ class Supplier {
         supplierId.city = data.city
 
         await supplierId.save()
+        AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
         res.json({message: 'Update supplier'})
 
     }
 
     static async inactivateSupplier(req, data, res) {
-       const dataSupplier = await tbSupplier.findByPk(req)
-       const countSupplierInContact = await tbContact.count({where: {idSupplier: req}}) 
-       const countSupplierInEquipment = await tbEquipment.count({where: {idSupplier: req}})
+       const dataSupplier = await tbSupplier.findByPk(req.params.idSupplier)
+       const countSupplierInContact = await tbContact.count({where: {idSupplier: req.params.idSupplier}}) 
+       const countSupplierInEquipment = await tbEquipment.count({where: {idSupplier: req.params.idSupplier}})
 
        if(countSupplierInContact > 0) {
             throw new Error('You cannot delete a Supplier, as it is registered in the Contact table')
@@ -196,6 +199,7 @@ class Supplier {
        dataSupplier.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
        await dataSupplier.save() 
+       AddLog.CreateLog(dataSupplier.dataValues.supplier, 'Deletado', 'Deletado Fornecedor', req)
        res.json({message: 'Successfully inactivated'})
     }
 }

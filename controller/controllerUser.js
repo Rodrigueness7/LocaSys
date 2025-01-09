@@ -45,7 +45,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const user = new User(req.body)
-        await user.updateUser(user, req.params.id, res)
+        await user.updateUser(user, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -53,7 +53,7 @@ const updateUser = async (req, res) => {
 
 const inactivateUser = async (req, res) => {
     try {
-        User.inactivateUser(req.params.id, req.body.deletionDate, res)
+        User.inactivateUser(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

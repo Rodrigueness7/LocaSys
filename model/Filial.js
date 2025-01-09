@@ -1,6 +1,7 @@
 const tbFilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
 const tbEquipment = require('../constant/tbEquipment')
+const AddLog = require('../constant/addLog')
 
 class Filial {
     idFilial
@@ -88,12 +89,13 @@ class Filial {
     }
 
 
-   async insertFilial(data, res) {
+   async insertFilial(data, res, req) {
         const existFilial = await tbFilial.findOne({where: {filial: data.filial}})
             if(existFilial) {
                 throw new Error('Filial already exist')
             }
             await tbFilial.create(data)
+            AddLog.CreateLog(data.filial, 'Adicionado', 'Adicionado Filial', req)
             res.json({message:'Add successfully'})   
     }
 
@@ -111,7 +113,7 @@ class Filial {
     }
 
     async updateFilial(req, data, res) {
-        const newFilial = await tbFilial.findByPk(req)
+        const newFilial = await tbFilial.findByPk(req.params.id)
 
         newFilial.idFilial = data.idFilial,
         newFilial.filial = data.filial
@@ -120,14 +122,15 @@ class Filial {
         newFilial.uniqueIdentifier = data.uniqueIdentifier
 
         await newFilial.save()
+        AddLog.CreateLog(data.filial, 'Atualizando', 'Atualizando Filial', req)
         res.json({message: 'Update successfully'})
         
     }
 
    static async inactivateFilial(req, data, res) {
-        const dataFilial = await tbFilial.findByPk(req)
-        const countFilialInSector = await tbSector.count({where: {idFilial: req}})
-        const countFilialInEquipment = await tbEquipment.count({where: {idFilial: req}})
+        const dataFilial = await tbFilial.findByPk(req.params.idFilial)
+        const countFilialInSector = await tbSector.count({where: {idFilial: req.params.idFilial}})
+        const countFilialInEquipment = await tbEquipment.count({where: {idFilial: req.params.idFilial}})
 
 
         if(countFilialInEquipment > 0) {
@@ -141,6 +144,7 @@ class Filial {
         dataFilial.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
         
         await dataFilial.save()
+        AddLog.CreateLog(dataFilial.dataValues.filial, 'Deletado', 'Deletado Filial', req)
         res.json({message: 'Successfully inactivated'})
     }
 

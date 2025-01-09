@@ -3,7 +3,7 @@ const Supplier = require('../model/Supplier')
 const addSupplier = async (req, res) => {
     try {
         const supplier = new Supplier(req.body)
-        await supplier.insertSupplier(supplier, res)
+        await supplier.insertSupplier(supplier, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -28,7 +28,7 @@ const findSupplier = async (req, res) => {
 const updateSupplier = async (req, res) => {
     try {
         const supplier = new Supplier(req.body)
-        supplier.updateSupplier(supplier, req.params.id, res)
+        supplier.updateSupplier(supplier, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -36,7 +36,7 @@ const updateSupplier = async (req, res) => {
 
 const inactivateSupplier = async (req, res) => {
     try {
-       await Supplier.inactivateSupplier(req.params.idSupplier, req.body.deletionDate, res)
+       await Supplier.inactivateSupplier(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

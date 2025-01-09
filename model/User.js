@@ -185,7 +185,7 @@ class User {
                 throw new Error('Username or email already registered')
             }
             await tbUser.create(data)
-            AddLog.CreateLog(data, req)
+            AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
             res.json({message: 'Add successfully'})   
     }
 
@@ -234,7 +234,7 @@ class User {
     }
 
     async updateUser(data, req, res) {
-        const userId = await tbUser.findByPk(req)
+        const userId = await tbUser.findByPk(req.params.id)
 
         userId.firstName = data.firstName
         userId.lastName = data.lastName
@@ -246,15 +246,17 @@ class User {
         userId.idProfile = data.idProfile
 
         await userId.save()
+        AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
         res.json({message:'Update with successfully'})
     }
 
     static async inactivateUser(req, data, res) {
-        const dataUser = await tbUser.findByPk(req)
+        const dataUser = await tbUser.findByPk(req.params.id)
 
         dataUser.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
         await dataUser.save()
+        AddLog.CreateLog(dataUser.dataValues.username, 'Deletado', 'Deletado usuário', req)
         res.json({message: 'Successfully inactivated'})
     }
 

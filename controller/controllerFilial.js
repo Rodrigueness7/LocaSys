@@ -3,7 +3,7 @@ const Filial = require('../model/Filial')
 const addFilial = async (req, res) => {
    try {
       const filial = new Filial(req.body)
-      await filial.insertFilial(filial, res)
+      await filial.insertFilial(filial, res, req)
    } catch (error) {
       res.json({message: error.message})
    }
@@ -29,7 +29,7 @@ const findFilial = async (req, res) => {
 const updateFilial = async (req, res) => {
    try {
       const filial = new Filial(req.body)
-      await filial.updateFilial(req.params.id, filial, res) 
+      await filial.updateFilial(req, filial, res) 
    } catch (error) {
       res.json({message: error.message})
    }
@@ -37,7 +37,7 @@ const updateFilial = async (req, res) => {
 
 const inactivateFilial = async (req, res) => {
    try {
-     await Filial.inactivateFilial(req.params.idFilial, req.body.deletionDate, res)
+     await Filial.inactivateFilial(req, req.body.deletionDate, res)
    } catch (error) {
       res.json({message: error.message})
    }

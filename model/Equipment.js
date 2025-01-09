@@ -6,6 +6,7 @@ const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
 const exportXlsx = require('../content/export/fileXlsx')
 const exportPdf = require('../content/export/filePdf')
+const AddLog = require('../constant/addLog')
 
 class Equipment {
     idEquipment
@@ -155,13 +156,14 @@ class Equipment {
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
-    async insertEquipment(data, res) {
+    async insertEquipment(data, res, req) {
         const existEquipment = await tbEquipment.findOne({where: {codProd: data.codProd}})
         
         if(existEquipment) {
             throw new Error('exist already equipment')
         }
         await tbEquipment.create(data)
+        AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
         res.json({message: 'Add successfully'})
     }
 
@@ -201,7 +203,7 @@ class Equipment {
     }
 
     async updateEquipment(req, data, res) {
-        let pk = await tbEquipment.findByPk(req)
+        let pk = await tbEquipment.findByPk(req.params.idEquipment)
 
         pk.codProd = data.codProd
         pk.equipment = data.equipment
@@ -215,15 +217,17 @@ class Equipment {
         pk.returnDate = data.returnDate
 
         await pk.save() 
+        AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
         res.json({message: 'Updated successfully'})
     }
 
     static async returnEquipment(req, data, res) {
-        let dataEquipment = await tbEquipment.findByPk(req)
+        let dataEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
         dataEquipment.returnDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
        await dataEquipment.save()
+       AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
        res.json({message: 'Returned successfully'})
     }
 

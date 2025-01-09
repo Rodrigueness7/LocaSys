@@ -1,14 +1,5 @@
 const Log = require('../model/Log')
 
-const addLog = async (req, res) => {
-    try {
-        const log = new Log(req.body)
-        await log.insertLog(log, res)
-    } catch (error) {
-        res.json({message: error.message})
-    }
-}
-
 const findAllLog = async (req, res) => {
     try {
         await Log.selectAllLog(res)
@@ -27,4 +18,4 @@ const findLog = async (req, res) => {
 
 
 
-module.exports = {addLog, findAllLog, findLog}
+module.exports = {findAllLog, findLog}

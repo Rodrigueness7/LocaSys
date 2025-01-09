@@ -2,6 +2,7 @@ const tbfilial = require('../constant/tbFilial')
 const tbSector = require('../constant/tbSector')
 const tbUser = require('../constant/tbUser')
 const tbEquipment = require('../constant/tbEquipment')
+const AddLog = require('../constant/addLog')
 
 class Sector {
     idSector
@@ -60,14 +61,14 @@ class Sector {
         return this.deletionDate = value
     }
 
-    async insertSector(data, uniqueIdentifier,res) {
+    async insertSector(data, uniqueIdentifier,res, req) {
         const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbfilial, where: {uniqueIdentifier: uniqueIdentifier}}})
        
         if (existSector) {
                 throw new Error('Sector already exist')
             }
             await tbSector.create(data)
-       
+            AddLog.CreateLog(data.sector, 'Adicionado', 'Adicionado Setor', req)
         res.json({message:'Add successfully'})
         
     }
@@ -86,21 +87,22 @@ class Sector {
     }
 
     async updateSector(req, data, res) {
-        const sectorById = await tbSector.findByPk(req)
+        const sectorById = await tbSector.findByPk(req.params.id)
 
         sectorById.idSector = data.idSector
         sectorById.sector = data.sector
         sectorById.idFilial = data.idFilial
 
         await sectorById.save()
+        AddLog.CreateLog(data.sector, 'Atualizado', 'Atualizado Setor', req)
         res.json({message: 'Update successfully'})
 
     }
 
     static async inactivateSector(req, data, res) {
-        const dataSector = await tbSector.findByPk(req)
-        const countSectorInUser = await tbUser.count({where: {idSector: req}})
-        const countSectorInEquipment = await tbEquipment.count({where: {idSector: req}})
+        const dataSector = await tbSector.findByPk(req.params.idSector)
+        const countSectorInUser = await tbUser.count({where: {idSector: req.params.idSector}})
+        const countSectorInEquipment = await tbEquipment.count({where: {idSector: req.params.idSector}})
 
 
         if(countSectorInEquipment > 0) {
@@ -114,6 +116,7 @@ class Sector {
         dataSector.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
         await dataSector.save()
+        AddLog.CreateLog(dataSector.dataValues.sector, 'Deletado', 'Deletado Setor', req)
         res.json({message: 'Successfully inactivated'})  
     }
 }

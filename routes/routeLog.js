@@ -5,6 +5,5 @@ const auth = require('../controller/auth')
 
 routeLog.get('/findAllLog', auth.verifyToken, controllerLog.findAllLog)
 routeLog.get('/findLog', auth.verifyToken, controllerLog.findLog)
-routeLog.post('/registerLog', auth.verifyToken, controllerLog.addLog)
 
 module.exports = routeLog

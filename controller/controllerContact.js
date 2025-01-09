@@ -3,7 +3,7 @@ const Contact = require('../model/Contact')
 const addContact = async (req, res) => {
     try {
         const contact = new Contact(req.body)
-        await contact.insertContact(contact, res)
+        await contact.insertContact(contact, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -28,7 +28,7 @@ const findContact = async (req, res) => {
 const updateContact = async (req, res) => {
     try {
         const contact = new Contact(req.body)
-       await contact.updateContact(contact, req.params.id, res)
+       await contact.updateContact(contact, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -36,7 +36,7 @@ const updateContact = async (req, res) => {
 
 const inactivateContact = async(req, res) => {
     try {
-        await Contact.inactivateContact(req.params.idContact, req.body.deletionDate, res)
+        await Contact.inactivateContact(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }

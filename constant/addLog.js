@@ -1,11 +1,11 @@
 const Log = require("../model/Log")
 const DecodeToken = require('../constant/decodeToken')
 
-function CreateLog(data, req) {
+function CreateLog(data, action, description, req) {
     let log = new Log({
         idLog: 0,
-        action: 'Adicionado',
-        description: `Adicionado usuário ${data.username}`,
+        action: action,
+        description: description + ' ' + data,
         idUser: DecodeToken.DecryptToken(req)
     })
     

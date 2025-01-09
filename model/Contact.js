@@ -1,4 +1,5 @@
 const tbContact = require('../constant/tbContact')
+const AddLog = require('../constant/addLog')
 
 class Contact {
     idContact
@@ -180,12 +181,13 @@ class Contact {
         return this.deletionDate = value
     }
 
-    async insertContact(data, res) {
+    async insertContact(data, res, req) {
         const existContact = await tbContact.findOne({where: {contact: data.contact}})
         if(existContact) {
             throw new Error('exist already contact')
         }
         await tbContact.create(data)
+        AddLog.CreateLog(data.contact, 'Adicionado', 'Adicionado contato', req)
         res.json({message: 'Add successfully'})
     }
 
@@ -203,8 +205,7 @@ class Contact {
     }
 
     async updateContact(data, req, res) {
-        const contactId = await tbContact.findByPk(req)
-
+        const contactId = await tbContact.findByPk(req.params.id)
 
         contactId.contact = data.contact
         contactId.email = data.email
@@ -220,19 +221,19 @@ class Contact {
         contactId.deletionDate = data.deletionDate
 
         await contactId.save()
-
+        AddLog.CreateLog(data.contact, 'Atualizada', 'Atualizado contato', req)
         res.json({message: 'Updated successfully'})
     }
-    
+
     static async inactivateContact(req, data, res) {
-        const dataContact = await tbContact.findByPk(req)
+        const dataContact = await tbContact.findByPk(req.params.idContact)
        
         dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
        
         await dataContact.save()
+        AddLog.CreateLog(dataContact.dataValues.contact, 'Deletado', 'Deletado contato', req)
         res.json({message: 'Successfully inactivated'})
     } 
-
     
 }
 

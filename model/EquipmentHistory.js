@@ -1,8 +1,9 @@
 const tbEquipmentHistory = require('../constant/tbEquipmentHistory')
-const localTime = require('../constant/localTime')
 const tbEquipment = require('../constant/tbEquipment')
 const condition = require('../constant/conditionDate')
 const { Op } = require('sequelize')
+const AddLog = require('../constant/addLog')
+
 
 class EquipmentHistory {
     idEquipmentHistory
