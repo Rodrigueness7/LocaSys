@@ -3,6 +3,9 @@ const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
 const jwt = require('jsonwebtoken')
+const Log = require('./Log')
+const AddLog = require('../constant/addLog')
+
 
 class User {
     idUser
@@ -176,12 +179,13 @@ class User {
         return this.deletionDate = value
     }
 
-   async insertUser(data, username, email, res) {
+   async insertUser(data, username, email, res, req) {
        const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
             if(existUser) {
                 throw new Error('Username or email already registered')
             }
             await tbUser.create(data)
+            AddLog.CreateLog(data, req)
             res.json({message: 'Add successfully'})   
     }
 

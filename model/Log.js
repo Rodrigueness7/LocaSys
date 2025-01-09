@@ -75,9 +75,9 @@ class Log {
         return this.idUser = value
     }
 
-    async insertLog(data, res) {
+    async insertLog(data) {
         await tbLog.create(data)
-        res.json({message: 'Add successfully'})
+        
     }
 
     static async selectAllLog(res) {

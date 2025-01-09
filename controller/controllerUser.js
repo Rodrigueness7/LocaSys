@@ -1,9 +1,10 @@
 const User = require('../model/User')
 
+
 const addUser = async (req, res) => {
     try {
         const user = new User(req.body)
-    await user.insertUser(user, req.body.username, req.body.email, res)
+    await user.insertUser(user, req.body.username, req.body.email, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
