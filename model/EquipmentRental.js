@@ -116,6 +116,7 @@ class EquipmentRental {
 
      async insertEquipmentRental(data) {
        await tbEquipmentRental.create(data)
+        
     }
     
     static async selectAllEquipmentRental(res) {

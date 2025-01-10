@@ -1,4 +1,5 @@
 const tbPermission = require('../constant/tbPermission')
+const AddLog = require('../constant/addLog')
 
 class Permission {
     idPermission
@@ -31,13 +32,15 @@ class Permission {
         return this.permission = value
     }
 
-    async insertPermission(data, res) {
+    async insertPermission(data, res, req) {
         const existPermission = await tbPermission.findOne({where: {permission: data.permission}})
 
         if(existPermission) {
             throw new Error('exist already permission')
         }
         await tbPermission.create(data)
+        AddLog.CreateLog(data.permission, 'Adicionado', 'Adicionado Permissão', req)
+        
         res.json({message: 'Add successufully'})
     }
 
@@ -55,19 +58,21 @@ class Permission {
     }
 
     async UpdatePermission(data, req, res) {
-        const permissionId = await tbPermission.findByPk(req)
+        const permissionId = await tbPermission.findByPk(req.params.id)
 
         permissionId.permission = data.permission
 
         await permissionId.save()
+        AddLog.CreateLog(data.permission, 'Atualizado', 'Atualizado Permissão', req)
         res.json({message: 'updated successfully'})
         
     } 
 
     static async removerPermission(req, res) {
-        await tbPermission.findByPk(req).then(
-            permission => permission.destroy()
-        )
+        const deletePermission = await tbPermission.findByPk(req.params.id)
+
+        deletePermission.destroy()
+        AddLog.CreateLog(deletePermission.dataValues.permission, 'Deletado', 'Deletado Permissão', req)
         res.json({message: 'Delete successfully'})
     }
 

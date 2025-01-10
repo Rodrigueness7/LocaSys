@@ -1,4 +1,5 @@
 const tbProfile = require('../constant/tbProfile')
+const AddLog = require('../constant/addLog')
 
 class Profile {
     idProfile
@@ -31,12 +32,13 @@ class Profile {
         return this.profile = value
     }
 
-    async insertProfile(data, res) {
+    async insertProfile(data, res, req) {
         const existProfile = await tbProfile.findOne({ where: { profile: data.profile } })
             if (existProfile) {
                 throw new Error('Profile already exist')
             }
             await tbProfile.create(data)
+            AddLog.CreateLog(data.profile, 'Adicionado', 'Adicionado Perfil', req)
             res.json({message: 'Add successfully'})
        
     }
@@ -55,19 +57,23 @@ class Profile {
     }
 
     async updateProfile(req, data, res) {
-        const profileById = await tbProfile.findByPk(req)
+        const profileById = await tbProfile.findByPk(req.params.id)
 
         profileById.idProfile = data.idProfile
         profileById.profile = data.profile
 
         await profileById.save()
+        AddLog.CreateLog(data.profile, 'Atualizado', 'Atualizado Perfil', req)
+
+
         res.json({message: 'Updated successfully'})
     }
 
     static async deleteProfile(req, res) {
-        await tbProfile.findByPk(req).then(
-            data =>  data.destroy()   
-        )
+       const removerProfile =  await tbProfile.findByPk(req)
+
+       removerProfile.destroy()
+        AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)
         res.json({message: 'Delete profile'})
     }
 

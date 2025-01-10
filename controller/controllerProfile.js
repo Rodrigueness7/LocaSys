@@ -19,7 +19,7 @@ const findAllProfile = async (req, res) => {
 
 const findProfile = async (req, res) => {
     try {
-        await Profile.selectProfile(req.params.id, res)
+        await Profile.selectProfile(req.params.id, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -28,7 +28,7 @@ const findProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
     try {
         const profile = new Profile(req.body)
-        await profile.updateProfile(req.params.id, profile, res)
+        await profile.updateProfile(req, profile, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -36,7 +36,7 @@ const updateProfile = async (req, res) => {
 
 const deleteProfile = async (req, res) => {
     try {
-       await Profile.deleteProfile(req.params.id, res)
+       await Profile.deleteProfile(req, res)
     } catch (error) {
         res.json({message: error.message})
     }

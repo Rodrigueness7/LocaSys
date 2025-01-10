@@ -3,7 +3,7 @@ const Permission = require('../model/Permission')
 const addPermission = async (req, res) => {
     try {
         const permission = new Permission(req.body)
-       await permission.insertPermission(permission, res)
+       await permission.insertPermission(permission, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -28,7 +28,7 @@ const findPermission = async (req, res) => {
 const updatePermission = async (req, res) => {
     try {
         const permission = new Permission(req.body)
-       await permission.UpdatePermission(permission, req.params.id, res)
+       await permission.UpdatePermission(permission, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -36,7 +36,7 @@ const updatePermission = async (req, res) => {
 
 const deletePermission = async (req, res) => {
     try {
-       await Permission.removerPermission(req.params.id, res)
+       await Permission.removerPermission(req, res)
     } catch (error) {
         res.json({message: error.message})
     }
