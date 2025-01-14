@@ -5,7 +5,7 @@ function DecryptToken(req) {
     let headers = req.headers['authorization']
     let decode = jwt.verify(headers, process.env.secret_key)
 
-    return decode.idUser
+    return decode
 }
 
 module.exports = {DecryptToken}

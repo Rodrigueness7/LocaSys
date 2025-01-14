@@ -72,6 +72,14 @@ class Profile_permission {
         res.json(result)
     }
 
+
+    static async selectProfile_permission(idProfile, permission) {
+        const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission', 'allwo'],
+            include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission'], where: {permission: permission}}]}))
+
+           return result
+    }
+
     static async selectIdProfile_permission(req, res) {
         await tbProfile_permission.findByPk(req, {attributes: ['idProfile_permission', 'allwo'], include: [{model: tbProfile, attributes: ['profile']}, {model: tbPermission, attributes: ['permission']}]}).then(
             idPermission_permission => res.json(idPermission_permission.dataValues)

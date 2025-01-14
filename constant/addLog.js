@@ -6,7 +6,7 @@ function CreateLog(data, action, description, req) {
         idLog: 0,
         action: action,
         description: description + ' ' + data,
-        idUser: DecodeToken.DecryptToken(req)
+        idUser: DecodeToken.DecryptToken(req).idUser
     })
     
     return log.insertLog(log)

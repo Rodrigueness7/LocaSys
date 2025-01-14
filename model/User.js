@@ -228,7 +228,9 @@ class User {
         }
         let idUser = existUser.dataValues.idUser
         let user = existUser.dataValues.username
-        const token = jwt.sign({idUser, user}, process.env.secret_key, {expiresIn: '24h'}) 
+        let idProfile = existUser.dataValues.idProfile
+        
+        const token = jwt.sign({idUser, user, idProfile}, process.env.secret_key, {expiresIn: '24h'}) 
         
         res.json({message: 'Logged in user', token})  
     }
