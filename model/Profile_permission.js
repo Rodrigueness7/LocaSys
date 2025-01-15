@@ -74,7 +74,7 @@ class Profile_permission {
 
 
     static async selectProfile_permission(idProfile, permission) {
-        const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission', 'allwo'],
+        const result = (await tbProfile_permission.findOne({attributes: ['idProfile_permission', 'allwo'],
             include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission'], where: {permission: permission}}]}))
 
            return result
