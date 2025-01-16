@@ -1,71 +1,71 @@
 const Equipment = require('../model/Equipment')
 
-const addEquipment = async (req, res) => {
+const add = async (req, res) => {
     try {
         const equipment = new Equipment(req.body)
-        await equipment.insertEquipment(equipment, res, req)
+        await equipment.insert(equipment, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllEquipment = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-       await Equipment.selectAllEquipment(res)
+       await Equipment.selectAll(res)
     } catch (error) {
         res,json({message: error.message})
     }
 }
 
-const findEquipmentId = async (req, res) => {
+const findId = async (req, res) => {
     try {
-        await Equipment.selectEquipmentId(req.params.idEquipment, res)
+        await Equipment.selectId(req.params.idEquipment, res)
     } catch (error) {
         res.json({message: error.message})
     }
 } 
 
-const findEquipment = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await Equipment.selectEquipment(req.body, res)
+        await Equipment.select(req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateEquipment = async (req, res) => {
+const update = async (req, res) => {
     try {
         const equipment = new Equipment(req.body)
-        await equipment.updateEquipment(req, equipment, res)
+        await equipment.update(req, equipment, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const returnEquipment = async (req, res) => {
+const returned = async (req, res) => {
     try {
-        await Equipment.returnEquipment(req, req.body.returnDate, res)
+        await Equipment.return(req, req.body.returnDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const exportFileXlsx = async (req, res) => {
+const exportXlsx = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.xlsx'
-        await Equipment.exportEquipmentlXlsx(address, res)
+        await Equipment.exportlXlsx(address, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const exportFilePdf = async (req, res) => {
+const exportPdf = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.pdf'
-        await Equipment.exportEquipmentPdf(address, res)
+        await Equipment.exportPdf(address, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addEquipment, findAllEquipment, findEquipment, findEquipmentId, updateEquipment, returnEquipment ,exportFileXlsx, exportFilePdf}
+module.exports = {add, findAll, find, findId, update, returned ,exportXlsx, exportPdf}

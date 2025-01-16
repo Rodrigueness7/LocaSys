@@ -1,14 +1,14 @@
 const express = require('express')
 const routeFilial = express.Router()
 const controller = require('../controller/controllerFilial')
-const auth = require('../controller/auth')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeFilial.get('/findAllFilial', auth.verifyToken, checkAcess, controller.findAllFilial)
-routeFilial.get('/findFilial/:id', auth.verifyToken, checkAcess, controller.findFilial)
-routeFilial.post('/addFilial', checkAcess, controller.addFilial)
-routeFilial.put('/updateFilial/:id', auth.verifyToken, checkAcess, controller.updateFilial)
-routeFilial.put('/inactivateFilial/:idFilial', auth.verifyToken, checkAcess, controller.inactivateFilial)
+routeFilial.get('/findAllFilial', verifyToken, checkAcess, controller.findAll)
+routeFilial.get('/findFilial/:id', verifyToken, checkAcess, controller.findId)
+routeFilial.post('/addFilial', checkAcess, controller.add)
+routeFilial.put('/updateFilial/:id', verifyToken, checkAcess, controller.update)
+routeFilial.put('/inactivateFilial/:idFilial', verifyToken, checkAcess, controller.inactivate)
 
 
 module.exports = routeFilial;

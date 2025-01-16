@@ -8,7 +8,7 @@ async function checkAcess (req, res, next) {
             case 'GET':
                 return 'Ler';
             case 'POST':
-                return 'Adicionar';
+                return 'Gravar';
             case 'PUT':
                 return 'Atualizar';
             case 'DELETE':

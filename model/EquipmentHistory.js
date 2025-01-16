@@ -75,12 +75,12 @@ class EquipmentHistory {
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString()
     }
 
-    async insertEquipmentHistory(data, res) {
+    async insert(data, res) {
        await tbEquipmentHistory.create(data)
        res.json({message: 'Add successfully'})
     }
 
-    static async selectAllEquipmentHistory(res) {
+    static async selectAll(res) {
         const result = (await tbEquipmentHistory.findAll({attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'], 
             include: {model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}})).map(
             values => values.dataValues
@@ -88,7 +88,7 @@ class EquipmentHistory {
         res.json(result)
     }
 
-    static async selectEquipmentHistoryId(req, res) {
+    static async selectId(req, res) {
         await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
             include: {model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}
         }).then(
@@ -96,7 +96,7 @@ class EquipmentHistory {
         )
     }
 
-    static async selectEquipmentHistory(data, res) {
+    static async select(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
       
         const result = (await tbEquipmentHistory.findAll({where:{[Op.and]: [condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish),
@@ -107,16 +107,16 @@ class EquipmentHistory {
         res.json(result)
         }
 
-        async UpdateEquipamentHistory(data, req, res) {
-            const pkEquipmentHistory = await tbEquipmentHistory.findByPk(req)
+        async update(data, req, res) {
+            const alterEquipmentHistory = await tbEquipmentHistory.findByPk(req)
 
-            pkEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
-            pkEquipmentHistory.idEquipment = data.idEquipment
-            pkEquipmentHistory.reason = data.reason
-            pkEquipmentHistory.entryDate = data.entryDate
-            pkEquipmentHistory.returnDate = data.returnDate
+            alterEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
+            alterEquipmentHistory.idEquipment = data.idEquipment
+            alterEquipmentHistory.reason = data.reason
+            alterEquipmentHistory.entryDate = data.entryDate
+            alterEquipmentHistory.returnDate = data.returnDate
 
-            await pkEquipmentHistory.save()
+            await alterEquipmentHistory.save()
             res.json({message: 'Updated successfully'})
 
         }

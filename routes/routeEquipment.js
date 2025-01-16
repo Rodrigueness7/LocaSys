@@ -1,17 +1,17 @@
 const express = require('express')
 const routeEquipment = express.Router()
-const controllerEquipment = require('../controller/controllerEquipment')
-const auth = require('../controller/auth')
+const controller = require('../controller/controllerEquipment')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeEquipment.get('/findAllEquipment', auth.verifyToken, checkAcess, controllerEquipment.findAllEquipment)
-routeEquipment.get('/findEquipment', auth.verifyToken, checkAcess, controllerEquipment.findEquipment)
-routeEquipment.get('/findEquipmentId/:idEquipment', auth.verifyToken, checkAcess, controllerEquipment.findEquipmentId)
-routeEquipment.post('/addEquipment', auth.verifyToken, checkAcess, controllerEquipment.addEquipment)
-routeEquipment.post('/exportFileXlsx', auth.verifyToken ,controllerEquipment.exportFileXlsx)
-routeEquipment.post('/exportFilePdf', auth.verifyToken ,controllerEquipment.exportFilePdf)
-routeEquipment.put('/updateEquipment/:idEquipment', auth.verifyToken, checkAcess, controllerEquipment.updateEquipment)
-routeEquipment.put('/returnEquipment/:idEquipment', auth.verifyToken, checkAcess, controllerEquipment.returnEquipment)
+routeEquipment.get('/findAllEquipment', verifyToken, checkAcess, controller.findAll)
+routeEquipment.get('/findEquipment', verifyToken, checkAcess, controller.find)
+routeEquipment.get('/findEquipmentId/:idEquipment', verifyToken, checkAcess, controller.findId)
+routeEquipment.post('/addEquipment', verifyToken, checkAcess, controller.add)
+routeEquipment.post('/exportFileXlsx', verifyToken ,controller.exportXlsx)
+routeEquipment.post('/exportFilePdf', verifyToken ,controller.exportPdf)
+routeEquipment.put('/updateEquipment/:idEquipment', verifyToken, checkAcess, controller.update)
+routeEquipment.put('/returnEquipment/:idEquipment', verifyToken, checkAcess, controller.returned)
 
 
 module.exports = routeEquipment

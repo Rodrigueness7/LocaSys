@@ -1,45 +1,45 @@
 const EquipmentHistory = require('../model/EquipmentHistory')
 
-const addEquipmentHistory = async (req, res) => {
+const add = async (req, res) => {
     try {
         const equipmentHistory = new EquipmentHistory(req.body)
-        await equipmentHistory.insertEquipmentHistory(equipmentHistory, res)
+        await equipmentHistory.insert(equipmentHistory, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllEquipmentHistory = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-        await EquipmentHistory.selectAllEquipmentHistory(res)
+        await EquipmentHistory.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findEquipmentHistoryId = async (req, res) => {
+const findId = async (req, res) => {
     try {
-        await EquipmentHistory.selectEquipmentHistoryId(req.params.idEquipmentHistory, res)
+        await EquipmentHistory.selectId(req.params.idEquipmentHistory, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findEquipmentHistory = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await EquipmentHistory.selectEquipmentHistory(req.body, res)
+        await EquipmentHistory.select(req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateEquipmentHistory = async (req, res) => {
+const update = async (req, res) => {
     try {
         const equipmentHistory = new EquipmentHistory(req.body)
-        await equipmentHistory.UpdateEquipamentHistory(equipmentHistory, req.params.idEquipmentHistory, res) 
+        await equipmentHistory.update(equipmentHistory, req.params.idEquipmentHistory, res) 
     } catch (error) {
         res.json({message: error.message})
     }
 } 
 
-module.exports = {addEquipmentHistory, findAllEquipmentHistory, findEquipmentHistoryId, findEquipmentHistory, updateEquipmentHistory}
+module.exports = {add, findAll, findId, find, update}

@@ -1,45 +1,45 @@
 const Contact = require('../model/Contact')
 
-const addContact = async (req, res) => {
+const add = async (req, res) => {
     try {
         const contact = new Contact(req.body)
-        await contact.insertContact(contact, res, req)
+        await contact.insert(contact, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllContact = async(req, res) => {
+const findAll = async(req, res) => {
     try {
-        await Contact.selectAllContact(res)
+        await Contact.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findContact = async (req, res) => {
+const findId = async (req, res) => {
     try {
-        await Contact.selectContact(req.params.id, res)
+        await Contact.selectId(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateContact = async (req, res) => {
+const update = async (req, res) => {
     try {
         const contact = new Contact(req.body)
-       await contact.updateContact(contact, req, res)
+       await contact.update(contact, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const inactivateContact = async(req, res) => {
+const inactivate = async(req, res) => {
     try {
-        await Contact.inactivateContact(req, req.body.deletionDate, res)
+        await Contact.inactivate(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addContact, findAllContact, inactivateContact, findContact, updateContact}
+module.exports = {add, findAll, inactivate, findId, update}

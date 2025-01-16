@@ -114,12 +114,12 @@ class EquipmentRental {
         return this.value = value
     }
 
-     async insertEquipmentRental(data) {
+     async insert(data) {
        await tbEquipmentRental.create(data)
         
     }
     
-    static async selectAllEquipmentRental(res) {
+    static async selectAll(res) {
         let result = (await tbEquipmentRental.findAll({attributes:['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']})).map(
             equipmentRental => equipmentRental.dataValues
         )
@@ -127,7 +127,7 @@ class EquipmentRental {
         
     }
 
-    static async selectEquipmentRental(data, res) {
+    static async select(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
         
         const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd},
@@ -140,13 +140,13 @@ class EquipmentRental {
         res.json(result)
     }
 
-    static async selectEquipmentRentalId(req, res) {
+    static async selectId(req, res) {
         await tbEquipmentRental.findByPk(req, {attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']}).then(
             equipmentRentalId => equipmentRentalId.dataValues
         )
     }
 
-    static async deleteAllEquipmentRental(res) {
+    static async deleteAll(res) {
         await tbEquipmentRental.destroy({truncate: true})
         res.json({message: 'Deleted all equipment rental '})
     }

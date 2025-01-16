@@ -1,14 +1,14 @@
 const express = require('express')
 const routeEquipmentHistory = express.Router()
-const controllerEquipmentHistory = require('../controller/controllerEquipmentHistory')
-const auth = require('../controller/auth')
+const controller = require('../controller/controllerEquipmentHistory')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeEquipmentHistory.get('/findAllEquipmentHistory', auth.verifyToken, checkAcess, controllerEquipmentHistory.findAllEquipmentHistory)
-routeEquipmentHistory.get('/findEquipmentHistory', auth.verifyToken, checkAcess, controllerEquipmentHistory.findEquipmentHistory)
-routeEquipmentHistory.get('/findEquipmentHistoryId/:idEquipmentHistory', auth.verifyToken, checkAcess, controllerEquipmentHistory.findEquipmentHistoryId)
-routeEquipmentHistory.post('/addEquipmentHistory', auth.verifyToken, checkAcess, controllerEquipmentHistory.addEquipmentHistory)
-routeEquipmentHistory.put('/updateEquipmentHistory/:idEquipmentHistory', auth.verifyToken, checkAcess, controllerEquipmentHistory.updateEquipmentHistory)
+routeEquipmentHistory.get('/findAllEquipmentHistory', verifyToken, checkAcess, controller.findAll)
+routeEquipmentHistory.get('/findEquipmentHistory', verifyToken, checkAcess, controller.find)
+routeEquipmentHistory.get('/findEquipmentHistoryId/:idEquipmentHistory', verifyToken, checkAcess, controller.findId)
+routeEquipmentHistory.post('/addEquipmentHistory', verifyToken, checkAcess, controller.add)
+routeEquipmentHistory.put('/updateEquipmentHistory/:idEquipmentHistory', verifyToken, checkAcess, controller.update)
 
 
 

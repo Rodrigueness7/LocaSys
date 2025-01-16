@@ -89,7 +89,7 @@ class Filial {
     }
 
 
-   async insertFilial(data, res, req) {
+   async insert(data, res, req) {
         const existFilial = await tbFilial.findOne({where: {filial: data.filial}})
             if(existFilial) {
                 throw new Error('Filial already exist')
@@ -99,35 +99,35 @@ class Filial {
             res.json({message:'Add successfully'})   
     }
 
-    static async selectAllFilial(res) {
+    static async selectAll(res) {
        const result =  (await tbFilial.findAll({where: {deletionDate: null}})).map(
             filial => filial.dataValues
         )
         res.json(result)
     }
 
-    static async selectFilial(req, res) {
+    static async selectId(req, res) {
         await tbFilial.findByPk(req).then(
             idFilial => res.json(idFilial.dataValues)
         )  
     }
 
-    async updateFilial(req, data, res) {
-        const newFilial = await tbFilial.findByPk(req.params.id)
+    async update(req, data, res) {
+        const alterFilial = await tbFilial.findByPk(req.params.id)
 
-        newFilial.idFilial = data.idFilial,
-        newFilial.filial = data.filial
-        newFilial.CNPJ = data.CNPJ,
-        newFilial.corporateName = data.corporateName,
-        newFilial.uniqueIdentifier = data.uniqueIdentifier
+        alterFilial.idFilial = data.idFilial,
+        alterFilial.filial = data.filial
+        alterFilial.CNPJ = data.CNPJ,
+        alterFilial.corporateName = data.corporateName,
+        alterFilial.uniqueIdentifier = data.uniqueIdentifier
 
-        await newFilial.save()
+        await alterFilial.save()
         AddLog.CreateLog(data.filial, 'Atualizando', 'Atualizando Filial', req)
         res.json({message: 'Update successfully'})
         
     }
 
-   static async inactivateFilial(req, data, res) {
+   static async inactivate(req, data, res) {
         const dataFilial = await tbFilial.findByPk(req.params.idFilial)
         const countFilialInSector = await tbSector.count({where: {idFilial: req.params.idFilial}})
         const countFilialInEquipment = await tbEquipment.count({where: {idFilial: req.params.idFilial}})

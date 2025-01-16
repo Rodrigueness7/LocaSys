@@ -181,7 +181,7 @@ class Contact {
         return this.deletionDate = value
     }
 
-    async insertContact(data, res, req) {
+    async insert(data, res, req) {
         const existContact = await tbContact.findOne({where: {contact: data.contact}})
         if(existContact) {
             throw new Error('exist already contact')
@@ -191,41 +191,41 @@ class Contact {
         res.json({message: 'Add successfully'})
     }
 
-    static async selectAllContact(res) {
+    static async selectAll(res) {
         const allContact = (await tbContact.findAll({where: {deletionDate: null}})).map(
             result => result.dataValues
         )
         res.json(allContact)
     }
 
-    static async selectContact(req, res) {
+    static async selectId(req, res) {
         await tbContact.findByPk(req).then(
             contact => res.json(contact.dataValues)
         )
     }
 
-    async updateContact(data, req, res) {
-        const contactId = await tbContact.findByPk(req.params.id)
+    async update(data, req, res) {
+        const alterContact = await tbContact.findByPk(req.params.id)
 
-        contactId.contact = data.contact
-        contactId.email = data.email
-        contactId.telephone = data.telephone
-        contactId.cellPhone = data.cellPhone
-        contactId.address = data.address
-        contactId.number = data.number
-        contactId.zipCode = data.zipCode
-        contactId.state = data.state
-        contactId.county = data.county
-        contactId.district = data.district
-        contactId.idSupplier = data.idSupplier
-        contactId.deletionDate = data.deletionDate
+        alterContact.contact = data.contact
+        alterContact.email = data.email
+        alterContact.telephone = data.telephone
+        alterContact.cellPhone = data.cellPhone
+        alterContact.address = data.address
+        alterContact.number = data.number
+        alterContact.zipCode = data.zipCode
+        alterContact.state = data.state
+        alterContact.county = data.county
+        alterContact.district = data.district
+        alterContact.idSupplier = data.idSupplier
+        alterContact.deletionDate = data.deletionDate
 
-        await contactId.save()
+        await alterContact.save()
         AddLog.CreateLog(data.contact, 'Atualizada', 'Atualizado contato', req)
         res.json({message: 'Updated successfully'})
     }
 
-    static async inactivateContact(req, data, res) {
+    static async inactivate(req, data, res) {
         const dataContact = await tbContact.findByPk(req.params.idContact)
        
         dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]

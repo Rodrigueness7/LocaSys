@@ -156,7 +156,7 @@ class Equipment {
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
-    async insertEquipment(data, res, req) {
+    async insert(data, res, req) {
         const existEquipment = await tbEquipment.findOne({where: {codProd: data.codProd}})
         
         if(existEquipment) {
@@ -167,7 +167,7 @@ class Equipment {
         res.json({message: 'Add successfully'})
     }
 
-    static async selectAllEquipment(res) {
+    static async selectAll(res) {
         const result = (await tbEquipment.findAll({ where: {returnDate: null}, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], 
             include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, 
             {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]
@@ -177,13 +177,13 @@ class Equipment {
         res.json(result)
     }
 
-    static async selectEquipmentId(req, res) {
+    static async selectId(req, res) {
         await tbEquipment.findByPk(req, {attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, {model: tbSector, attributes:['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}).then(
             idEquipment => res.json(idEquipment.dataValues)
         )
     }
 
-    static async selectEquipment(data, res) {
+    static async select(data, res) {
 
         let codProd = data.codProd ? data.codProd : '%'
         let equipment = data.equipment ? data.equipment : '%'
@@ -202,26 +202,26 @@ class Equipment {
         res.json(result)
     }
 
-    async updateEquipment(req, data, res) {
-        let pk = await tbEquipment.findByPk(req.params.idEquipment)
+    async update(req, data, res) {
+        const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
-        pk.codProd = data.codProd
-        pk.equipment = data.equipment
-        pk.type = data.type
-        pk.idUser = data.idUser
-        pk.value = data.value
-        pk.idFilial = data.idFilial
-        pk.idSector = data.idSector
-        pk.idSupplier = data.idSupplier
-        pk.entryDate = data.entryDate
-        pk.returnDate = data.returnDate
+        alterEquipment.codProd = data.codProd
+        alterEquipment.equipment = data.equipment
+        alterEquipment.type = data.type
+        alterEquipment.idUser = data.idUser
+        alterEquipment.value = data.value
+        alterEquipment.idFilial = data.idFilial
+        alterEquipment.idSector = data.idSector
+        alterEquipment.idSupplier = data.idSupplier
+        alterEquipment.entryDate = data.entryDate
+        alterEquipment.returnDate = data.returnDate
 
-        await pk.save() 
+        await alterEquipment.save() 
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
         res.json({message: 'Updated successfully'})
     }
 
-    static async returnEquipment(req, data, res) {
+    static async return(req, data, res) {
         let dataEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
         dataEquipment.returnDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
@@ -231,7 +231,7 @@ class Equipment {
        res.json({message: 'Returned successfully'})
     }
 
-    static async exportEquipmentlXlsx(req, res) {
+    static async exportlXlsx(req, res) {
         const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
             data => data.dataValues
         )
@@ -239,7 +239,7 @@ class Equipment {
         res.json({message: 'File generated successfully'})
     }
 
-    static async exportEquipmentPdf(req, res) {
+    static async exportPdf(req, res) {
         const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
             data => data.dataValues
         )

@@ -10,33 +10,33 @@ const addFile = async (req, res) => {
     }
 }
 
-const findAllEquipmentRental = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-        await EquipmentRental.selectAllEquipmentRental(res)
+        await EquipmentRental.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findEquipmentRental = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await EquipmentRental.selectEquipmentRental(req.body, res)
+        await EquipmentRental.select(req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findEquipmentRentalId = async (req, res) => {
+const findId = async (req, res) => {
     try {
-        await EquipmentRental.selectEquipmentRentalId(req.params.idEquipmentRental, res)
+        await EquipmentRental.selectId(req.params.idEquipmentRental, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const removerAllEquipmentRental = async (req, res) => {
+const removerAll = async (req, res) => {
     try {
-        await EquipmentRental.deleteAllEquipmentRental(res)
+        await EquipmentRental.deleteAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -44,4 +44,4 @@ const removerAllEquipmentRental = async (req, res) => {
 
 
 
-module.exports = {addFile, findAllEquipmentRental ,findEquipmentRental, findEquipmentRentalId, removerAllEquipmentRental}
+module.exports = {addFile, findAll ,find, findId, removerAll}
