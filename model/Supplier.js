@@ -139,7 +139,7 @@ class Supplier {
         return this.deletionDate = value
     }
 
-    async insertSupplier(data, res, req) {
+    async insert(data, res, req) {
         const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier} })
 
         if(existSupplier) {
@@ -150,14 +150,14 @@ class Supplier {
         res.json({message: 'Add successufully'})
     }
 
-    static async selectAllSupplier(res) {
+    static async selectAll(res) {
         const result = (await tbSupplier.findAll({where: {deletionDate: null}})).map(
             allSupplier => allSupplier.dataValues 
         )
         res.json(result)
     }
 
-    static async selectSupplier(req, res) {
+    static async select(req, res) {
         await tbSupplier.findByPk(req).then(
             supplier => {
                 res.json(supplier.dataValues)
@@ -165,25 +165,25 @@ class Supplier {
         )
     }
 
-    async updateSupplier(data, req, res) {
-        const supplierId = await tbSupplier.findByPk(req.params.id)
+    async update(data, req, res) {
+        const alterSupplier = await tbSupplier.findByPk(req.params.id)
 
-        supplierId.supplier = data.supplier
-        supplierId.email = data.email
-        supplierId.contact = data.contact
-        supplierId.CNPJ = data.CNPJ
-        supplierId.address = data.address
-        supplierId.zipCode = data.zipCode
-        supplierId.state = data.state
-        supplierId.city = data.city
+        alterSupplier.supplier = data.supplier
+        alterSupplier.email = data.email
+        alterSupplier.contact = data.contact
+        alterSupplier.CNPJ = data.CNPJ
+        alterSupplier.address = data.address
+        alterSupplier.zipCode = data.zipCode
+        alterSupplier.state = data.state
+        alterSupplier.city = data.city
 
-        await supplierId.save()
+        await alterSupplier.save()
         AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
         res.json({message: 'Update supplier'})
 
     }
 
-    static async inactivateSupplier(req, data, res) {
+    static async inactivate(req, data, res) {
        const dataSupplier = await tbSupplier.findByPk(req.params.idSupplier)
        const countSupplierInContact = await tbContact.count({where: {idSupplier: req.params.idSupplier}}) 
        const countSupplierInEquipment = await tbEquipment.count({where: {idSupplier: req.params.idSupplier}})

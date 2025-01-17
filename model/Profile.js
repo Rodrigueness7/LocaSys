@@ -32,7 +32,7 @@ class Profile {
         return this.profile = value
     }
 
-    async insertProfile(data, res, req) {
+    async insert(data, res, req) {
         const existProfile = await tbProfile.findOne({ where: { profile: data.profile } })
             if (existProfile) {
                 throw new Error('Profile already exist')
@@ -43,33 +43,33 @@ class Profile {
        
     }
 
-    static async selectAllProfile(res) {
+    static async selectAll(res) {
         const result = (await tbProfile.findAll()).map(
             profile => profile.dataValues
         )
         res.json(result)
     }
 
-    static async selectProfile(req, res) {
+    static async select(req, res) {
         await tbProfile.findByPk(req).then(
             values => res.json(values.dataValues)
         )
     }
 
-    async updateProfile(req, data, res) {
-        const profileById = await tbProfile.findByPk(req.params.id)
+    async update(req, data, res) {
+        const alterProfile = await tbProfile.findByPk(req.params.id)
 
-        profileById.idProfile = data.idProfile
-        profileById.profile = data.profile
+        alterProfile.idProfile = data.idProfile
+        alterProfile.profile = data.profile
 
-        await profileById.save()
+        await alterProfile.save()
         AddLog.CreateLog(data.profile, 'Atualizado', 'Atualizado Perfil', req)
 
 
         res.json({message: 'Updated successfully'})
     }
 
-    static async deleteProfile(req, res) {
+    static async delete(req, res) {
        const removerProfile =  await tbProfile.findByPk(req)
 
        removerProfile.destroy()

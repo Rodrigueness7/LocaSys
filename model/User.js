@@ -179,7 +179,7 @@ class User {
         return this.deletionDate = value
     }
 
-   async insertUser(data, username, email, res, req) {
+   async insert(data, username, email, res, req) {
        const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
             if(existUser) {
                 throw new Error('Username or email already registered')
@@ -189,14 +189,14 @@ class User {
             res.json({message: 'Add successfully'})   
     }
 
-    static async selectIdUser(req, res) {
+    static async selectId(req, res) {
         await tbUser.findByPk(req, {attributes: ['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password'], include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]}).then(
                 idUser => res.json(idUser.dataValues)
             )
     }
 
-    static async selectAllUser(res) {
+    static async selectAll(res) {
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password', 'deletionDate'],
             include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
@@ -205,7 +205,7 @@ class User {
         res.json(result)
     }
 
-    static async selectUser(data, res) {
+    static async select(data, res) {
         
         let username = data.username? data.username : '%'
         let firstName = data.firstName ? data.firstName : '%'
@@ -235,24 +235,24 @@ class User {
         res.json({message: 'Logged in user', token})  
     }
 
-    async updateUser(data, req, res) {
-        const userId = await tbUser.findByPk(req.params.id)
+    async update(data, req, res) {
+        const alterUser = await tbUser.findByPk(req.params.id)
 
-        userId.firstName = data.firstName
-        userId.lastName = data.lastName
-        userId.cpf = data.cpf
-        userId.username = data.username
-        userId.password = data.password
-        userId.email = data.email
-        userId.idSector = data.idSector
-        userId.idProfile = data.idProfile
+        alterUser.firstName = data.firstName
+        alterUser.lastName = data.lastName
+        alterUser.cpf = data.cpf
+        alterUser.username = data.username
+        alterUser.password = data.password
+        alterUser.email = data.email
+        alterUser.idSector = data.idSector
+        alterUser.idProfile = data.idProfile
 
-        await userId.save()
+        await alterUser.save()
         AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
         res.json({message:'Update with successfully'})
     }
 
-    static async inactivateUser(req, data, res) {
+    static async inactivate(req, data, res) {
         const dataUser = await tbUser.findByPk(req.params.id)
 
         dataUser.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]

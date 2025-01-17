@@ -1,40 +1,40 @@
 const Permission = require('../model/Permission')
 
-const addPermission = async (req, res) => {
+const add = async (req, res) => {
     try {
         const permission = new Permission(req.body)
-       await permission.insertPermission(permission, res, req)
+       await permission.insert(permission, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllPermission = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-        await Permission.selectAllPermission(res)
+        await Permission.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findPermission = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await Permission.selectPermission(res, req.params.id)
+        await Permission.select(res, req.params.id)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updatePermission = async (req, res) => {
+const update = async (req, res) => {
     try {
         const permission = new Permission(req.body)
-       await permission.UpdatePermission(permission, req, res)
+       await permission.update(permission, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const deletePermission = async (req, res) => {
+const remover = async (req, res) => {
     try {
        await Permission.removerPermission(req, res)
     } catch (error) {
@@ -43,4 +43,4 @@ const deletePermission = async (req, res) => {
 }
 
 
-module.exports = {addPermission, findAllPermission, findPermission, updatePermission, deletePermission}
+module.exports = {add, findAll, find, update, remover}

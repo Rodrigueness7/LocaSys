@@ -1,13 +1,13 @@
 const express = require('express')
 const routeSector = express.Router()
-const controllerSector = require('../controller/controllerSector')
-const auth = require('../controller/auth')
+const controller = require('../controller/controllerSector')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeSector.get('/findAllSector', auth.verifyToken, checkAcess, controllerSector.findAllSector)
-routeSector.get('/findSector/:id', auth.verifyToken, checkAcess, controllerSector.findSectorById)
-routeSector.post('/addSector', checkAcess, controllerSector.addSector)
-routeSector.put('/updateSector/:id', auth.verifyToken, checkAcess, controllerSector.updateSector)
-routeSector.put('/inactivateSector/:idSector', auth.verifyToken, checkAcess, controllerSector.inactivateSector)
+routeSector.get('/findAllSector', verifyToken, checkAcess, controller.findAll)
+routeSector.get('/findSector/:id', verifyToken, checkAcess, controller.findId)
+routeSector.post('/addSector', checkAcess, controller.add)
+routeSector.put('/updateSector/:id', verifyToken, checkAcess, controller.update)
+routeSector.put('/inactivateSector/:idSector', verifyToken, checkAcess, controller.inactivate)
 
 module.exports = routeSector

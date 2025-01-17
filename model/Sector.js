@@ -61,7 +61,7 @@ class Sector {
         return this.deletionDate = value
     }
 
-    async insertSector(data, uniqueIdentifier,res, req) {
+    async insert(data, uniqueIdentifier,res, req) {
         const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbfilial, where: {uniqueIdentifier: uniqueIdentifier}}})
        
         if (existSector) {
@@ -69,37 +69,37 @@ class Sector {
             }
             await tbSector.create(data)
             AddLog.CreateLog(data.sector, 'Adicionado', 'Adicionado Setor', req)
-        res.json({message:'Add successfully'})
+            res.json({message:'Add successfully'})
         
     }
 
-    static async findAllSector(res) {
+    static async findAll(res) {
         const result = (await tbSector.findAll({attributes: ['idSector','sector', 'deletionDate'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}, where: {deletionDate: null}})).map(
             sector => sector.dataValues
         )
         res.json(result)
     }
 
-    static async findSector(req, res) {
+    static async find(req, res) {
         await tbSector.findByPk(req, {attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}}).then(
             idSector => res.json(idSector.dataValues)
         )
     }
 
-    async updateSector(req, data, res) {
-        const sectorById = await tbSector.findByPk(req.params.id)
+    async update(req, data, res) {
+        const alterSector = await tbSector.findByPk(req.params.id)
 
-        sectorById.idSector = data.idSector
-        sectorById.sector = data.sector
-        sectorById.idFilial = data.idFilial
+        alterSector.idSector = data.idSector
+        alterSector.sector = data.sector
+        alterSector.idFilial = data.idFilial
 
-        await sectorById.save()
+        await alterSector.save()
         AddLog.CreateLog(data.sector, 'Atualizado', 'Atualizado Setor', req)
         res.json({message: 'Update successfully'})
 
     }
 
-    static async inactivateSector(req, data, res) {
+    static async inactivate(req, data, res) {
         const dataSector = await tbSector.findByPk(req.params.idSector)
         const countSectorInUser = await tbUser.count({where: {idSector: req.params.idSector}})
         const countSectorInEquipment = await tbEquipment.count({where: {idSector: req.params.idSector}})

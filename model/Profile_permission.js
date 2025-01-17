@@ -60,12 +60,12 @@ class Profile_permission {
         return this.allwo = value
     }
 
-    async insertProfile_permission(data, res) {
+    async insert(data, res) {
         await tbProfile_permission.create(data)
         res.json({message: 'Add successfuly'})
     }
 
-    static async selectAllProfile_permission(res) {
+    static async selectAll(res) {
         const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission', 'allwo'],
             include: [{model: tbProfile, attributes: ['profile']},{model: tbPermission, attributes: ['permission']}]})).
             map(data => data.dataValues)
@@ -73,32 +73,32 @@ class Profile_permission {
     }
 
 
-    static async selectProfile_permission(idProfile, permission) {
+    static async select(idProfile, permission) {
         const result = (await tbProfile_permission.findOne({attributes: ['idProfile_permission', 'allwo'],
             include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission'], where: {permission: permission}}]}))
 
            return result
     }
 
-    static async selectIdProfile_permission(req, res) {
+    static async selectId(req, res) {
         await tbProfile_permission.findByPk(req, {attributes: ['idProfile_permission', 'allwo'], include: [{model: tbProfile, attributes: ['profile']}, {model: tbPermission, attributes: ['permission']}]}).then(
             idPermission_permission => res.json(idPermission_permission.dataValues)
         )
     }
 
-    async updateProfile_permission(req, data, res) {
-        const valueId = await tbProfile_permission.findByPk(req)
+    async update(req, data, res) {
+        const alterProfile_permission = await tbProfile_permission.findByPk(req)
 
-        valueId.idProfile_permission = data.idPermission_permission
-        valueId.idProfile = data.idProfile
-        valueId.idPermission = data.idPermission
-        valueId.allwo = data.allwo
+        alterProfile_permission.idProfile_permission = data.idPermission_permission
+        alterProfile_permission.idProfile = data.idProfile
+        alterProfile_permission.idPermission = data.idPermission
+        alterProfile_permission.allwo = data.allwo
 
-        await valueId.save()
+        await alterProfile_permission.save()
         res.json({message: 'Updated successfully'})
     }
 
-    static async deleteProfile_permission(req, res) {
+    static async delete(req, res) {
         await tbProfile_permission.findByPk(req).then(
             removerProfile_permission => removerProfile_permission.destroy()
         )

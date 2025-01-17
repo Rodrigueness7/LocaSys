@@ -2,34 +2,34 @@
 const User = require('../model/User')
 
 
-const addUser = async (req, res) => {
+const add = async (req, res) => {
     try {
         const user = new User(req.body)
-    await user.insertUser(user, req.body.username, req.body.email, res, req)
+    await user.insert(user, req.body.username, req.body.email, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllUser = async (req, res) => {
+const findAll = async (req, res) => {
    try {
-    await User.selectAllUser(res)
+    await User.selectAll(res)
    } catch (error) {
     res.json({message: error.message})
    }
 }
 
-const findIdUser = async (req, res) => {
+const findId = async (req, res) => {
     try {
-        await User.selectIdUser(req.params.id, res)
+        await User.selectId(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findUser = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await User.selectUser(req.body, res)
+        await User.select(req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -43,16 +43,16 @@ const login = async (req, res) => {
     }
 }
 
-const updateUser = async (req, res) => {
+const update = async (req, res) => {
     try {
         const user = new User(req.body)
-        await user.updateUser(user, req, res)
+        await user.update(user, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const inactivateUser = async (req, res) => {
+const inactivate = async (req, res) => {
     try {
         User.inactivateUser(req, req.body.deletionDate, res)
     } catch (error) {
@@ -60,4 +60,4 @@ const inactivateUser = async (req, res) => {
     }
 }
 
-module.exports = {addUser, findAllUser, findIdUser, findUser, login, updateUser, inactivateUser}
+module.exports = {add, findAll, findId, find, login, update, inactivate}

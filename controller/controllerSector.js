@@ -1,45 +1,45 @@
 const Sector = require('../model/Sector')
 
-const addSector = async (req, res) => {
+const add = async (req, res) => {
   try {
     const sector = new Sector(req.body)
-    await sector.insertSector(sector, req.body.uniqueIdentifier,res, req)
+    await sector.insert(sector, req.body.uniqueIdentifier,res, req)
   } catch (error) {
     res.json({message: error.message})
   }
 }
 
-const findAllSector = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-        await Sector.findAllSector(res)
+        await Sector.findAll(res)
     } catch (error) {
        res.json({message: error.message})
     }
 }
 
-const findSectorById = async (req, res) => {
+const findId = async (req, res) => {
     try {
-       await Sector.findSector(req.params.id, res)
+       await Sector.find(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateSector = async (req, res) => {
+const update = async (req, res) => {
     try {
         const sector = new Sector(req.body)
-        await sector.updateSector(req, sector, res)
+        await sector.update(req, sector, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const inactivateSector = async (req, res) => {
+const inactivate = async (req, res) => {
     try {
-       await Sector.inactivateSector(req, req.body.deletionDate, res)
+       await Sector.inactivate(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 } 
 
-module.exports = {addSector, findAllSector, findSectorById, updateSector, inactivateSector}
+module.exports = {add, findAll, findId, update, inactivate}

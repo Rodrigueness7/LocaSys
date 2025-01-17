@@ -1,14 +1,14 @@
 const express = require('express')
 const routeSupplier = express.Router()
-const controllerSupplier = require('../controller/controllerSupplier')
-const auth = require('../controller/auth')
+const controller = require('../controller/controllerSupplier')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeSupplier.get('/findAllSupplier', auth.verifyToken, checkAcess, controllerSupplier.findAll)
-routeSupplier.get('/findSupplier/:id', auth.verifyToken, checkAcess, controllerSupplier.findSupplier)
-routeSupplier.post('/addSupplier', auth.verifyToken, checkAcess, controllerSupplier.addSupplier)
-routeSupplier.put('/updateSupplier/:id', auth.verifyToken, checkAcess, controllerSupplier.updateSupplier)
-routeSupplier.put('/inactivateSupplier/:idSupplier', auth.verifyToken, checkAcess, controllerSupplier.inactivateSupplier)
+routeSupplier.get('/findAllSupplier', verifyToken, checkAcess, controller.findAll)
+routeSupplier.get('/findSupplier/:id', verifyToken, checkAcess, controller.find)
+routeSupplier.post('/addSupplier', verifyToken, checkAcess, controller.add)
+routeSupplier.put('/updateSupplier/:id', verifyToken, checkAcess, controller.update)
+routeSupplier.put('/inactivateSupplier/:idSupplier', verifyToken, checkAcess, controller.inactivate)
 
 
 module.exports = routeSupplier

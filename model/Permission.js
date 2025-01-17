@@ -32,7 +32,7 @@ class Permission {
         return this.permission = value
     }
 
-    async insertPermission(data, res, req) {
+    async insert(data, res, req) {
         const existPermission = await tbPermission.findOne({where: {permission: data.permission}})
 
         if(existPermission) {
@@ -44,31 +44,31 @@ class Permission {
         res.json({message: 'Add successufully'})
     }
 
-    static async selectAllPermission(res) {
+    static async selectAll(res) {
         const result = (await tbPermission.findAll()).map(
             permissions => permissions.dataValues
         )
         res.json(result)
     }
 
-    static async selectPermission(res, req) {
+    static async select(res, req) {
         await tbPermission.findByPk(req).then(
             permission => res.json(permission.dataValues)
         )
     }
 
-    async UpdatePermission(data, req, res) {
-        const permissionId = await tbPermission.findByPk(req.params.id)
+    async update(data, req, res) {
+        const alterPermission = await tbPermission.findByPk(req.params.id)
 
-        permissionId.permission = data.permission
+        alterPermission.permission = data.permission
 
-        await permissionId.save()
+        await alterPermission.save()
         AddLog.CreateLog(data.permission, 'Atualizado', 'Atualizado Permissão', req)
         res.json({message: 'updated successfully'})
         
     } 
 
-    static async removerPermission(req, res) {
+    static async remover(req, res) {
         const deletePermission = await tbPermission.findByPk(req.params.id)
 
         deletePermission.destroy()

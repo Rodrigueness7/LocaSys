@@ -1,13 +1,13 @@
 const express = require('express')
 const routeProfile_permission = express.Router()
-const controllerProfile_permission = require('../controller/controllerProfile_permission')
-const auth = require('../controller/auth')
+const controller = require('../controller/controllerProfile_permission')
+const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeProfile_permission.get('/findAllProfile_permission', auth.verifyToken, checkAcess, controllerProfile_permission.findAllProfile_permission)
-routeProfile_permission.get('/findIdProfile_permission/:id', auth.verifyToken, checkAcess, controllerProfile_permission.findIdProfile_permission)
-routeProfile_permission.post('/addProfile_permission', auth.verifyToken, checkAcess, controllerProfile_permission.addProfile_permission)
-routeProfile_permission.put('/updateProfile_permission/:id', auth.verifyToken, checkAcess, controllerProfile_permission.updateProfile_permission)
-routeProfile_permission.delete('/deleteProfile_permission/:id', auth.verifyToken, checkAcess, controllerProfile_permission.removerProfile_permission)
+routeProfile_permission.get('/findAllProfile_permission', verifyToken, checkAcess, controller.findAll)
+routeProfile_permission.get('/findIdProfile_permission/:id', verifyToken, checkAcess, controller.findId)
+routeProfile_permission.post('/addProfile_permission', verifyToken, checkAcess, controller.add)
+routeProfile_permission.put('/updateProfile_permission/:id', verifyToken, checkAcess, controller.update)
+routeProfile_permission.delete('/deleteProfile_permission/:id', verifyToken, checkAcess, controller.remover)
 
 module.exports = routeProfile_permission

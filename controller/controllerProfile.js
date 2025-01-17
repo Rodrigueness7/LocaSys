@@ -1,46 +1,46 @@
 const Profile = require('../model/Profile')
 
-const addProfile = async (req, res) => {
+const add = async (req, res) => {
     try {
         const profile = new Profile(req.body)
-        await profile.insertProfile(profile, res)
+        await profile.insert(profile, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findAllProfile = async (req, res) => {
+const findAll = async (req, res) => {
     try {
-        await Profile.selectAllProfile(res)
+        await Profile.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findProfile = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await Profile.selectProfile(req.params.id, res, req)
+        await Profile.select(req.params.id, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateProfile = async (req, res) => {
+const update = async (req, res) => {
     try {
         const profile = new Profile(req.body)
-        await profile.updateProfile(req, profile, res)
+        await profile.update(req, profile, res)
     } catch (error) {
         res.json({message: error.message})
     }
 } 
 
-const deleteProfile = async (req, res) => {
+const remover = async (req, res) => {
     try {
-       await Profile.deleteProfile(req, res)
+       await Profile.delete(req, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
 
-module.exports = {addProfile, findAllProfile, findProfile, updateProfile, deleteProfile}
+module.exports = {add, findAll, find, update, remover}

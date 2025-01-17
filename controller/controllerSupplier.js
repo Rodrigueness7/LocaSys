@@ -1,9 +1,9 @@
 const Supplier = require('../model/Supplier')
 
-const addSupplier = async (req, res) => {
+const add = async (req, res) => {
     try {
         const supplier = new Supplier(req.body)
-        await supplier.insertSupplier(supplier, res, req)
+        await supplier.insert(supplier, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -11,35 +11,35 @@ const addSupplier = async (req, res) => {
 
 const findAll = async ( req, res) => {
     try {
-        await Supplier.selectAllSupplier(res)
+        await Supplier.selectAll(res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const findSupplier = async (req, res) => {
+const find = async (req, res) => {
     try {
-        await Supplier.selectSupplier(req.params.id, res)
+        await Supplier.select(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const updateSupplier = async (req, res) => {
+const update = async (req, res) => {
     try {
         const supplier = new Supplier(req.body)
-        supplier.updateSupplier(supplier, req, res)
+        supplier.update(supplier, req, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-const inactivateSupplier = async (req, res) => {
+const inactivate = async (req, res) => {
     try {
-       await Supplier.inactivateSupplier(req, req.body.deletionDate, res)
+       await Supplier.inactivate(req, req.body.deletionDate, res)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 
-module.exports = {addSupplier, findAll, findSupplier, updateSupplier, inactivateSupplier}
+module.exports = {add, findAll, find, update, inactivate}
