@@ -5,7 +5,7 @@ const tbSector = require('../constant/tbSector')
 const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
 const exportXlsx = require('../content/export/fileXlsx')
-const exportPdf = require('../content/export/filePdf')
+const {equipmentReport} = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 
 class Equipment {
@@ -239,11 +239,28 @@ class Equipment {
         res.json({message: 'File generated successfully'})
     }
 
-    static async exportPdf(req, res) {
-        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
-            data => data.dataValues
+    static async export(adress, data, res) {
+
+        let codProd = data.codProd ? data.codProd : '%'
+        let equipment = data.equipment ? data.equipment : '%'
+        let type = data.type ? data.type : '%'
+        let idUser = data.idUser ? data.idUser : '%'
+        let idFilial = data.idFilial ? data.idFilial : '%'
+
+        const result = (await tbEquipment.findAll({where: {[Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
+            {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
+            attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
+            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
+            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
+        )).map(
+            value => value.dataValues
         )
-        exportPdf.filePdf(result, req)
+        
+        if(result.length < 1) {
+            throw new Error('There is no data')
+        }
+
+        equipmentReport(result, adress)
         res.json({message: 'File generated successfully'})
     }
 

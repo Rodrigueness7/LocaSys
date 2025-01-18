@@ -62,7 +62,7 @@ const exportXlsx = async (req, res) => {
 const exportPdf = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.pdf'
-        await Equipment.exportPdf(address, res)
+        await Equipment.export(address, req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }

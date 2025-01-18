@@ -3,7 +3,7 @@ const PDFDocument = require('pdfkit-table')
 const doc = new PDFDocument({margin: 30, size: 'A4'})
 
 
-const filePdf = (data, req) => {
+const equipmentReport = (data, req) => {
     doc.pipe(fs.createWriteStream(req))
 
     const headers = [
@@ -13,7 +13,7 @@ const filePdf = (data, req) => {
         {label: 'type', property: 'type', width: 80},
         {label: 'value', property: 'value', width: 80},
         {label: 'entryDate', property: 'entryDate', width: 80},
-        {label: 'deletionDate', property: 'deletionDate', width: 80}  
+        {label: 'returnDate', property: 'returnDate', width: 80}  
     ]
 
     const datas = data.map((item) => ({
@@ -22,9 +22,10 @@ const filePdf = (data, req) => {
         equipment: item.equipment,
         type: item.type,
         value: item.value.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}),
-        entryDate: new Date(item.entryDate).toISOString().slice(0, 10).split('-').reverse().join('/'),
-        deletionDate: item.deletionDate ? new Date(item.deletionDate).toISOString().slice(0, 10).split('-').reverse().join('/') : ''
+        entryDate: new Date(item.entryDate).toLocaleDateString('pt-br', {timeZone: 'UTC'}),
+        returnDate: item.returnDate ? new Date(item.returnDate).toLocaleDateString('pt-br', {timeZone: 'UTC'}) : ''
     }))
+
 
     const tableJson = {
         headers: headers,
@@ -34,10 +35,11 @@ const filePdf = (data, req) => {
         }
     }
 
+
     doc.fontSize(16).text('Lista de Equipamentos', {align: 'center'})
     doc.moveDown()
-    doc.table(tableJson)
+    doc.table(JSON.stringify(tableJson))
     doc.end()
 }
 
-module.exports = {filePdf}
+module.exports = {equipmentReport}
