@@ -16,8 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Profile_permission.init({
     idProfile_permission: DataTypes.INTEGER,
     idProfile: DataTypes.INTEGER,
-    idPermission: DataTypes.INTEGER,
-    allwo: DataTypes.STRING
+    idPermission: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Profile_permission',

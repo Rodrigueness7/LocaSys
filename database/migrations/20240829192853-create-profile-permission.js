@@ -25,10 +25,6 @@ module.exports = {
           key: 'idPermission'
         }
       },
-      allwo: {
-        type: Sequelize.STRING(1),
-        allowNull: false
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

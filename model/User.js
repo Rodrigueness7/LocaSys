@@ -226,6 +226,7 @@ class User {
         if(!existUser) {
             throw new Error('Username or password invalid')
         }
+
         let idUser = existUser.dataValues.idUser
         let user = existUser.dataValues.username
         let idProfile = existUser.dataValues.idProfile

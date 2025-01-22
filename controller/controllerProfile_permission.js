@@ -3,7 +3,7 @@ const Profile_permission = require('../model/Profile_permission')
 const add = async (req, res) => {
     try {
         const profile_permission = new Profile_permission(req.body)
-        await profile_permission.insert(profile_permission, res)
+        await profile_permission.insert(profile_permission, req.body, res)
     } catch (error) {
         res.json({message: error.message})
     }
