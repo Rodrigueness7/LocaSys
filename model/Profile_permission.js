@@ -52,7 +52,12 @@ class Profile_permission {
     async insert(data, req, res) {
        const idProfile = await tbProfile.findOne({where: {profile: req.profile}, attributes: ['idProfile']})
        data.idProfile = idProfile.dataValues.idProfile
-      
+       
+       const existprofile_permission = await tbProfile_permission.findOne({where: {idProfile: data.idProfile, idPermission: req.idPermission}})
+        if(existprofile_permission) {
+            throw new Error('Permission already exists for this profile')
+        }
+       
         await tbProfile_permission.create(data)
         res.json({message: 'Add successfuly'})
     }

@@ -25,10 +25,6 @@ const tbProfile_permission = db.define('Profile_permissions', {
       model: 'Permissions',
       key: 'idPermission'
     }
-  },
-  allwo: {
-    type: Sequelize.STRING(1),
-    allowNull: false
   }
 })
 
