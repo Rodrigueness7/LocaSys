@@ -21,8 +21,8 @@ async function checkAcess (req, res, next) {
         const profileId = DecryptToken(req).idProfile;
         const permissions = await Profile_permission.select(profileId, action());
 
-        if (!permissions || !permissions.dataValues) {
-            throw new Error('Usuário sem permissão')
+        if (permissions.dataValues.allow !== 'S') {
+            throw new Error('Usuário sem permissão')   
         }
 
         next();

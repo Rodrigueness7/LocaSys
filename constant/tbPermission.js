@@ -11,7 +11,11 @@ const tbPermission = db.define('Permissions', {
       permission: {
         type: Sequelize.STRING(45),
         allowNull: false
-      }
+      },
+      section: {
+        type: Sequelize.STRING(80),
+        allowNull: false
+      },
 })
 
 module.exports = tbPermission
