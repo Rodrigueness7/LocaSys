@@ -25,7 +25,11 @@ const tbProfile_permission = db.define('Profile_permissions', {
       model: 'Permissions',
       key: 'idPermission'
     }
-  }
+  },
+  allow: {
+    allowNull: false,
+    type: Sequelize.STRING
+  },
 })
 
 tbProfile_permission.belongsTo(tbProfile, { foreignKey: 'idProfile' })

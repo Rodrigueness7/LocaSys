@@ -6,12 +6,14 @@ class Profile_permission {
     idProfile_permission
     idProfile
     idPermission
+    allow
   
 
     constructor(data) {
         this._idProfile_permission = data.idProfile_permission
         this._idProfile = data.idProfile
         this._idPermission = data.idPermission
+        this._allow = data.allow
 
     }
 
@@ -49,6 +51,17 @@ class Profile_permission {
         return this.idPermission = value
     }
 
+    get _allow(){
+        return this.allow
+    }
+
+    set _allow(value){
+        if(value === undefined){
+            throw new Error('Invalid allwo')
+        }
+        return this.allow = value
+    }
+
     async insert(data, req, res) {
        const idProfile = await tbProfile.findOne({where: {profile: req.profile}, attributes: ['idProfile']})
        data.idProfile = idProfile.dataValues.idProfile
@@ -63,7 +76,7 @@ class Profile_permission {
     }
 
     static async selectAll(res) {
-        const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission'],
+        const result = (await tbProfile_permission.findAll({attributes: ['idProfile_permission', 'allow'],
             include: [{model: tbProfile, attributes: ['profile']},{model: tbPermission, attributes: ['permission']}]})).
             map(data => data.dataValues)
         res.json(result)
@@ -71,14 +84,14 @@ class Profile_permission {
 
 
     static async select(idProfile, permission) {
-        const result = (await tbProfile_permission.findOne({attributes: ['idProfile_permission'],
+        const result = (await tbProfile_permission.findOne({attributes: ['idProfile_permission', 'allow'],
             include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission'], where: {permission: permission}}]}))
 
            return result
     }
 
     static async selectId(req, res) {
-        await tbProfile_permission.findByPk(req, {attributes: ['idProfile_permission'], include: [{model: tbProfile, attributes: ['profile']}, {model: tbPermission, attributes: ['permission']}]}).then(
+        await tbProfile_permission.findByPk(req, {attributes: ['idProfile_permission', 'allow'], include: [{model: tbProfile, attributes: ['profile']}, {model: tbPermission, attributes: ['permission']}]}).then(
             idPermission_permission => res.json(idPermission_permission.dataValues)
         )
     }
@@ -89,6 +102,7 @@ class Profile_permission {
         alterProfile_permission.idProfile_permission = data.idPermission_permission
         alterProfile_permission.idProfile = data.idProfile
         alterProfile_permission.idPermission = data.idPermission
+        alterProfile_permission.allow = data.allow
 
         await alterProfile_permission.save()
         res.json({message: 'Updated successfully'})
