@@ -83,9 +83,9 @@ class Profile_permission {
     }
 
 
-    static async select(idProfile, permission) {
+    static async select(idProfile, permission, section) {
         const result = (await tbProfile_permission.findOne({attributes: ['idProfile_permission', 'allow'],
-            include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission'], where: {permission: permission}}]}))
+            include: [{model: tbProfile, attributes: ['profile'], where: {idProfile: idProfile}},{model: tbPermission, attributes: ['permission', 'section'], where: {permission: permission, section: section}}]}))
 
            return result
     }

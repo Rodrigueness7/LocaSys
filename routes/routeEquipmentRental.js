@@ -4,10 +4,10 @@ const controller = require('../controller/controllerEquipmentRental')
 const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 
-routeEquipmentRental.get('/findEquipmentRental', verifyToken, checkAcess, controller.find)
-routeEquipmentRental.get('/findAllEquipmentRental', verifyToken, checkAcess, controller.findAll)
-routeEquipmentRental.get('/findEquipmentRentalId/:idEquipmentRental', verifyToken, checkAcess, controller.findId)
-routeEquipmentRental.post('/addEquipmentRental', verifyToken, checkAcess, controller.addFile)
-routeEquipmentRental.delete('/deleteAllEquipmentRental', verifyToken, checkAcess, controller.removerAll)
+routeEquipmentRental.get('/findEquipmentRental', verifyToken, checkAcess('equipmentRental'), controller.find)
+routeEquipmentRental.get('/findAllEquipmentRental', verifyToken, checkAcess('equipmentRental'), controller.findAll)
+routeEquipmentRental.get('/findEquipmentRentalId/:idEquipmentRental', verifyToken, checkAcess('equipmentRental'), controller.findId)
+routeEquipmentRental.post('/addEquipmentRental', verifyToken, checkAcess('equipmentRental'), controller.addFile)
+routeEquipmentRental.delete('/deleteAllEquipmentRental', verifyToken, checkAcess('equipmentRental'), controller.removerAll)
 
 module.exports = routeEquipmentRental

@@ -1,7 +1,8 @@
 const Profile_permission = require('../model/Profile_permission');
 const { DecryptToken } = require("../constant/decodeToken");
 
-async function checkAcess (req, res, next) {
+ function checkAcess (section) {
+   return async (req, res, next) => {
     try {
         function action() {
         switch(req.method) {
@@ -19,16 +20,18 @@ async function checkAcess (req, res, next) {
         }
 
         const profileId = DecryptToken(req).idProfile;
-        const permissions = await Profile_permission.select(profileId, action());
+        const permissions = await Profile_permission.select(profileId, action(), section);
 
-        if (permissions.dataValues.allow !== 'S') {
+        if (permissions.dataValues.allow !== true) {
             throw new Error('Usuário sem permissão')   
         }
+        
 
         next();
     } catch (error) {
         res.json({ message: error.message });
     }
+   }
 };
 
 module.exports = { checkAcess };

@@ -28,7 +28,7 @@ const tbProfile_permission = db.define('Profile_permissions', {
   },
   allow: {
     allowNull: false,
-    type: Sequelize.STRING
+    type: Sequelize.BOOLEAN
   },
 })
 
