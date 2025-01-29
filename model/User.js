@@ -2,9 +2,10 @@ const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
+const tbProfile_permission = require('../constant/tbProfile_permission')
 const jwt = require('jsonwebtoken')
-const Log = require('./Log')
 const AddLog = require('../constant/addLog')
+const tbPermission = require('../constant/tbPermission')
 
 
 class User {
@@ -231,6 +232,7 @@ class User {
         let user = existUser.dataValues.username
         let idProfile = existUser.dataValues.idProfile
         
+       
         const token = jwt.sign({idUser, user, idProfile}, process.env.secret_key, {expiresIn: '24h'}) 
         
         res.json({message: 'Logged in user', token})  

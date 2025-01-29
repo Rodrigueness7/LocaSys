@@ -25,8 +25,6 @@ const { DecryptToken } = require("../constant/decodeToken");
         if (permissions.dataValues.allow !== true) {
             throw new Error('Usuário sem permissão')   
         }
-        
-
         next();
     } catch (error) {
         res.json({ message: error.message });

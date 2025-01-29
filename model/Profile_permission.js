@@ -96,6 +96,11 @@ class Profile_permission {
         )
     }
 
+    static async selectSection(idProfile) {
+        const result = (await tbProfile_permission.findAll({where: {allow: true, idProfile: idProfile}}))
+        return result
+    }
+
     async update(req, data, res) {
         const alterProfile_permission = await tbProfile_permission.findByPk(req)
 

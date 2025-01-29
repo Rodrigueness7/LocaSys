@@ -7,6 +7,7 @@ const tbUser = require('../constant/tbUser')
 const exportXlsx = require('../content/export/fileXlsx')
 const {equipmentReport} = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
+const Profile_permission = require('./Profile_permission')
 
 class Equipment {
     idEquipment
@@ -175,6 +176,7 @@ class Equipment {
             equipment => equipment.dataValues
         )
         res.json(result)
+      
     }
 
     static async selectId(req, res) {
