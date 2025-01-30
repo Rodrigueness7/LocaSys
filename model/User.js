@@ -2,10 +2,9 @@ const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
-const tbProfile_permission = require('../constant/tbProfile_permission')
 const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
-const tbPermission = require('../constant/tbPermission')
+const Profile_permission = require('../model/Profile_permission')
 
 
 class User {
@@ -224,18 +223,19 @@ class User {
 
     static async login(username, password, res) {
         const existUser = await tbUser.findOne({where: {username: username, password: password}})
+       
         if(!existUser) {
             throw new Error('Username or password invalid')
         }
-
         let idUser = existUser.dataValues.idUser
         let user = existUser.dataValues.username
         let idProfile = existUser.dataValues.idProfile
+        let permission =  (await Profile_permission.selectSection(idProfile)).map(itens => itens.dataValues.idPermission)
         
-       
-        const token = jwt.sign({idUser, user, idProfile}, process.env.secret_key, {expiresIn: '24h'}) 
+        const token = jwt.sign({idUser, user, idProfile, permission}, process.env.secret_key, {expiresIn: '24h'}) 
         
         res.json({message: 'Logged in user', token})  
+      
     }
 
     async update(data, req, res) {

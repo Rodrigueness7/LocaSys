@@ -5,9 +5,10 @@ const tbSector = require('../constant/tbSector')
 const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
 const exportXlsx = require('../content/export/fileXlsx')
-const {equipmentReport} = require('../content/export/reports/equipmentReport')
+const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
-const Profile_permission = require('./Profile_permission')
+const { DecryptToken } = require('../constant/decodeToken')
+
 
 class Equipment {
     idEquipment
@@ -41,7 +42,7 @@ class Equipment {
     }
 
     set _idEquipment(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idEquipment = 0
         }
         return this.idEquipment = value
@@ -52,7 +53,7 @@ class Equipment {
     }
 
     set _codProd(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid codProd')
         }
         return this.codProd = value
@@ -63,7 +64,7 @@ class Equipment {
     }
 
     set _equipment(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.equipment = null
         }
         return this.equipment = value
@@ -74,7 +75,7 @@ class Equipment {
     }
 
     set _type(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid type')
         }
         return this.type = value
@@ -85,7 +86,7 @@ class Equipment {
     }
 
     set _idUser(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idUser')
         }
         return this.idUser = value
@@ -96,7 +97,7 @@ class Equipment {
     }
 
     set _value(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid value')
         }
         return this.value = value
@@ -107,7 +108,7 @@ class Equipment {
     }
 
     set _idFilial(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idFilial')
         }
         return this.idFilial = value
@@ -118,7 +119,7 @@ class Equipment {
     }
 
     set _idSector(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idSector')
         }
         return this.idSector = value
@@ -129,7 +130,7 @@ class Equipment {
     }
 
     set _idSupplier(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idSupplier')
         }
         return this.idSupplier = value
@@ -140,9 +141,9 @@ class Equipment {
     }
 
     set _entryDate(value) {
-        if(value == undefined){
-           throw new Error('Invalid entryDate')
-        } 
+        if (value == undefined) {
+            throw new Error('Invalid entryDate')
+        }
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
@@ -151,36 +152,43 @@ class Equipment {
     }
 
     set _returnDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.returnDate = null
         }
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
     async insert(data, res, req) {
-        const existEquipment = await tbEquipment.findOne({where: {codProd: data.codProd}})
-        
-        if(existEquipment) {
+        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd } })
+
+        if (existEquipment) {
             throw new Error('exist already equipment')
         }
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
-        res.json({message: 'Add successfully'})
+        res.json({ message: 'Add successfully' })
     }
 
-    static async selectAll(res) {
-        const result = (await tbEquipment.findAll({ where: {returnDate: null}, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], 
-            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, 
-            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]
+    static async selectAll(res, req) {
+        const result = (await tbEquipment.findAll({
+            where: { returnDate: null }, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
         })).map(
             equipment => equipment.dataValues
         )
+
+        if (DecryptToken(req).permission.find(itens => itens == 5) === undefined) {
+            result.map(itens => {
+                delete itens.value
+            })
+        }
         res.json(result)
-      
+
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req, {attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value','entryDate', 'returnDate'], include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']}, {model: tbSector, attributes:['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}).then(
+        await tbEquipment.findByPk(req, { attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }] }).then(
             idEquipment => res.json(idEquipment.dataValues)
         )
     }
@@ -193,11 +201,15 @@ class Equipment {
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipment.findAll({where: {returnDate: null, [Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
-            {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
+        const result = (await tbEquipment.findAll({
+            where: {
+                returnDate: null, [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
+                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idFilial: { [Op.like]: idFilial } }]
+            },
             attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
-            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
-            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
+        }
         )).map(
             value => value.dataValues
         )
@@ -206,6 +218,7 @@ class Equipment {
 
     async update(req, data, res) {
         const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+
 
         alterEquipment.codProd = data.codProd
         alterEquipment.equipment = data.equipment
@@ -218,9 +231,9 @@ class Equipment {
         alterEquipment.entryDate = data.entryDate
         alterEquipment.returnDate = data.returnDate
 
-        await alterEquipment.save() 
+        await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
-        res.json({message: 'Updated successfully'})
+        res.json({ message: 'Updated successfully' })
     }
 
     static async return(req, data, res) {
@@ -228,17 +241,17 @@ class Equipment {
 
         dataEquipment.returnDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
-       await dataEquipment.save()
-       AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
-       res.json({message: 'Returned successfully'})
+        await dataEquipment.save()
+        AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
+        res.json({ message: 'Returned successfully' })
     }
 
     static async exportlXlsx(req, res) {
-        const result = ( await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate']})).map(
+        const result = (await tbEquipment.findAll({ attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'] })).map(
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
-        res.json({message: 'File generated successfully'})
+        res.json({ message: 'File generated successfully' })
     }
 
     static async export(adress, data, res) {
@@ -249,21 +262,25 @@ class Equipment {
         let idUser = data.idUser ? data.idUser : '%'
         let idFilial = data.idFilial ? data.idFilial : '%'
 
-        const result = (await tbEquipment.findAll({where: {[Op.and]: [{codProd:{[Op.like]:codProd}},{equipment: {[Op.like]: equipment}}, 
-            {type: {[Op.like]: type }}, {idUser: {[Op.like]: idUser}}, {idFilial: {[Op.like]: idFilial}}]},
+        const result = (await tbEquipment.findAll({
+            where: {
+                [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
+                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idFilial: { [Op.like]: idFilial } }]
+            },
             attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
-            include: [{model: tbUser, attributes: ['idUser','username']}, {model: tbfilial, attributes: ['idFilial','filial']},
-            {model: tbSector, attributes: ['idSector','sector']}, {model: tbSupplier, attributes: ['idSupplier','supplier']}]}
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
+        }
         )).map(
             value => value.dataValues
         )
-        
-        if(result.length < 1) {
+
+        if (result.length < 1) {
             throw new Error('There is no data')
         }
 
         equipmentReport(result, adress)
-        res.json({message: 'File generated successfully'})
+        res.json({ message: 'File generated successfully' })
     }
 
 }

@@ -11,9 +11,9 @@ const add = async (req, res) => {
 
 const findAll = async (req, res) => {
     try {
-       await Equipment.selectAll(res)
+       await Equipment.selectAll(res, req)
     } catch (error) {
-        res,json({message: error.message})
+        res.json({message: error.message})
     }
 }
 
