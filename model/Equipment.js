@@ -23,13 +23,13 @@ class Equipment {
     entryDate
     returnDate
 
-    constructor(data) {
+    constructor(data, req) {
         this._idEquipment = data.idEquipment
         this._codProd = data.codProd
         this._equipment = data.equipment
         this._type = data.type
         this._idUser = data.idUser
-        this._value = data.value
+        this._value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? 0 : data.value
         this._idFilial = data.idFilial
         this._idSector = data.idSector
         this._idSupplier = data.idSupplier
@@ -184,7 +184,6 @@ class Equipment {
             })
         }
         res.json(result)
-
     }
 
     static async selectId(req, res) {
@@ -219,12 +218,11 @@ class Equipment {
     async update(req, data, res) {
         const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
-
         alterEquipment.codProd = data.codProd
         alterEquipment.equipment = data.equipment
         alterEquipment.type = data.type
         alterEquipment.idUser = data.idUser
-        alterEquipment.value = data.value
+        alterEquipment.value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? alterEquipment.dataValues.value : data.value
         alterEquipment.idFilial = data.idFilial
         alterEquipment.idSector = data.idSector
         alterEquipment.idSupplier = data.idSupplier

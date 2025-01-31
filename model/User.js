@@ -222,8 +222,22 @@ class User {
     }
 
     static async login(username, password, res) {
+
+        if (password.length < 8) {
+            throw new Error('our password must be at least 8 characters')
+        }
+        if (password.search(/[a-z]/i) < 0) {
+            throw new Error("Your password must contain at least one letter."); 
+        }
+        if (password.search(/[0-9]/) < 0) {
+            throw new Error("Your password must contain at least one digit.");
+        }
+        if(password.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
+            throw new Error('Your password must contain at least one Special symbol')
+        }
+        
         const existUser = await tbUser.findOne({where: {username: username, password: password}})
-       
+
         if(!existUser) {
             throw new Error('Username or password invalid')
         }

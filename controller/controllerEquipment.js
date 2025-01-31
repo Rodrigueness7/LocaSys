@@ -2,7 +2,7 @@ const Equipment = require('../model/Equipment')
 
 const add = async (req, res) => {
     try {
-        const equipment = new Equipment(req.body)
+        const equipment = new Equipment(req.body, req)
         await equipment.insert(equipment, res, req)
     } catch (error) {
         res.json({message: error.message})
@@ -35,7 +35,7 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const equipment = new Equipment(req.body)
+        const equipment = new Equipment(req.body, req)
         await equipment.update(req, equipment, res)
     } catch (error) {
         res.json({message: error.message})
