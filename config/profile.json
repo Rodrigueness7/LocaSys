@@ -1,0 +1,11 @@
+[
+    {
+        "idProfile": 0,
+        "profile": "Administrador"
+    },
+    {
+        "idProfile": 1,
+        "profile": "Usuario"
+    }
+
+]

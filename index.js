@@ -1,4 +1,5 @@
 require('dotenv').config()
+const readLine = require('readline')
 const express = require('express')
 const app = express()
 const routeFilial = require('./routes/routeFilial')
@@ -15,6 +16,7 @@ const routeEquipmentHistory = require('./routes/routeEquipmentHistory')
 const routeUploadFile = require('./routes/routeUploadFile')
 const routeEquipmentRental = require('./routes/routeEquipmentRental')
 const cors = require('cors')
+
 
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeFilial)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeSector)
@@ -35,7 +37,22 @@ app.listen(process.env.PORT, (error) => {
         if(error) {
             throw new Error('Server is not running')
         }
+        
         console.log(`Server is running in port:${process.env.PORT}`)
+        const rl = readLine.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        })
+        rl.question('Runs as tables: ', (res) => {
+            if(res == 'S' || 's' || 'Y' || 'y') {
+                console.log(true)
+            } else {
+                console.log(false)
+            }
+            rl.close()
+        })
+        
+
     } catch (error) {
         console.log(error.message)
     }
