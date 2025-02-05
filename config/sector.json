@@ -1,8 +1,5 @@
-[
-    {
-        "idSector": 0,
-        "sector": "Implantacao",
-        "idFilial": 0,
-        "deletionDate": null
-    }
-]
+{
+    "sector": "Implantacao",
+    "idFilial": 1,
+    "deletionDate": null
+}

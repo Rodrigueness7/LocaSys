@@ -1,10 +1,7 @@
-[
-    {
-        "idFilial": 0,
-        "filial": "Implantacao",
-        "CNPJ": null,
-        "corporateName": null,
-        "uniqueIdentifier": 0,
-        "deletionDate": null
-    }
-]
+{
+    "filial": "Implantacao",
+    "CNPJ": null,
+    "corporateName": null,
+    "uniqueIdentifier": 0,
+    "deletionDate": null
+}

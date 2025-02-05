@@ -16,7 +16,7 @@ const routeEquipmentHistory = require('./routes/routeEquipmentHistory')
 const routeUploadFile = require('./routes/routeUploadFile')
 const routeEquipmentRental = require('./routes/routeEquipmentRental')
 const cors = require('cors')
-
+const { sendConfiguration } = require('./config/sendConfiguration')
 
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeFilial)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeSector)
@@ -44,10 +44,10 @@ app.listen(process.env.PORT, (error) => {
             output: process.stdout
         })
         rl.question('Runs as tables: ', (res) => {
-            if(res == 'S' || 's' || 'Y' || 'y') {
-                console.log(true)
+            if(res === 'S' || 's' || 'Y' || 'y') {
+                sendConfiguration()
             } else {
-                console.log(false)
+                console.log('command does not exist')
             }
             rl.close()
         })

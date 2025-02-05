@@ -1,236 +1,236 @@
 [
     {
-        "idPermission": 0,
-        "permission": "Ler",
-        "section": "equipment"
-    },
-    {
         "idPermission": 1,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "equipment"
     },
     {
         "idPermission": 2,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "equipment"
     },
     {
         "idPermission": 3,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "equipment"
     },
     {
         "idPermission": 4,
-        "permission": "Valor",
+        "permission": "Deletar",
         "section": "equipment"
     },
     {
         "idPermission": 5,
-        "permission": "Ler",
-        "section": "filial"
+        "permission": "Valor",
+        "section": "equipment"
     },
     {
         "idPermission": 6,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "filial"
     },
     {
         "idPermission": 7,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "filial"
     },
     {
         "idPermission": 8,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "filial"
     },
     {
         "idPermission": 9,
-        "permission": "Ler",
-        "section": "user"
+        "permission": "Deletar",
+        "section": "filial"
     },
     {
         "idPermission": 10,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "user"
     },
     {
         "idPermission": 11,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "user"
     },
     {
         "idPermission": 12,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "user"
     },
     {
         "idPermission": 13,
-        "permission": "password",
+        "permission": "Deletar",
         "section": "user"
     },
     {
         "idPermission": 14,
-        "permission": "Ler",
-        "section": "profile"
+        "permission": "password",
+        "section": "user"
     },
     {
         "idPermission": 15,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "profile"
     },
     {
         "idPermission": 16,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "profile"
     },
     {
         "idPermission": 17,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "profile"
     },
     {
         "idPermission": 18,
-        "permission": "Ler",
-        "section": "sector"
+        "permission": "Deletar",
+        "section": "profile"
     },
     {
         "idPermission": 19,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "sector"
     },
     {
         "idPermission": 20,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "sector"
     },
     {
         "idPermission": 21,
+        "permission": "Atualizar",
+        "section": "sector"
+    },
+    {
+        "idPermission": 22,
         "permission": "Deletar",
         "section": "user"
     },
     {
-        "idPermission": 22,
-        "permission": "Ler",
-        "section": "contact"
-    },
-    {
         "idPermission": 23,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "contact"
     },
     {
         "idPermission": 24,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "contact"
     },
     {
         "idPermission": 25,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "contact"
     },
     {
         "idPermission": 26,
-        "permission": "Ler",
-        "section": "equipmentHistory"
+        "permission": "Deletar",
+        "section": "contact"
     },
     {
         "idPermission": 27,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "equipmentHistory"
     },
     {
         "idPermission": 28,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "equipmentHistory"
     },
     {
         "idPermission": 29,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "equipmentHistory"
     },
     {
         "idPermission": 30,
-        "permission": "Ler",
-        "section": "equipmentRental"
+        "permission": "Deletar",
+        "section": "equipmentHistory"
     },
     {
         "idPermission": 31,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "equipmentRental"
     },
     {
         "idPermission": 32,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "equipmentRental"
     },
     {
         "idPermission": 33,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "equipmentRental"
     },
     {
         "idPermission": 34,
-        "permission": "Ler",
-        "section": "log"
+        "permission": "Deletar",
+        "section": "equipmentRental"
     },
     {
         "idPermission": 35,
         "permission": "Ler",
-        "section": "permission"
+        "section": "log"
     },
     {
         "idPermission": 36,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "permission"
     },
     {
         "idPermission": 37,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "permission"
     },
     {
         "idPermission": 38,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "permission"
     },
     {
         "idPermission": 39,
-        "permission": "Ler",
-        "section": "profile_permission"
+        "permission": "Deletar",
+        "section": "permission"
     },
     {
         "idPermission": 40,
-        "permission": "Gravar",
+        "permission": "Ler",
         "section": "profile_permission"
     },
     {
         "idPermission": 41,
-        "permission": "Atualizar",
+        "permission": "Gravar",
         "section": "profile_permission"
     },
     {
         "idPermission": 42,
-        "permission": "Deletar",
+        "permission": "Atualizar",
         "section": "profile_permission"
     },
     {
         "idPermission": 43,
+        "permission": "Deletar",
+        "section": "profile_permission"
+    },
+    {
+        "idPermission": 44,
         "permission": "Ler",
         "section": "supplier"
     },
     {
-        "idPermission": 44,
+        "idPermission": 45,
         "permission": "Gravar",
         "section": "supplier"
     },
     {
-        "idPermission": 45,
+        "idPermission": 46,
         "permission": "Atualizar",
         "section": "supplier"
     },
     {
-        "idPermission": 46,
+        "idPermission": 47,
         "permission": "Deletar",
         "section": "supplier"
     }
