@@ -44,15 +44,14 @@ app.listen(process.env.PORT, (error) => {
             output: process.stdout
         })
         rl.question('Runs as tables: ', (res) => {
-            if(res === 'S' || 's' || 'Y' || 'y') {
+            if(res === 'S' || res === 's' || res === 'Y' || res === 'y') {
                 sendConfiguration()
             } else {
                 console.log('command does not exist')
-            }
+            } 
             rl.close()
         })
         
-
     } catch (error) {
         console.log(error.message)
     }
