@@ -231,6 +231,7 @@ class Equipment {
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
+        console.log(alterEquipment)
         res.json({ message: 'Updated successfully' })
     }
 

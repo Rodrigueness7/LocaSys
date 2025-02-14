@@ -5,7 +5,7 @@ const tbProfile = require('../constant/tbProfile')
 const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
 const Profile_permission = require('../model/Profile_permission')
-
+const {DecryptToken} = require('../constant/decodeToken')
 
 class User {
     idUser
@@ -21,14 +21,14 @@ class User {
     idProfile
     deletionDate
 
-    constructor(data) {
+    constructor(data, req) {
         this._idUser = data.idUser
         this._firstName = data.firstName
         this._lastName = data.lastName
         this._cpf = data.cpf
         this._username = data.username
-        this._password = data.password 
-        this._confirmationPassword = data.confirmationPassword
+        this._password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.password
+        this._confirmationPassword = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.confirmationPassword
         this._email = data.email
         this._confirmationEmail = data.confirmationEmail
         this._idSector = data.idSector
@@ -97,6 +97,9 @@ class User {
 
    
     set _password(value) {
+        if(value == null) {
+            return this.password = null
+        }
         
         if (value.length < 8) {
             throw new Error('our password must be at least 8 characters')
@@ -186,6 +189,7 @@ class User {
             }
             await tbUser.create(data)
             AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
+   
             res.json({message: 'Add successfully'})   
     }
 
@@ -196,12 +200,18 @@ class User {
             )
     }
 
-    static async selectAll(res) {
+    static async selectAll(res, req) {
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password', 'deletionDate'],
             include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
             allUser => allUser.dataValues
         )
+        if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
+            result.map(itens => {
+                delete itens.password
+            })
+        }
+
         res.json(result)
     }
 
@@ -259,13 +269,15 @@ class User {
         alterUser.lastName = data.lastName
         alterUser.cpf = data.cpf
         alterUser.username = data.username
-        alterUser.password = data.password
+        alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.password
         alterUser.email = data.email
         alterUser.idSector = data.idSector
         alterUser.idProfile = data.idProfile
 
         await alterUser.save()
         AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
+        
+        
         res.json({message:'Update with successfully'})
     }
 

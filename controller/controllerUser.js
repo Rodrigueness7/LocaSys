@@ -4,7 +4,7 @@ const User = require('../model/User')
 
 const add = async (req, res) => {
     try {
-        const user = new User(req.body)
+        const user = new User(req.body, req)
     await user.insert(user, req.body.username, req.body.email, res, req)
     } catch (error) {
         res.json({message: error.message})
@@ -13,7 +13,7 @@ const add = async (req, res) => {
 
 const findAll = async (req, res) => {
    try {
-    await User.selectAll(res)
+    await User.selectAll(res, req)
    } catch (error) {
     res.json({message: error.message})
    }
@@ -45,7 +45,7 @@ const login = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const user = new User(req.body)
+        const user = new User(req.body, req)
         await user.update(user, req, res)
     } catch (error) {
         res.json({message: error.message})
