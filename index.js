@@ -43,7 +43,7 @@ app.listen(process.env.PORT, (error) => {
             input: process.stdin,
             output: process.stdout
         })
-        rl.question('Runs as tables: ', (res) => {
+        rl.question('Runs as tables: S/Y ', (res) => {
             if(res === 'S' || res === 's' || res === 'Y' || res === 'y') {
                 sendConfiguration()
             } else {
