@@ -170,6 +170,7 @@ class Equipment {
     }
 
     static async selectAll(res, req) {
+        let array = []
         const result = (await tbEquipment.findAll({
             where: { returnDate: null }, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
@@ -183,7 +184,30 @@ class Equipment {
                 delete itens.value
             })
         }
-        res.json(result)
+        result.map(value => {
+            value['Código'] = value.codProd
+            delete value.codProd
+            value['Equipament'] = value.equipment
+            delete value.equipment
+            value['Tipo'] = value.type
+            delete value.type
+            value['Entrada'] = value.entryDate
+            delete value.entryDate
+            value['Retorno'] = value.returnDate
+            delete value.returnDate
+            value['Filial'] = value['Filial'].filial
+            delete value['Filial'].filial
+            value['Setor'] = value['Sector'].sector
+            delete value['Sector']
+            value['Usuario'] = value['User'].username
+            delete value['User']
+            value['Fornecedor'] = value['Supplier'].supplier
+            delete value['Supplier']
+            
+          array.push(value)
+        })
+     
+        res.json(array)
     }
 
     static async selectId(req, res) {
