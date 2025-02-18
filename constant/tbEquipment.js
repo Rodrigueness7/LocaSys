@@ -1,7 +1,7 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
 const tbuser = require('./tbUser')
-const tbFilial = require('./tbFilial')
+const tbBranch = require('./tbBranch')
 const tbSector = require('./tbSector')
 const tbSupplier = require('./tbSupplier')
 
@@ -36,12 +36,12 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.DECIMAL(13,2),
     allowNull: false
   },
-  idFilial: {
+  idBranch: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
-      model: 'Filials',
-      key: 'idFilial'
+      model: 'Branches',
+      key: 'idBranch'
     }
   },
   idSector: {
@@ -71,7 +71,7 @@ const tbEquipment = db.define('Equipments', {
 })
 
 tbEquipment.belongsTo(tbuser, {foreignKey: 'idUser'})
-tbEquipment.belongsTo(tbFilial, {foreignKey: 'idFilial'})
+tbEquipment.belongsTo(tbBranch, {foreignKey: 'idBranch'})
 tbEquipment.belongsTo(tbSector, {foreignKey: 'idSector'})
 tbEquipment.belongsTo(tbSupplier, {foreignKey: 'idSupplier'})
 

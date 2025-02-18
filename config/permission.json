@@ -27,22 +27,22 @@
     {
         "idPermission": 6,
         "permission": "Ler",
-        "section": "filial"
+        "section": "branch"
     },
     {
         "idPermission": 7,
         "permission": "Gravar",
-        "section": "filial"
+        "section": "branch"
     },
     {
         "idPermission": 8,
         "permission": "Atualizar",
-        "section": "filial"
+        "section": "branch"
     },
     {
         "idPermission": 9,
         "permission": "Deletar",
-        "section": "filial"
+        "section": "branch"
     },
     {
         "idPermission": 10,
@@ -235,5 +235,4 @@
         "section": "supplier"
     }
    
-
 ]

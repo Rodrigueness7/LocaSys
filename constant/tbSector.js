@@ -1,6 +1,6 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
-const tbFilial = require('./tbFilial')
+const tbBranch = require('./tbBranch')
 
 const tbSector = db.define('Sectors', {
   idSector: {
@@ -13,12 +13,12 @@ const tbSector = db.define('Sectors', {
     type: Sequelize.STRING(80),
     allowNull: false
   },
-  idFilial: {
+  idBranch: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
-      model: 'Filials',
-      key: 'idFilial'
+      model: 'Branches',
+      key: 'idBranch'
     }
   },
   deletionDate: {
@@ -27,6 +27,6 @@ const tbSector = db.define('Sectors', {
   }
 })
 
-tbSector.belongsTo(tbFilial, {foreignKey: 'idFilial'})
+tbSector.belongsTo(tbBranch, {foreignKey: 'idBranch'})
 
 module.exports = tbSector;

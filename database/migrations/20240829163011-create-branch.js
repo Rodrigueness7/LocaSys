@@ -2,14 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Filials', {
-      idFilial: {
+    await queryInterface.createTable('Branches', {
+      idBranch: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      filial: {
+      branch: {
         type: Sequelize.STRING(80),
         allowNull: false
       },
@@ -40,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Filials');
+    await queryInterface.dropTable('Branches');
   }
 };

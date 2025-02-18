@@ -1,4 +1,4 @@
-const tbfilial = require('../constant/tbFilial')
+const tbBranch = require('../constant/tbBranch')
 const tbSector = require('../constant/tbSector')
 const tbUser = require('../constant/tbUser')
 const tbEquipment = require('../constant/tbEquipment')
@@ -7,13 +7,13 @@ const AddLog = require('../constant/addLog')
 class Sector {
     idSector
     sector
-    idFilial
+    idBranch
     deletionDate
 
     constructor(data) {
         this._idSector = data.idSector,
         this._sector = data.sector,
-        this._idFilial = data.idFilial
+        this._idBranch = data.idBranch
         this._deletionDate = data.deletionDate
     }
 
@@ -39,15 +39,15 @@ class Sector {
         return this.sector = value
     }
 
-    get _idFilial() {
-        return this.idFilial
+    get _idBranch() {
+        return this.idBranch
     }
 
-    set _idFilial(value) {
+    set _idBranch(value) {
         if (value == undefined) {
-            throw new Error('Invalid idFilial')
+            throw new Error('Invalid idBranch')
         }
-        return this.idFilial = value
+        return this.idBranch = value
     }
 
     get _deletionDate() {
@@ -62,7 +62,7 @@ class Sector {
     }
 
     async insert(data, uniqueIdentifier,res, req) {
-        const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbfilial, where: {uniqueIdentifier: uniqueIdentifier}}})
+        const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbBranch, where: {uniqueIdentifier: uniqueIdentifier}}})
        
         if (existSector) {
                 throw new Error('Sector already exist')
@@ -74,14 +74,14 @@ class Sector {
     }
 
     static async findAll(res) {
-        const result = (await tbSector.findAll({attributes: ['idSector','sector', 'deletionDate'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}, where: {deletionDate: null}})).map(
+        const result = (await tbSector.findAll({attributes: ['idSector','sector', 'deletionDate'], include: {model: tbBranch, attributes: ['idBranch', 'uniqueIdentifier', 'branch']}, where: {deletionDate: null}})).map(
             sector => sector.dataValues
         )
         res.json(result)
     }
 
     static async find(req, res) {
-        await tbSector.findByPk(req, {attributes: ['idSector','sector'], include: {model: tbfilial, attributes: ['idFilial', 'uniqueIdentifier', 'filial']}}).then(
+        await tbSector.findByPk(req, {attributes: ['idSector','sector'], include: {model: tbBranch, attributes: ['idBranch', 'uniqueIdentifier', 'branch']}}).then(
             idSector => res.json(idSector.dataValues)
         )
     }
@@ -91,7 +91,7 @@ class Sector {
 
         alterSector.idSector = data.idSector
         alterSector.sector = data.sector
-        alterSector.idFilial = data.idFilial
+        alterSector.idBranch = data.idBranch
 
         await alterSector.save()
         AddLog.CreateLog(data.sector, 'Atualizado', 'Atualizado Setor', req)

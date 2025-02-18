@@ -1,10 +1,10 @@
-const tbFilial = require('../constant/tbFilial')
+const tbBranch = require('../constant/tbBranch')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
 const tbPermission = require('../constant/tbPermission')
 const tbProfile_permission = require('../constant/tbProfile_permission')
 const tbUser = require('../constant/tbUser')
-const filial = require('../config/filial.json')
+const branch = require('../config/branch.json')
 const sector = require('../config/sector.json')
 const profile = require('../config/profile.json')
 const permission = require('../config/permission.json')
@@ -22,8 +22,8 @@ async function sendConfiguration() {
     }
 
     setTimeout(async() => {
-      if ((await tbFilial.findAll()).map(values => values.dataValues).length <= 0) {
-      await tbFilial.create(filial)
+      if ((await tbBranch.findAll()).map(values => values.dataValues).length <= 0) {
+      await tbBranch.create(branch)
     }
 
     if ((await tbSector.findAll()).map(values => values.dataValues).length <= 0) {

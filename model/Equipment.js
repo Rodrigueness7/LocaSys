@@ -1,6 +1,6 @@
 const { Op } = require('sequelize')
 const tbEquipment = require('../constant/tbEquipment')
-const tbfilial = require('../constant/tbFilial')
+const tbBranch = require('../constant/tbBranch')
 const tbSector = require('../constant/tbSector')
 const tbSupplier = require('../constant/tbSupplier')
 const tbUser = require('../constant/tbUser')
@@ -8,6 +8,7 @@ const exportXlsx = require('../content/export/fileXlsx')
 const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
+const { changeKeyObejct } = require('../constant/changeKeyObejct')
 
 
 class Equipment {
@@ -17,7 +18,7 @@ class Equipment {
     type
     idUser
     value
-    idFilial
+    idBranch
     idSector
     idSupplier
     entryDate
@@ -30,7 +31,7 @@ class Equipment {
         this._type = data.type
         this._idUser = data.idUser
         this._value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? 0 : data.value
-        this._idFilial = data.idFilial
+        this._idBranch = data.idBranch
         this._idSector = data.idSector
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
@@ -103,15 +104,15 @@ class Equipment {
         return this.value = value
     }
 
-    get _idFilial() {
-        return this.idFilial
+    get _idBranch() {
+        return this.idBranch
     }
 
-    set _idFilial(value) {
+    set _idBranch(value) {
         if (value == undefined) {
-            throw new Error('Invalid idFilial')
+            throw new Error('Invalid idBranch')
         }
-        return this.idFilial = value
+        return this.idBranch = value
     }
 
     get _idSector() {
@@ -173,7 +174,7 @@ class Equipment {
         let array = []
         const result = (await tbEquipment.findAll({
             where: { returnDate: null }, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
-            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
         })).map(
             equipment => equipment.dataValues
@@ -185,33 +186,29 @@ class Equipment {
             })
         }
         result.map(value => {
-            value['Código'] = value.codProd
-            delete value.codProd
-            value['Equipament'] = value.equipment
-            delete value.equipment
-            value['Tipo'] = value.type
-            delete value.type
-            value['Entrada'] = value.entryDate
-            delete value.entryDate
-            value['Retorno'] = value.returnDate
-            delete value.returnDate
-            value['Filial'] = value['Filial'].filial
-            delete value['Filial'].filial
-            value['Setor'] = value['Sector'].sector
-            delete value['Sector']
+            changeKeyObejct(value, 'Código', 'codProd')
+            changeKeyObejct(value, 'Equipamento', 'equipment')
+            changeKeyObejct(value, 'Tipo', 'type')
+            changeKeyObejct(value, 'Valor', 'value')
+            changeKeyObejct(value, 'Entrada', 'entryDate')
+            changeKeyObejct(value, 'Retorno', 'returnDate')
             value['Usuario'] = value['User'].username
             delete value['User']
+            value['Setor'] = value['Sector'].sector
+            delete value['Sector']
+            value['Filial'] = value['Branch'].branch
+            delete value['Branch'].branch
             value['Fornecedor'] = value['Supplier'].supplier
             delete value['Supplier']
-            
-          array.push(value)
+
+            array.push(value)
         })
      
         res.json(array)
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req, { attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }] }).then(
+        await tbEquipment.findByPk(req, { attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }] }).then(
             idEquipment => res.json(idEquipment.dataValues)
         )
     }
@@ -222,15 +219,15 @@ class Equipment {
         let equipment = data.equipment ? data.equipment : '%'
         let type = data.type ? data.type : '%'
         let idUser = data.idUser ? data.idUser : '%'
-        let idFilial = data.idFilial ? data.idFilial : '%'
+        let idBranch = data.idBranch ? data.idBranch : '%'
 
         const result = (await tbEquipment.findAll({
             where: {
                 returnDate: null, [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
-                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idFilial: { [Op.like]: idFilial } }]
+                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
             },
             attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
-            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
         }
         )).map(
@@ -247,7 +244,7 @@ class Equipment {
         alterEquipment.type = data.type
         alterEquipment.idUser = data.idUser
         alterEquipment.value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? alterEquipment.dataValues.value : data.value
-        alterEquipment.idFilial = data.idFilial
+        alterEquipment.idBranch = data.idBranch
         alterEquipment.idSector = data.idSector
         alterEquipment.idSupplier = data.idSupplier
         alterEquipment.entryDate = data.entryDate
@@ -283,15 +280,15 @@ class Equipment {
         let equipment = data.equipment ? data.equipment : '%'
         let type = data.type ? data.type : '%'
         let idUser = data.idUser ? data.idUser : '%'
-        let idFilial = data.idFilial ? data.idFilial : '%'
+        let idBranch = data.idBranch ? data.idBranch : '%'
 
         const result = (await tbEquipment.findAll({
             where: {
                 [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
-                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idFilial: { [Op.like]: idFilial } }]
+                { type: { [Op.like]: type } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
             },
             attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
-            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbfilial, attributes: ['idFilial', 'filial'] },
+            include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
         }
         )).map(

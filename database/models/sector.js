@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Sector.init({
     idSector: DataTypes.INTEGER,
     sector: DataTypes.STRING,
-    idFilial: DataTypes.INTEGER,
+    idBranch: DataTypes.INTEGER,
     deletionDate: DataTypes.DATE
   }, {
     sequelize,

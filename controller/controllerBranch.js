@@ -1,9 +1,9 @@
-const Filial = require('../model/Filial')
+const Branch = require('../model/Branch')
 
 const add = async (req, res) => {
    try {
-      const filial = new Filial(req.body)
-      await filial.insert(filial, res, req)
+      const branch = new Branch(req.body)
+      await branch.insert(branch, res, req)
    } catch (error) {
       res.json({message: error.message})
    }
@@ -12,7 +12,7 @@ const add = async (req, res) => {
 
 const findAll = async (req, res) => {
    try {
-     await Filial.selectAll(res)
+     await Branch.selectAll(res)
    } catch (error) {
       res.json({message: error.message})
    }
@@ -20,7 +20,7 @@ const findAll = async (req, res) => {
 
 const findId = async (req, res) => {
    try {
-      await Filial.selectId(req.params.id, res)
+      await Branch.selectId(req.params.id, res)
    } catch (error) {
       res.json({message: error.message})
    }
@@ -28,8 +28,8 @@ const findId = async (req, res) => {
 
 const update = async (req, res) => {
    try {
-      const filial = new Filial(req.body)
-      await filial.update(req, filial, res) 
+      const branch = new Branch(req.body)
+      await branch.update(req, branch, res) 
    } catch (error) {
       res.json({message: error.message})
    }
@@ -37,7 +37,7 @@ const update = async (req, res) => {
 
 const inactivate = async (req, res) => {
    try {
-     await Filial.inactivate(req, req.body.deletionDate, res)
+     await Branch.inactivate(req, req.body.deletionDate, res)
    } catch (error) {
       res.json({message: error.message})
    }

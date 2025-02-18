@@ -1,11 +1,11 @@
-const tbFilial = require('../constant/tbFilial')
+const tbBranch = require('../constant/tbBranch')
 const tbSector = require('../constant/tbSector')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
 
-class Filial {
-    idFilial
-    filial  
+class Branch {
+    idBranch
+    branch 
     CNPJ
     corporateName
     uniqueIdentifier
@@ -13,8 +13,8 @@ class Filial {
 
 
     constructor(data) {
-        this._idFilial = data.idFilial
-        this._filial = data.filial
+        this._idBranch = data.idBranch
+        this._branch = data.branch
         this._CNPJ = data.CNPJ
         this._coporateName = data.corporateName
         this._uniqueIdentifier = data.uniqueIdentifier
@@ -22,26 +22,26 @@ class Filial {
 
     }
 
-    get _idFilial() {
-        return this.idFilial
+    get _idBranch() {
+        return this.idBranch
     }
 
-    set _idFilial(value) {
+    set _idBranch(value) {
         if(value == undefined) {
-            return this.idFilial = 0
+            return this.idBranch = 0
         }
-        return this.idFilial = value
+        return this.idBranch = value
     }
 
-    get _filial() {
-        return this.filial
+    get _branch() {
+        return this.branch
     }
 
-    set _filial(value) {
+    set _branch(value) {
         if(value == undefined) {
-            throw new Error('Invalid filial')
+            throw new Error('Invalid branch')
         }
-        return this.filial = value
+        return this.branch = value
     }
 
     get _CNPJ() {
@@ -90,65 +90,65 @@ class Filial {
 
 
    async insert(data, res, req) {
-        const existFilial = await tbFilial.findOne({where: {filial: data.filial}})
-            if(existFilial) {
-                throw new Error('Filial already exist')
+        const existBranch = await tbBranch.findOne({where: {branch: data.branch}})
+            if(existBranch) {
+                throw new Error('Branch already exist')
             }
-            await tbFilial.create(data)
-            AddLog.CreateLog(data.filial, 'Adicionado', 'Adicionado Filial', req)
+            await tbBranch.create(data)
+            AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
             res.json({message:'Add successfully'})   
     }
 
     static async selectAll(res) {
-       const result =  (await tbFilial.findAll({where: {deletionDate: null}})).map(
-            filial => filial.dataValues
+       const result =  (await tbBranch.findAll({where: {deletionDate: null}})).map(
+            branch => branch.dataValues
         )
         res.json(result)
     }
 
     static async selectId(req, res) {
-        await tbFilial.findByPk(req).then(
-            idFilial => res.json(idFilial.dataValues)
+        await tbBranch.findByPk(req).then(
+            idBranch => res.json(idBranch.dataValues)
         )  
     }
 
     async update(req, data, res) {
-        const alterFilial = await tbFilial.findByPk(req.params.id)
+        const alterBranch = await tbBranch.findByPk(req.params.id)
 
-        alterFilial.idFilial = data.idFilial,
-        alterFilial.filial = data.filial
-        alterFilial.CNPJ = data.CNPJ,
-        alterFilial.corporateName = data.corporateName,
-        alterFilial.uniqueIdentifier = data.uniqueIdentifier
+        alterBranch.idBranch = data.idBranch,
+        alterBranch.branch = data.branch
+        alterBranch.CNPJ = data.CNPJ,
+        alterBranch.corporateName = data.corporateName,
+        alterBranch.uniqueIdentifier = data.uniqueIdentifier
 
-        await alterFilial.save()
-        AddLog.CreateLog(data.filial, 'Atualizando', 'Atualizando Filial', req)
+        await alterBranch.save()
+        AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)
         res.json({message: 'Update successfully'})
         
     }
 
    static async inactivate(req, data, res) {
-        const dataFilial = await tbFilial.findByPk(req.params.idFilial)
-        const countFilialInSector = await tbSector.count({where: {idFilial: req.params.idFilial}})
-        const countFilialInEquipment = await tbEquipment.count({where: {idFilial: req.params.idFilial}})
+        const dataBranch = await tbBranch.findByPk(req.params.idBranch)
+        const countBranchInSector = await tbSector.count({where: {idBranch: req.params.idBranch}})
+        const countBranchInEquipment = await tbEquipment.count({where: {idFilial: req.params.idBranch}})
 
 
-        if(countFilialInEquipment > 0) {
+        if(countBranchInEquipment > 0) {
             throw new Error('You cannot delete a Filial, as it is registered in the Equipment table')
         }
 
-        if(countFilialInSector > 0) {
+        if(countBranchInSector > 0) {
             throw new Error('You cannot delete a Filial, as it is registered in the Sector table')
         }
 
-        dataFilial.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+        dataBranch.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
         
-        await dataFilial.save()
-        AddLog.CreateLog(dataFilial.dataValues.filial, 'Deletado', 'Deletado Filial', req)
+        await dataBranch.save()
+        AddLog.CreateLog(dataBranch.dataValues.branch, 'Deletado', 'Deletado Filial', req)
         res.json({message: 'Successfully inactivated'})
     }
 
    
 }
 
-module.exports = Filial;
+module.exports = Branch;

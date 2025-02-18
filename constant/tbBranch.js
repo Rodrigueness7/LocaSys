@@ -1,14 +1,14 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
 
-const tbfilial = db.define('Filials', {
-  idFilial: {
+const tbBranch = db.define('Branches', {
+  idBranch: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: Sequelize.INTEGER
   },
-  filial: {
+  branch: {
     type: Sequelize.STRING(80),
     allowNull: false
   },
@@ -30,4 +30,4 @@ const tbfilial = db.define('Filials', {
   }
 })
 
-module.exports = tbfilial;
+module.exports = tbBranch;
