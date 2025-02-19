@@ -197,7 +197,7 @@ class Equipment {
             value['Setor'] = value['Sector'].sector
             delete value['Sector']
             value['Filial'] = value['Branch'].branch
-            delete value['Branch'].branch
+            delete value['Branch']
             value['Fornecedor'] = value['Supplier'].supplier
             delete value['Supplier']
 

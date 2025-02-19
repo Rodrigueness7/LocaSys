@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     idUser: DataTypes.INTEGER,
     value: DataTypes.DECIMAL,
-    idFilial: DataTypes.INTEGER,
+    idBranch: DataTypes.INTEGER,
     idSector: DataTypes.INTEGER,
     idSupplier: DataTypes.INTEGER,
     entryDate: DataTypes.DATE,

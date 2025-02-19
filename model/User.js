@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
 const Profile_permission = require('../model/Profile_permission')
 const {DecryptToken} = require('../constant/decodeToken')
+const { changeKeyObejct } = require('../constant/changeKeyObejct')
 
 class User {
     idUser
@@ -201,6 +202,7 @@ class User {
     }
 
     static async selectAll(res, req) {
+        const array = []
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password', 'deletionDate'],
             include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
@@ -211,7 +213,22 @@ class User {
                 delete itens.password
             })
         }
-
+        result.map(value => {
+            changeKeyObejct(value, 'Nome', 'firstName')
+            changeKeyObejct(value, 'Sobrenome', 'lastName')
+            changeKeyObejct(value, 'CPF', 'cpf')
+            changeKeyObejct(value, 'Usuario', 'username')
+            changeKeyObejct(value, 'Senha', 'password')
+            changeKeyObejct(value, 'E-mail', 'email')
+            value['Setor'] = value['Sector'].sector
+            delete value['Sector']
+            value['Perfil'] = value['Profile'].profile
+            delete value['Profile']
+            changeKeyObejct(value, 'Data Exclussão', 'deletionDate')
+            
+            array.push(value)   
+        })
+        
         res.json(result)
     }
 

@@ -33,12 +33,12 @@ module.exports = {
         type: Sequelize.DECIMAL(13,2),
         allowNull: false
       },
-      idFilial: {
+      idBranch: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Filials',
-          key: 'idFilial'
+          model: 'Branches',
+          key: 'idBranch'
         }
       },
       idSector: {
