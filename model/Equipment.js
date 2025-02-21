@@ -171,7 +171,6 @@ class Equipment {
     }
 
     static async selectAll(res, req) {
-        let array = []
         const result = (await tbEquipment.findAll({
             where: { returnDate: null }, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
@@ -185,31 +184,18 @@ class Equipment {
                 delete itens.value
             })
         }
-        result.map(value => {
-            changeKeyObejct(value, 'Código', 'codProd')
-            changeKeyObejct(value, 'Equipamento', 'equipment')
-            changeKeyObejct(value, 'Tipo', 'type')
-            changeKeyObejct(value, 'Valor', 'value')
-            changeKeyObejct(value, 'Entrada', 'entryDate')
-            changeKeyObejct(value, 'Retorno', 'returnDate')
-            value['Usuario'] = value['User'].username
-            delete value['User']
-            value['Setor'] = value['Sector'].sector
-            delete value['Sector']
-            value['Filial'] = value['Branch'].branch
-            delete value['Branch']
-            value['Fornecedor'] = value['Supplier'].supplier
-            delete value['Supplier']
-
-            array.push(value)
-        })
      
-        res.json(array)
+        res.json(result)
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req, { attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }] }).then(
-            idEquipment => res.json(idEquipment.dataValues)
+        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }] }).then(
+            idEquipment => {
+                if (DecryptToken(req).permission.find(itens => itens == 5) === undefined) {
+                    delete idEquipment.dataValues.value
+                }
+                res.json(idEquipment.dataValues)
+            }
         )
     }
 

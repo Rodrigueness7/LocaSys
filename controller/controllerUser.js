@@ -21,7 +21,7 @@ const findAll = async (req, res) => {
 
 const findId = async (req, res) => {
     try {
-        await User.selectId(req.params.id, res)
+        await User.selectId(req, res)
     } catch (error) {
         res.json({message: error.message})
     }

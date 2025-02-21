@@ -195,14 +195,19 @@ class User {
     }
 
     static async selectId(req, res) {
-        await tbUser.findByPk(req, {attributes: ['idUser', 'username', 'firstName', 'lastName', 
+       await tbUser.findByPk(req.params.id, {attributes: ['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password'], include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]}).then(
-                idUser => res.json(idUser.dataValues)
-            )
+                idUser => { 
+                    if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
+                            delete idUser.dataValues.password   
+                    }
+                    res.json(idUser.dataValues)
+                }     
+            )     
     }
 
     static async selectAll(res, req) {
-        const array = []
+      
         const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
             'cpf', 'email', 'password', 'deletionDate'],
             include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
@@ -213,22 +218,7 @@ class User {
                 delete itens.password
             })
         }
-        result.map(value => {
-            changeKeyObejct(value, 'Nome', 'firstName')
-            changeKeyObejct(value, 'Sobrenome', 'lastName')
-            changeKeyObejct(value, 'CPF', 'cpf')
-            changeKeyObejct(value, 'Usuario', 'username')
-            changeKeyObejct(value, 'Senha', 'password')
-            changeKeyObejct(value, 'E-mail', 'email')
-            value['Setor'] = value['Sector'].sector
-            delete value['Sector']
-            value['Perfil'] = value['Profile'].profile
-            delete value['Profile']
-            changeKeyObejct(value, 'Data Exclussão', 'deletionDate')
-            
-            array.push(value)   
-        })
-        
+       
         res.json(result)
     }
 
