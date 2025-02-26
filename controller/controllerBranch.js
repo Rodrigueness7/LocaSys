@@ -20,7 +20,7 @@ const findAll = async (req, res) => {
 
 const findId = async (req, res) => {
    try {
-      await Branch.selectId(req.params.id, res)
+      await Branch.selectId(req.params.idBranch, res)
    } catch (error) {
       res.json({message: error.message})
    }
