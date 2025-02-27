@@ -90,13 +90,12 @@ class Branch {
 
 
    async insert(data, res, req) {
-        // const existBranch = await tbBranch.findOne({where: {branch: data.branch}})
-        //     if(existBranch) {
-        //         throw new Error('Branch already exist')
-        //     }
-        //     await tbBranch.create(data)
-        //     AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
-        console.log(data)
+        const existBranch = await tbBranch.findOne({where: {branch: data.branch}})
+            if(existBranch) {
+                throw new Error('Branch already exist')
+            }
+            await tbBranch.create(data)
+            AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
             res.json({message:'Add successfully'})   
     }
 
