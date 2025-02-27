@@ -6,6 +6,7 @@ const {checkAcess} = require('../controller/checkAcess')
 
 routeProfile_permission.get('/findAllProfile_permission', verifyToken, checkAcess('profile_permission'), controller.findAll)
 routeProfile_permission.get('/findIdProfile_permission/:id', verifyToken, checkAcess('profile_permission'), controller.findId)
+routeProfile_permission.get('/findSection/:id', verifyToken, checkAcess('profile_permission'), controller.findSection)
 routeProfile_permission.post('/addProfile_permission', verifyToken, checkAcess('profile_permission'), controller.add)
 routeProfile_permission.put('/updateProfile_permission/:id', verifyToken, checkAcess('profile_permission'), controller.update)
 routeProfile_permission.delete('/deleteProfile_permission/:id', verifyToken, checkAcess('profile_permission'), controller.remover)
