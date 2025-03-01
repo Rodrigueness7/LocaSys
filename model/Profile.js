@@ -33,7 +33,7 @@ class Profile {
     }
 
     async insert(data, res, req) {
-        const existProfile = await tbProfile.findOne({ where: { profile: data.profile } })
+        const existProfile = await tbProfile.findOne({ where: { profile: data.profile}})
             if (existProfile) {
                 throw new Error('Profile already exist')
             }

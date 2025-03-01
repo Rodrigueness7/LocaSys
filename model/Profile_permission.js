@@ -70,8 +70,8 @@ class Profile_permission {
         if(existprofile_permission) {
             throw new Error('Permission already exists for this profile')
         }
-       
-        await tbProfile_permission.create(data)
+        
+        data.map(values => tbProfile_permission.create(values))
         res.json({message: 'Add successfuly'})
     }
 

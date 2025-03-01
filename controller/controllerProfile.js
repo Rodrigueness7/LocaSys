@@ -3,7 +3,7 @@ const Profile = require('../model/Profile')
 const add = async (req, res) => {
     try {
         const profile = new Profile(req.body)
-        await profile.insert(profile, res)
+        await profile.insert(profile, res, req)
     } catch (error) {
         res.json({message: error.message})
     }
