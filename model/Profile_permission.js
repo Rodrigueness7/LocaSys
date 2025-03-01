@@ -96,11 +96,15 @@ class Profile_permission {
         )
     }
 
-    static async selectSection(idProfile, res) {
-        const result = (await tbProfile_permission.findAll({where: {allow: true, idProfile: idProfile}, attributes: ['idProfile_permission'], include: [{model: tbPermission, attributes:['permission', 'section']}]}))
-         res.json(result)
+    static async selectSection(idProfile) {
+        const result = (await tbProfile_permission.findAll({where: {allow: true, idProfile: idProfile}}))
+         return result
     }
 
+    static async selectPermissionIdProfile(idProfile, res) {
+        const result = (await tbProfile_permission.findAll({where: {allow: true, idProfile: idProfile}, attributes: ['idProfile_permission'], include: {model: tbPermission, attributes: ['permission', 'section']}}))
+        res.json(result)
+    }
 
     async update(req, data, res) {
         const alterProfile_permission = await tbProfile_permission.findByPk(req)

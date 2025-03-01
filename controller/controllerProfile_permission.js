@@ -25,9 +25,9 @@ const findId = async (req, res) => {
     }
 }
 
-const findSection = async (req, res) => {
+const findSectionIdProfile = async (req, res) => {
     try {
-        Profile_permission.selectSection(req.params.id, res)
+        await Profile_permission.selectPermissionIdProfile(req.params.id, res)
     } catch (error) {
         res.json({message: error.message})
     }
@@ -51,4 +51,4 @@ const remover = async (req, res) => {
     }
 }
 
-module.exports = {add, findId, findSection, findAll, update, remover}
+module.exports = {add, findId, findSectionIdProfile, findAll, update, remover}
