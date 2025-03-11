@@ -13,8 +13,8 @@ class Profile_permission {
         this._idProfile_permission = data.idProfile_permission
         this._idProfile = data.idProfile
         this._idPermission = data.idPermission
-        this._allow = data.allow
-
+        this._allow = data.allow    
+ 
     }
 
     get _idProfile_permission() {
@@ -34,8 +34,7 @@ class Profile_permission {
 
     set _idProfile(value) {
         if(value == undefined) {
-            throw new Error('Invalid idProfile')
-            
+            throw new Error('Invalid idProfile')    
         }
         return this.idProfile = value
     }
@@ -62,17 +61,28 @@ class Profile_permission {
         return this.allow = value
     }
 
-    async insert(data, req, res) {
-       const idProfile = await tbProfile.findOne({where: {profile: req.profile}, attributes: ['idProfile']})
-       data.idProfile = idProfile.dataValues.idProfile
+    async insert(data, profile) {
+       try {
+        let idProfile = await tbProfile.findOne({where: {profile: profile}, attributes: ['idProfile']})
        
-       const existprofile_permission = await tbProfile_permission.findOne({where: {idProfile: data.idProfile, idPermission: req.idPermission}})
+        if(!idProfile) {
+            throw new Error('IdProfile invalid')
+        }
+
+        data.idProfile = idProfile.dataValues.idProfile
+       const existprofile_permission = await tbProfile_permission.findOne({where: {idProfile: data.idProfile, idPermission: data.idPermission}})
         if(existprofile_permission) {
             throw new Error('Permission already exists for this profile')
         }
-        
-        data.map(values => tbProfile_permission.create(values))
-        res.json({message: 'Add successfuly'})
+         
+        setTimeout(async () => {
+            await tbProfile_permission.create(data)
+            
+        }, 5000)
+
+       } catch (error) {
+            throw error
+       }
     }
 
     static async selectAll(res) {
@@ -106,16 +116,17 @@ class Profile_permission {
         res.json(result)
     }
 
-    async update(req, data, res) {
-        const alterProfile_permission = await tbProfile_permission.findByPk(req)
+    async update(idProfile, data) {
+        const alterProfile_permission = await tbProfile_permission.findOne({where: {idProfile: idProfile}})
 
-        alterProfile_permission.idProfile_permission = data.idPermission_permission
+        alterProfile_permission.idProfile_permission = data.idProfile_permission
         alterProfile_permission.idProfile = data.idProfile
         alterProfile_permission.idPermission = data.idPermission
         alterProfile_permission.allow = data.allow
 
+         console.log(alterProfile_permission.dataValues)
         await alterProfile_permission.save()
-        res.json({message: 'Updated successfully'})
+      
     }
 
     static async delete(req, res) {

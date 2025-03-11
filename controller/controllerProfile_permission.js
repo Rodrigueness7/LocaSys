@@ -2,8 +2,11 @@ const Profile_permission = require('../model/Profile_permission')
 
 const add = async (req, res) => {
     try {
-        const profile_permission = new Profile_permission(req.body)
-        await profile_permission.insert(profile_permission, req.body, res)
+        await Promise.all(req.body.map(async values => {   
+          const profile_permission = new Profile_permission(values)
+        await profile_permission.insert(profile_permission, values.profile)
+         }))  
+         res.json({message: 'Add successfuly'})
     } catch (error) {
         res.json({message: error.message})
     }
@@ -35,13 +38,15 @@ const findSectionIdProfile = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const profile_permission = new Profile_permission(req.body)
-        await profile_permission.update(req.params.id, profile_permission, res)
+       await Promise.all(req.body.map(async values => {
+        const profile_permission = new Profile_permission(values)
+        await profile_permission.update(req.params.id, profile_permission)
+       }))
+       res.json({message: 'Updated successfully'})
     } catch (error) {
         res.json({message: error.message})
     }
 }
-
 
 const remover = async (req, res) => {
     try {
