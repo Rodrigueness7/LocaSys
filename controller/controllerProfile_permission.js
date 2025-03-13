@@ -38,15 +38,18 @@ const findSectionIdProfile = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-       await Promise.all(req.body.map(async values => {
-        const profile_permission = new Profile_permission(values)
-        await profile_permission.update(req.params.id, profile_permission)
-       }))
-       res.json({message: 'Updated successfully'})
+        await Promise.all(req.body.map(async (values) => {
+            const profile_permission = new Profile_permission(values);
+            
+            await profile_permission.update(values);
+        }));
+
+        res.json({ message: 'Updated successfully' });
     } catch (error) {
-        res.json({message: error.message})
+        res.json({ message: error.message });
     }
 }
+
 
 const remover = async (req, res) => {
     try {

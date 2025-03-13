@@ -2,6 +2,7 @@ const tbPermission = require('../constant/tbPermission')
 const tbProfile = require('../constant/tbProfile')
 const tbProfile_permission = require('../constant/tbProfile_permission')
 
+
 class Profile_permission {
     idProfile_permission
     idProfile
@@ -116,18 +117,15 @@ class Profile_permission {
         res.json(result)
     }
 
-    async update(idProfile, data) {
-        const alterProfile_permission = await tbProfile_permission.findOne({where: {idProfile: idProfile}})
+   async update (data)  {
+   
+    const alterProfile_permission = await tbProfile_permission.findByPk(data.idProfile_permission)
 
-        alterProfile_permission.idProfile_permission = data.idProfile_permission
-        alterProfile_permission.idProfile = data.idProfile
-        alterProfile_permission.idPermission = data.idPermission
-        alterProfile_permission.allow = data.allow
+    alterProfile_permission.allow = data.allow
 
-         console.log(alterProfile_permission.dataValues)
-        await alterProfile_permission.save()
-      
-    }
+    await alterProfile_permission.save()
+    
+   }
 
     static async delete(req, res) {
         await tbProfile_permission.findByPk(req).then(
