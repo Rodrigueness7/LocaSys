@@ -70,8 +70,8 @@ class Profile {
     }
 
     static async delete(req, res) {
-       const removerProfile =  await tbProfile.findByPk(req)
-
+       const removerProfile =  await tbProfile.findByPk(req.params.id)
+       
        removerProfile.destroy()
         AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)
         res.json({message: 'Delete profile'})

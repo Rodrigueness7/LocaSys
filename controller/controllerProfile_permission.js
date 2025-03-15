@@ -53,7 +53,7 @@ const update = async (req, res) => {
 
 const remover = async (req, res) => {
     try {
-       await Profile_permission.delete(req.params.id, res)
+       await Profile_permission.delete(req, res)
     } catch (error) {
         res.json({message: error.message})
     }
