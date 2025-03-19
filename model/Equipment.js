@@ -172,7 +172,7 @@ class Equipment {
 
     static async selectAll(res, req) {
         const result = (await tbEquipment.findAll({
-            where: { returnDate: null }, attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
+            attributes: ['idEquipment', 'codProd', 'equipment', 'type', 'value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }]
         })).map(
@@ -238,7 +238,6 @@ class Equipment {
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
-        console.log(alterEquipment)
         res.json({ message: 'Updated successfully' })
     }
 
