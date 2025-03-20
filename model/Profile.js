@@ -39,7 +39,7 @@ class Profile {
             }
             await tbProfile.create(data)
             AddLog.CreateLog(data.profile, 'Adicionado', 'Adicionado Perfil', req)
-            res.json({message: 'Add successfully'})
+            res.json({successMessage: 'Add successfully'})
        
     }
 
@@ -66,7 +66,7 @@ class Profile {
         AddLog.CreateLog(data.profile, 'Atualizado', 'Atualizado Perfil', req)
 
 
-        res.json({message: 'Updated successfully'})
+        res.json({successMessage: 'Updated successfully'})
     }
 
     static async delete(req, res) {
@@ -74,7 +74,7 @@ class Profile {
        
        removerProfile.destroy()
         AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)
-        res.json({message: 'Delete profile'})
+        res.json({successMessage: 'Delete profile'})
     }
 
 }

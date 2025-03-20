@@ -191,7 +191,7 @@ class User {
             await tbUser.create(data)
             AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
    
-            res.json({message: 'Add successfully'})   
+            res.json({successMessage: 'Add successfully'})   
     }
 
     static async selectId(req, res) {
@@ -265,7 +265,7 @@ class User {
         
         const token = jwt.sign({idUser, user, idProfile, permission}, process.env.secret_key, {expiresIn: '24h'}) 
         
-        res.json({message: 'Logged in user', token})  
+        res.json({successMessage: 'Logged in user', token})  
       
     }
 
@@ -285,7 +285,7 @@ class User {
         AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
         
         
-        res.json({message:'Update with successfully'})
+        res.json({successMessage:'Update with successfully'})
     }
 
     static async inactivate(req, data, res) {
@@ -295,7 +295,7 @@ class User {
 
         await dataUser.save()
         AddLog.CreateLog(dataUser.dataValues.username, 'Deletado', 'Deletado usuário', req)
-        res.json({message: 'Successfully inactivated'})
+        res.json({successMessage: 'Successfully inactivated'})
     }
 
 }

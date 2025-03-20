@@ -188,7 +188,7 @@ class Contact {
         }
         await tbContact.create(data)
         AddLog.CreateLog(data.contact, 'Adicionado', 'Adicionado contato', req)
-        res.json({message: 'Add successfully'})
+        res.json({successMessage: 'Add successfully'})
     }
 
     static async selectAll(res) {
@@ -222,7 +222,7 @@ class Contact {
 
         await alterContact.save()
         AddLog.CreateLog(data.contact, 'Atualizada', 'Atualizado contato', req)
-        res.json({message: 'Updated successfully'})
+        res.json({successMessage: 'Updated successfully'})
     }
 
     static async inactivate(req, data, res) {
@@ -232,7 +232,7 @@ class Contact {
        
         await dataContact.save()
         AddLog.CreateLog(dataContact.dataValues.contact, 'Deletado', 'Deletado contato', req)
-        res.json({message: 'Successfully inactivated'})
+        res.json({successMessage: 'Successfully inactivated'})
     } 
     
 }

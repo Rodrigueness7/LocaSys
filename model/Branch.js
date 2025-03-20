@@ -96,7 +96,7 @@ class Branch {
             }
             await tbBranch.create(data)
             AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
-            res.json({message:'Add successfully'})   
+            res.json({successMessage:'Add successfully'})   
     }
 
     static async selectAll(res) {
@@ -123,7 +123,7 @@ class Branch {
 
         await alterBranch.save()
         AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)
-        res.json({message: 'Update successfully'})
+        res.json({successMessage: 'Update successfully'})
         
     }
 
@@ -145,7 +145,7 @@ class Branch {
         
         await dataBranch.save()
         AddLog.CreateLog(dataBranch.dataValues.branch, 'Deletado', 'Deletado Filial', req)
-        res.json({message: 'Successfully inactivated'})
+        res.json({successMessage: 'Successfully inactivated'})
     }
 
    

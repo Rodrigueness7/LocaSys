@@ -5,7 +5,7 @@ const add = async (req, res) => {
         const contact = new Contact(req.body)
         await contact.insert(contact, res, req)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -13,7 +13,7 @@ const findAll = async(req, res) => {
     try {
         await Contact.selectAll(res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -21,7 +21,7 @@ const findId = async (req, res) => {
     try {
         await Contact.selectId(req.params.id, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -30,7 +30,7 @@ const update = async (req, res) => {
         const contact = new Contact(req.body)
        await contact.update(contact, req, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -38,7 +38,7 @@ const inactivate = async(req, res) => {
     try {
         await Contact.inactivate(req, req.body.deletionDate, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 

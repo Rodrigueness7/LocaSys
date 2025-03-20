@@ -147,7 +147,7 @@ class Supplier {
         }
         await tbSupplier.create(data)
         AddLog.CreateLog(data.supplier, 'Adicionado', 'Adicionado Fornecedor', req)
-        res.json({message: 'Add successufully'})
+        res.json({successMessage: 'Add successufully'})
     }
 
     static async selectAll(res) {
@@ -179,7 +179,7 @@ class Supplier {
 
         await alterSupplier.save()
         AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
-        res.json({message: 'Update supplier'})
+        res.json({successMessage: 'Update supplier'})
 
     }
 
@@ -200,7 +200,7 @@ class Supplier {
 
        await dataSupplier.save() 
        AddLog.CreateLog(dataSupplier.dataValues.supplier, 'Deletado', 'Deletado Fornecedor', req)
-       res.json({message: 'Successfully inactivated'})
+       res.json({successMessage: 'Successfully inactivated'})
     }
 }
 

@@ -69,7 +69,7 @@ class Sector {
             }
             await tbSector.create(data)
             AddLog.CreateLog(data.sector, 'Adicionado', 'Adicionado Setor', req)
-            res.json({message:'Add successfully'})
+            res.json({successMessage:'Add successfully'})
         
     }
 
@@ -95,7 +95,7 @@ class Sector {
 
         await alterSector.save()
         AddLog.CreateLog(data.sector, 'Atualizado', 'Atualizado Setor', req)
-        res.json({message: 'Update successfully'})
+        res.json({successMessage: 'Update successfully'})
 
     }
 
@@ -117,7 +117,7 @@ class Sector {
 
         await dataSector.save()
         AddLog.CreateLog(dataSector.dataValues.sector, 'Deletado', 'Deletado Setor', req)
-        res.json({message: 'Successfully inactivated'})  
+        res.json({successMessage: 'Successfully inactivated'})  
     }
 }
 

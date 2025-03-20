@@ -148,7 +148,7 @@ class EquipmentRental {
 
     static async deleteAll(res) {
         await tbEquipmentRental.destroy({truncate: true})
-        res.json({message: 'Deleted all equipment rental '})
+        res.json({successMessage: 'Deleted all equipment rental'})
     }
 
 }

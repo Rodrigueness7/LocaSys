@@ -238,17 +238,17 @@ class Equipment {
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
-        res.json({ message: 'Updated successfully' })
+        res.json({ successMessage: 'Updated successfully' })
     }
 
     static async return(req, data, res) {
         let dataEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
-        dataEquipment.returnDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
+        dataEquipment.returnDate = data == null ? null : new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
         await dataEquipment.save()
         AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
-        res.json({ message: 'Returned successfully' })
+        res.json({ successMessage: 'Returned successfully' })
     }
 
     static async exportlXlsx(req, res) {
@@ -256,7 +256,7 @@ class Equipment {
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
-        res.json({ message: 'File generated successfully' })
+        res.json({ successMessage: 'File generated successfully' })
     }
 
     static async export(adress, data, res) {
@@ -285,7 +285,7 @@ class Equipment {
         }
 
         equipmentReport(result, adress)
-        res.json({ message: 'File generated successfully' })
+        res.json({ successMessage: 'File generated successfully' })
     }
 
 }

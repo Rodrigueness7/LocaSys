@@ -133,7 +133,7 @@ class Profile_permission {
 
     static async delete(req, res) {
        (await tbProfile_permission.findAll({where: {idProfile: req.params.idProfile}})).map(itens => itens.destroy())
-        res.json({ message: 'Deleted successfully' })
+        res.json({successMessage: 'Deleted successfully' })
     }
 }
 

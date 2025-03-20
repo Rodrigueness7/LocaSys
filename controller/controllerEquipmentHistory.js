@@ -5,7 +5,7 @@ const add = async (req, res) => {
         const equipmentHistory = new EquipmentHistory(req.body)
         await equipmentHistory.insert(equipmentHistory, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -13,7 +13,7 @@ const findAll = async (req, res) => {
     try {
         await EquipmentHistory.selectAll(res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -21,7 +21,7 @@ const findId = async (req, res) => {
     try {
         await EquipmentHistory.selectId(req.params.idEquipmentHistory, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -29,7 +29,7 @@ const find = async (req, res) => {
     try {
         await EquipmentHistory.select(req.body, res)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -38,7 +38,7 @@ const update = async (req, res) => {
         const equipmentHistory = new EquipmentHistory(req.body)
         await equipmentHistory.update(equipmentHistory, req.params.idEquipmentHistory, res) 
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 } 
 

@@ -41,7 +41,7 @@ class Permission {
         await tbPermission.create(data)
         AddLog.CreateLog(data.permission, 'Adicionado', 'Adicionado Permissão', req)
         
-        res.json({message: 'Add successufully'})
+        res.json({successMessage: 'Add successufully'})
     }
 
     static async selectAll(res) {
@@ -64,7 +64,7 @@ class Permission {
 
         await alterPermission.save()
         AddLog.CreateLog(data.permission, 'Atualizado', 'Atualizado Permissão', req)
-        res.json({message: 'updated successfully'})
+        res.json({successMessage: 'updated successfully'})
         
     } 
 
@@ -73,7 +73,7 @@ class Permission {
 
         deletePermission.destroy()
         AddLog.CreateLog(deletePermission.dataValues.permission, 'Deletado', 'Deletado Permissão', req)
-        res.json({message: 'Delete successfully'})
+        res.json({successMessage: 'Delete successfully'})
     }
 
 }

@@ -77,7 +77,7 @@ class EquipmentHistory {
 
     async insert(data, res) {
        await tbEquipmentHistory.create(data)
-       res.json({message: 'Add successfully'})
+       res.json({successMessage: 'Add successfully'})
     }
 
     static async selectAll(res) {
@@ -117,7 +117,7 @@ class EquipmentHistory {
             alterEquipmentHistory.returnDate = data.returnDate
 
             await alterEquipmentHistory.save()
-            res.json({message: 'Updated successfully'})
+            res.json({successMessage: 'Updated successfully'})
 
         }
 
