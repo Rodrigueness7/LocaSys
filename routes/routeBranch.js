@@ -8,7 +8,7 @@ routeBranch.get('/findAllBranch', verifyToken, checkAcess('branch'), controller.
 routeBranch.get('/findBranch/:idBranch', verifyToken, checkAcess('branch'), controller.findId)
 routeBranch.post('/addBranch', checkAcess('branch'), controller.add)
 routeBranch.put('/updateBranch/:idBranch', verifyToken, checkAcess('branch'), controller.update)
-routeBranch.put('/inactivateBranch/:idFBranch', verifyToken, checkAcess('branch'), controller.inactivate)
+routeBranch.put('/inactivateBranch/:idBranch', verifyToken, checkAcess('branch'), controller.inactivate)
 
 
 module.exports = routeBranch;

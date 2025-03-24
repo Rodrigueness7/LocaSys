@@ -130,7 +130,7 @@ class Branch {
    static async inactivate(req, data, res) {
         const dataBranch = await tbBranch.findByPk(req.params.idBranch)
         const countBranchInSector = await tbSector.count({where: {idBranch: req.params.idBranch}})
-        const countBranchInEquipment = await tbEquipment.count({where: {idFilial: req.params.idBranch}})
+        const countBranchInEquipment = await tbEquipment.count({where: {idBranch: req.params.idBranch}})
 
 
         if(countBranchInEquipment > 0) {
