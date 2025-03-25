@@ -2,6 +2,7 @@ const tbBranch = require('../constant/tbBranch')
 const tbSector = require('../constant/tbSector')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
+const { Op, where } = require('sequelize')
 
 class Branch {
     idBranch
@@ -90,7 +91,7 @@ class Branch {
 
 
    async insert(data, res, req) {
-        const existBranch = await tbBranch.findOne({where: {branch: data.branch}})
+        const existBranch = await tbBranch.findOne({where: {[Op.or]: [{branch: data.branch}, {CNPJ: data.CNPJ}]}})
             if(existBranch) {
                 throw new Error('Branch already exist')
             }
@@ -113,6 +114,12 @@ class Branch {
     }
 
     async update(req, data, res) {
+        const existBranch = await tbBranch.findOne({where: {[Op.or] : [{CNPJ: data.CNPJ}, {branch: data.branch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
+
+        if(existBranch != null && existBranch.dataValues.idBranch != req.params.idBranch) {
+            throw new Error('exist already branch')
+        }
+
         const alterBranch = await tbBranch.findByPk(req.params.idBranch)
 
         alterBranch.idBranch = data.idBranch,

@@ -8,7 +8,7 @@ routeContact.get('/findAllContact', verifyToken, checkAcess('contact'), controll
 routeContact.get('/findContact/:id', verifyToken,checkAcess('contact'), controller.findId)
 routeContact.post('/addContact', verifyToken, checkAcess('contact'), controller.add)
 routeContact.put('/updateContact/:id', verifyToken, checkAcess('contact'), controller.update)
-routeContact.put('/inactivateContact/:idContact', verifyToken, checkAcess('contact'), controller.inactivate)
+routeContact.put('/inactivateContact/:id', verifyToken, checkAcess('contact'), controller.inactivate)
 
 
 

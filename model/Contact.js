@@ -1,5 +1,6 @@
 const tbContact = require('../constant/tbContact')
 const AddLog = require('../constant/addLog')
+const { Op } = require('sequelize')
 
 class Contact {
     idContact
@@ -182,7 +183,7 @@ class Contact {
     }
 
     async insert(data, res, req) {
-        const existContact = await tbContact.findOne({where: {contact: data.contact}})
+        const existContact = await tbContact.findOne({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
         if(existContact) {
             throw new Error('exist already contact')
         }
@@ -205,6 +206,12 @@ class Contact {
     }
 
     async update(data, req, res) {
+        const existContact = await tbContact.findOne({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
+
+        if(existContact != null && existContact.dataValues.idContact != req.params.id) {
+            throw new Error('exist already contact')
+        }
+
         const alterContact = await tbContact.findByPk(req.params.id)
 
         alterContact.contact = data.contact
@@ -226,7 +233,7 @@ class Contact {
     }
 
     static async inactivate(req, data, res) {
-        const dataContact = await tbContact.findByPk(req.params.idContact)
+        const dataContact = await tbContact.findByPk(req.params.id)
        
         dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
        
