@@ -28,7 +28,7 @@ const find = async (req, res) => {
 const update = async (req, res) => {
     try {
         const supplier = new Supplier(req.body)
-        supplier.update(supplier, req, res)
+        await supplier.update(supplier, req, res)
     } catch (error) {
         res.json({errorMessage: error.message})
     }

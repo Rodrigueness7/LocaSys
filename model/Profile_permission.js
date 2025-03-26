@@ -122,7 +122,7 @@ class Profile_permission {
     }
 
     async update(data) {
-
+        
         const alterProfile_permission = await tbProfile_permission.findByPk(data.idProfile_permission)
 
         alterProfile_permission.allow = data.allow

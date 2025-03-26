@@ -3,7 +3,7 @@ const Sector = require('../model/Sector')
 const add = async (req, res) => {
   try {
     const sector = new Sector(req.body)
-    await sector.insert(sector, req.body.uniqueIdentifier,res, req)
+    await sector.insert(sector, res, req)
   } catch (error) {
     res.json({errorMessage: error.message})
   }

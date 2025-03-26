@@ -166,6 +166,17 @@ class Supplier {
     }
 
     async update(data, req, res) {
+        const existEquipmentSupplier = await tbEquipment.findOne({where: {idSupplier: req.params.id}})
+
+        if(existEquipmentSupplier) {
+            throw new Error('Exist equipments in the supplier')
+        }
+
+        const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier}})
+
+        if(existSupplier != null && existSupplier.dataValues['CNPJ'] === data.CNPJ) {
+            throw new Error('Exist already supplier')
+        }
         const alterSupplier = await tbSupplier.findByPk(req.params.id)
 
         alterSupplier.supplier = data.supplier

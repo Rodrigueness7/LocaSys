@@ -3,6 +3,7 @@ const tbSector = require('../constant/tbSector')
 const tbUser = require('../constant/tbUser')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
+const { Op, where } = require('sequelize')
 
 class Sector {
     idSector
@@ -61,8 +62,8 @@ class Sector {
         return this.deletionDate = value
     }
 
-    async insert(data, uniqueIdentifier,res, req) {
-        const existSector = await tbSector.findOne({ where: { sector: data.sector}, include: {model: tbBranch, where: {uniqueIdentifier: uniqueIdentifier}}})
+    async insert(data, res, req) {
+       const existSector = await tbSector.findOne({where: {[Op.and]: [{idBranch: data.idBranch}, {sector: data.sector}]}})
        
         if (existSector) {
                 throw new Error('Sector already exist')
@@ -87,6 +88,18 @@ class Sector {
     }
 
     async update(req, data, res) {
+        const existEquipmentSector = await tbEquipment.findOne({where: {idSector: req.params.id}})
+
+        if(existEquipmentSector) {
+            throw new Error('Exist equipments in the sectors')
+        }
+
+        const existSector = await tbSector.findOne({where: {[Op.and]: [{idBranch: data.idBranch}, {sector: data.sector}]}})
+
+        if(existSector) {
+            throw new Error('Sector already exist')
+        }
+
         const alterSector = await tbSector.findByPk(req.params.id)
 
         alterSector.idSector = data.idSector

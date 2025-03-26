@@ -160,7 +160,7 @@ class Equipment {
     }
 
     async insert(data, res, req) {
-        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd } })
+        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd }})
 
         if (existEquipment) {
             throw new Error('exist already equipment')
@@ -223,6 +223,12 @@ class Equipment {
     }
 
     async update(req, data, res) {
+        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd }})
+        
+        if(existEquipment != null && existEquipment.dataValues.idEquipment != req.params.idEquipment) {
+            throw new Error('exist already equipment')
+        }
+
         const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
         alterEquipment.codProd = data.codProd

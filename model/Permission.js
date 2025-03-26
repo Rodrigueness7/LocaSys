@@ -58,6 +58,12 @@ class Permission {
     }
 
     async update(data, req, res) {
+        const existPermission = await tbPermission.findOne({where: {permission: data.permission}})
+
+        if(existPermission != null && existPermission.dataValues.idPermission != req.params.id) {
+            throw new Error('exist already permission')
+        }
+
         const alterPermission = await tbPermission.findByPk(req.params.id)
 
         alterPermission.permission = data.permission

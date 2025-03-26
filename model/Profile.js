@@ -57,6 +57,12 @@ class Profile {
     }
 
     async update(req, data, res) {
+        const existProfile = await tbProfile.findOne({ where: { profile: data.profile}})
+
+        if(existProfile != null && existProfile.dataValues.idProfile != req.params.id) {
+            throw new Error('Profile already exist')
+        }
+
         const alterProfile = await tbProfile.findByPk(req.params.id)
 
         alterProfile.idProfile = data.idProfile
