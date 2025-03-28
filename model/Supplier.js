@@ -188,7 +188,7 @@ class Supplier {
         AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
 
        if(existEquipmentSupplier) {
-        res.json({successMessage: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier.'})
+        res.json({successMessageObs: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier.'})
         
        } else {
         res.json({successMessage: 'Update success'})

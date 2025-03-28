@@ -2,9 +2,11 @@ const { Op, or } = require('sequelize')
 const tbUser = require('../constant/tbUser')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
+const tbEquipment = require('../constant/tbEquipment')
+const Profile_permission = require('../model/Profile_permission')
 const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
-const Profile_permission = require('../model/Profile_permission')
+
 const {DecryptToken} = require('../constant/decodeToken')
 const { changeKeyObejct } = require('../constant/changeKeyObejct')
 
@@ -270,22 +272,33 @@ class User {
     }
 
     async update(data, req, res) {
+        const existEquipmentUser = await tbEquipment.findOne({where: {idUser: req.params.id}})
+        const existUser = await tbUser.findOne({where: {[Op.or]: [{username: data.username}, {email: data.email}]}})  
+
+        if(existUser != null && existUser.dataValues.idUser != req.params.id) {
+            throw new Error('Exist already user with email and username register')
+        }
+
         const alterUser = await tbUser.findByPk(req.params.id)
 
-        alterUser.firstName = data.firstName
-        alterUser.lastName = data.lastName
+        alterUser.firstName = existEquipmentUser ? alterUser.dataValues.firstName : data.firstName
+        alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName
         alterUser.cpf = data.cpf
-        alterUser.username = data.username
+        alterUser.username = existEquipmentUser ? alterUser.dataValues.username : data.username
         alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.password
         alterUser.email = data.email
-        alterUser.idSector = data.idSector
+        alterUser.idSector = existEquipmentUser ? alterUser.dataValues.idSector : data.idSector
         alterUser.idProfile = data.idProfile
 
         await alterUser.save()
         AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
         
-        
-        res.json({successMessage:'Update with successfully'})
+        if(existEquipmentUser) {
+            res.json({successMessageObs: 'Updated with success, but was only updated Cpf, E-mail and Profile, since exist registered of equipments for this user'})
+        } else {
+            res.json({successMessage:'Update with successfully'})
+        }
+       
     }
 
     static async inactivate(req, data, res) {
