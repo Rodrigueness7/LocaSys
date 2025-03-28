@@ -31,7 +31,7 @@ const readXlsx = async (cell1, cell2) => {
         data.output = !regex.test(data.output) ? null : data.output
 
         const equipmentRental = new EquipmentRental(data)
-        await equipmentRental.insertEquipmentRental(equipmentRental)
+        await equipmentRental.insert(equipmentRental)
        
     })
      
