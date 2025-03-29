@@ -89,16 +89,16 @@ class Sector {
 
     async update(req, data, res) {
         const existEquipmentSector = await tbEquipment.findOne({where: {idSector: req.params.id}})
-
+        const existSector = await tbSector.findAll({where: {[Op.or]: [{sector: data.sector}, {idBranch: data.idBranch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
+        
         if(existEquipmentSector) {
             throw new Error('Exist equipments in the sectors')
         }
 
-        const existSector = await tbSector.findOne({where: {[Op.and]: [{idBranch: data.idBranch}, {sector: data.sector}]}})
-
-        if(existSector) {
-            throw new Error('Sector already exist')
-        }
+        if(existSector.find(value => value.dataValues.idSector != req.params.id)) {
+            throw new Error('Exist already sector registered:' + ' (' + ( existSector.filter(value => value.dataValues.idSector != req.params.id)
+            .map(value => value.dataValues.sector).join(', ').concat(') ')))
+       }
 
         const alterSector = await tbSector.findByPk(req.params.id)
 

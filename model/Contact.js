@@ -206,12 +206,14 @@ class Contact {
     }
 
     async update(data, req, res) {
-        const existContact = await tbContact.findOne({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
+        const existContact = await tbContact.findAll({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
 
-        if(existContact != null && existContact.dataValues.idContact != req.params.id) {
-            throw new Error('exist already contact')
-        }
-
+       
+        if(existContact.find(value => value.dataValues.idContact != req.params.id)) {
+            throw new Error('Exist already contact registered:' + ' (' + ( existContact.filter(value => value.dataValues.idContact != req.params.id)
+            .map(value => value.dataValues.contact).join(', ').concat(') ')))
+       }
+        
         const alterContact = await tbContact.findByPk(req.params.id)
 
         alterContact.contact = data.contact

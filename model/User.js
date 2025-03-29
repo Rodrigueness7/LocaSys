@@ -1,5 +1,5 @@
 const { Op, or } = require('sequelize')
-const tbUser = require('../constant/tbUser')
+
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
 const tbEquipment = require('../constant/tbEquipment')
@@ -9,6 +9,7 @@ const AddLog = require('../constant/addLog')
 
 const {DecryptToken} = require('../constant/decodeToken')
 const { changeKeyObejct } = require('../constant/changeKeyObejct')
+const tbUser = require('../constant/tbUser')
 
 class User {
     idUser
@@ -273,13 +274,14 @@ class User {
 
     async update(data, req, res) {
         const existEquipmentUser = await tbEquipment.findOne({where: {idUser: req.params.id}})
-        const existUser = await tbUser.findOne({where: {[Op.or]: [{username: data.username}, {email: data.email}]}})  
+       const alterUser = await tbUser.findByPk(req.params.id)
+       const existUser = await tbUser.findAll({where: {[Op.or]: [{username: data.username},{email: data.email}]}, attributes:['idUser', 'username']})
+        
 
-        if(existUser != null && existUser.dataValues.idUser != req.params.id) {
-            throw new Error('Exist already user with email and username register')
-        }
-
-        const alterUser = await tbUser.findByPk(req.params.id)
+       if(existUser.find(value => value.dataValues.idUser != req.params.id)) {
+            throw new Error('Exist already users registered:' + ' (' + ( existUser.filter(value => value.dataValues.idUser != req.params.id)
+            .map(value => value.dataValues.username).join(', ').concat(') ')))
+       }
 
         alterUser.firstName = existEquipmentUser ? alterUser.dataValues.firstName : data.firstName
         alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName
@@ -297,8 +299,7 @@ class User {
             res.json({successMessageObs: 'Updated with success, but was only updated Cpf, E-mail and Profile, since exist registered of equipments for this user'})
         } else {
             res.json({successMessage:'Update with successfully'})
-        }
-       
+        }  
     }
 
     static async inactivate(req, data, res) {

@@ -57,11 +57,12 @@ class Profile {
     }
 
     async update(req, data, res) {
-        const existProfile = await tbProfile.findOne({ where: { profile: data.profile}})
+        const existProfile = await tbProfile.findAll({ where: { profile: data.profile}})
 
-        if(existProfile != null && existProfile.dataValues.idProfile != req.params.id) {
-            throw new Error('Profile already exist')
-        }
+        if(existProfile.find(value => value.dataValues.idProfile != req.params.id)) {
+            throw new Error('Exist already profile registered:' + ' (' + ( existProfile.filter(value => value.dataValues.idProfile != req.params.id)
+            .map(value => value.dataValues.profile).join(', ').concat(') ')))
+       }
 
         const alterProfile = await tbProfile.findByPk(req.params.id)
 

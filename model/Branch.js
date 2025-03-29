@@ -1,8 +1,9 @@
-const tbBranch = require('../constant/tbBranch')
+
 const tbSector = require('../constant/tbSector')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
 const { Op, where } = require('sequelize')
+const tbBranch = require('../constant/tbBranch')
 
 class Branch {
     idBranch
@@ -91,7 +92,7 @@ class Branch {
 
 
    async insert(data, res, req) {
-        const existBranch = await tbBranch.findOne({where: {[Op.or]: [{branch: data.branch}, {CNPJ: data.CNPJ}]}})
+        const existBranch = await tbBranch.findOne({where: {[Op.or]: [{branch: data.branch}, {CNPJ: data.CNPJ}, {uniqueIdentifier: data.uniqueIdentifier}]}})
             if(existBranch) {
                 throw new Error('Branch already exist')
             }
@@ -114,10 +115,12 @@ class Branch {
     }
 
     async update(req, data, res) {
-        const existBranch = await tbBranch.findOne({where: {[Op.or] : [{CNPJ: data.CNPJ}, {branch: data.branch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
-
-        if(existBranch != null && existBranch.dataValues.idBranch != req.params.idBranch) {
-            throw new Error('exist already branch')
+       
+        const existBranch = await tbBranch.findAll({where: {[Op.or] : [{CNPJ: data['CNPJ']}, {branch: data.branch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
+        
+        if(existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
+            throw new Error('This branch is already registered: ' + '(' + existBranch.filter(value => value.dataValues.idBranch != req.params.idBranch)
+            .map(value => value.dataValues.branch).join(', ').concat(') '))
         }
 
         const alterBranch = await tbBranch.findByPk(req.params.idBranch)

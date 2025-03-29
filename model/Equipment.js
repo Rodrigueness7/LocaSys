@@ -223,12 +223,12 @@ class Equipment {
     }
 
     async update(req, data, res) {
-        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd }})
+        const existEquipment = await tbEquipment.findAll({ where: { codProd: data.codProd }})
         
-        if(existEquipment != null && existEquipment.dataValues.idEquipment != req.params.idEquipment) {
-            throw new Error('exist already equipment')
-        }
-
+        if(existEquipment.find(value => value.dataValues.idEquipment != req.params.idEquipment)) {
+            throw new Error('Exist already equipment registered:' + ' (' + ( existEquipment.filter(value => value.dataValues.idEquipment != req.params.id)
+            .map(value => value.dataValues.codProd).join(', ').concat(') ')))
+       }
         const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
         alterEquipment.codProd = data.codProd
