@@ -28,7 +28,7 @@ const findId = async (req, res) => {
 const update = async (req, res) => {
     try {
         const sector = new Sector(req.body)
-        await sector.update(req, sector, res)
+        await sector.update(req, req.body.uniqueIdentifier, sector, res)
     } catch (error) {
         res.json({errorMessage: error.message})
     }

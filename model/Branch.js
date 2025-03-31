@@ -115,9 +115,13 @@ class Branch {
     }
 
     async update(req, data, res) {
-       
+        const existSector = await tbSector.findOne({where: {idBranch: req.params.idBranch}})
         const existBranch = await tbBranch.findAll({where: {[Op.or] : [{CNPJ: data['CNPJ']}, {branch: data.branch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
         
+        if(existSector) {
+            throw new Error('Not was possible update, since the branch registered in the sector')
+        }
+
         if(existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
             throw new Error('This branch is already registered: ' + '(' + existBranch.filter(value => value.dataValues.idBranch != req.params.idBranch)
             .map(value => value.dataValues.branch).join(', ').concat(') '))
@@ -127,12 +131,13 @@ class Branch {
 
         alterBranch.idBranch = data.idBranch,
         alterBranch.branch = data.branch
-        alterBranch.CNPJ = data.CNPJ,
+        alterBranch.CNPJ =  data.CNPJ,
         alterBranch.corporateName = data.corporateName,
         alterBranch.uniqueIdentifier = data.uniqueIdentifier
 
         await alterBranch.save()
         AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)
+        
         res.json({successMessage: 'Update successfully'})
         
     }

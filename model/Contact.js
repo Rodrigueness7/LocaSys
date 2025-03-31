@@ -208,7 +208,6 @@ class Contact {
     async update(data, req, res) {
         const existContact = await tbContact.findAll({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
 
-       
         if(existContact.find(value => value.dataValues.idContact != req.params.id)) {
             throw new Error('Exist already contact registered:' + ' (' + ( existContact.filter(value => value.dataValues.idContact != req.params.id)
             .map(value => value.dataValues.contact).join(', ').concat(') ')))

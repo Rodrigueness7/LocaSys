@@ -167,12 +167,13 @@ class Supplier {
 
     async update(data, req, res) {
        
-        const existSupplier =  await tbSupplier.findOne({where: {CNPJ: data['CNPJ']}})
+        const existSupplier =  await tbSupplier.findAll({where: {CNPJ: data['CNPJ']}})
         const existEquipmentSupplier = await tbEquipment.findOne({where: {idSupplier: req.params.id}})
 
-         if(existSupplier != null && existSupplier.dataValues.idSupplier != req.params.id ) {
-            throw new Error('Exist already Supplier with this CNPJ')
-         }
+        if(existSupplier.find(value => value.dataValues.idSupplier != req.params.id)) {
+            throw new Error('Exist already supplier registered:' + ' (' + ( existSupplier.filter(value => value.dataValues.idSupplier != req.params.id)
+            .map(value => value.dataValues.supplier).join(', ').concat(') ')))
+       }
         const alterSupplier = await tbSupplier.findByPk(req.params.id)
 
         alterSupplier.supplier = data.supplier
@@ -194,7 +195,6 @@ class Supplier {
         res.json({successMessage: 'Update success'})
        }
        
-
     }
 
     static async inactivate(req, data, res) {

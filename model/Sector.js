@@ -87,14 +87,14 @@ class Sector {
         )
     }
 
-    async update(req, data, res) {
+    async update(req, uniqueIdentifier, data, res) {
         const existEquipmentSector = await tbEquipment.findOne({where: {idSector: req.params.id}})
-        const existSector = await tbSector.findAll({where: {[Op.or]: [{sector: data.sector}, {idBranch: data.idBranch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
+        const existSector = await tbSector.findAll({where: {sector: data.sector, idBranch: data.idBranch} , include: {model: tbBranch, where:{uniqueIdentifier: uniqueIdentifier}}})
         
         if(existEquipmentSector) {
             throw new Error('Exist equipments in the sectors')
         }
-
+        
         if(existSector.find(value => value.dataValues.idSector != req.params.id)) {
             throw new Error('Exist already sector registered:' + ' (' + ( existSector.filter(value => value.dataValues.idSector != req.params.id)
             .map(value => value.dataValues.sector).join(', ').concat(') ')))
@@ -108,6 +108,7 @@ class Sector {
 
         await alterSector.save()
         AddLog.CreateLog(data.sector, 'Atualizado', 'Atualizado Setor', req)
+       
         res.json({successMessage: 'Update successfully'})
 
     }
