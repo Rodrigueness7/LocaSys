@@ -166,9 +166,9 @@ class Supplier {
     }
 
     async update(data, req, res) {
-       
         const existSupplier =  await tbSupplier.findAll({where: {CNPJ: data['CNPJ']}})
         const existEquipmentSupplier = await tbEquipment.findOne({where: {idSupplier: req.params.id}})
+        const existContact = await tbContact.findOne({where: {idSupplier: req.params.id}})
 
         if(existSupplier.find(value => value.dataValues.idSupplier != req.params.id)) {
             throw new Error('Exist already supplier registered:' + ' (' + ( existSupplier.filter(value => value.dataValues.idSupplier != req.params.id)
@@ -188,8 +188,8 @@ class Supplier {
         await alterSupplier.save()
         AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
 
-       if(existEquipmentSupplier) {
-        res.json({successMessageObs: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier.'})
+       if(existEquipmentSupplier || existContact) {
+        res.json({successMessageObs: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier .'})
         
        } else {
         res.json({successMessage: 'Update success'})

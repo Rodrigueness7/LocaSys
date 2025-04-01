@@ -1,5 +1,6 @@
 const tbProfile = require('../constant/tbProfile')
 const AddLog = require('../constant/addLog')
+const tbUser = require('../constant/tbUser')
 
 class Profile {
     idProfile
@@ -57,7 +58,12 @@ class Profile {
     }
 
     async update(req, data, res) {
+        const existProfileUser = await tbUser.findOne({where: {idProfile: req.params.id}})
         const existProfile = await tbProfile.findAll({ where: { profile: data.profile}})
+
+        if(existProfileUser) {
+                throw new Error('Exist user registered in this profile')
+        }
 
         if(existProfile.find(value => value.dataValues.idProfile != req.params.id)) {
             throw new Error('Exist already profile registered:' + ' (' + ( existProfile.filter(value => value.dataValues.idProfile != req.params.id)
