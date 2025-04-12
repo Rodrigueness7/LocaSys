@@ -5,7 +5,7 @@ const add = async (req, res) => {
         const equipment = new Equipment(req.body, req)
         await equipment.insert(equipment, res, req)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -13,7 +13,7 @@ const findAll = async (req, res) => {
     try {
        await Equipment.selectAll(res, req)
     } catch (error) {
-        res.json({message: error.message})
+        res.json({errorMessage: error.message})
     }
 }
 
