@@ -167,7 +167,7 @@ class Equipment {
         }
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
-        res.json({ message: 'Add successfully' })
+        res.json({ successMessage: 'Add successfully' })
     }
 
     static async selectAll(res, req) {
