@@ -4,7 +4,7 @@ const EquipmentRental = require('../model/EquipmentRental')
 const addFile = async (req, res) => {
     try {
         await xlsx.readXlsx(req.body.cell1, req.body.cell2)
-        res.json({message: 'Add successfully'})
+        res.json({successMessage: 'Add successfully'})
     } catch (error) {
         res.json({ errorMessage: error.message })
     }
