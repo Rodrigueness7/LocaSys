@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   EquipmentRental.init({
     idEquipmentRental: DataTypes.INTEGER,
+    idBranch: DataTypes.INTEGER,
     codProd: DataTypes.INTEGER,
     proposal: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -22,7 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     finish: DataTypes.DATE,
     entry: DataTypes.DATE,
     output: DataTypes.DATE,
-    value: DataTypes.DECIMAL
+    value: DataTypes.DECIMAL,
+    releaseDate: DataTypes.DATE,
+    initialPeriod: DataTypes.DATE,
+    finishPeriod: DataTypes.DATE
+
   }, {
     sequelize,
     modelName: 'EquipmentRental',

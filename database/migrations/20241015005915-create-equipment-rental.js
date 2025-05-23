@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      idBranch: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Branches',
+          key: 'idBranch'
+        }
+      },
       codProd: {
         type: Sequelize.INTEGER,
         allowNull: false
@@ -38,7 +46,19 @@ module.exports = {
         allowNull: true
       },
       value: {
-        type: Sequelize.DECIMAL(13,2),
+        type: Sequelize.DECIMAL(13, 2),
+        allowNull: false
+      },
+      releaseDate: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      initPeriod: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      finishPeriod: {
+        type: Sequelize.DATE,
         allowNull: false
       },
       createdAt: {

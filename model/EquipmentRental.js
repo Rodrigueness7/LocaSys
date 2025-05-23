@@ -5,6 +5,7 @@ const condition = require('../constant/conditionDate')
 
 class EquipmentRental {
     idEquipmentRental
+    idBranch
     codProd
     proposal
     description
@@ -13,9 +14,14 @@ class EquipmentRental {
     entry
     output
     value
+    releaseDate
+    initPeriod
+    finishPeriod
+
 
     constructor(data) {
         this.idEquipmentRental = 0
+        this._idBranch = data.idBranch
         this._codProd = data.codProd
         this._proposal = data.proposal
         this._description = data.description
@@ -24,10 +30,24 @@ class EquipmentRental {
         this._entry = data.entry
         this._output = data.output
         this._value = data.value
+        this._releaseDate = data.releaseDate
+        this._initPeriod = data.initPeriod
+        this._finishPeriod = data.finishPeriod
     }
 
     get _codProd() {
         return this.codProd
+    }
+
+    get _idBranch() {
+        return this.idBranch
+    }
+
+    set _idBranch(value) {
+        if(value == undefined) {
+            throw new Error('Invalid idBranch')
+        }
+        return this.idBranch = value
     }
 
     set _codProd(value) {
@@ -112,6 +132,40 @@ class EquipmentRental {
             throw new Error('Invalid value')
         }
         return this.value = value
+    }
+
+    get _releaseDate() {
+        return this.releaseDate
+    }
+
+    set _releaseDate(value) {
+        if(value == undefined) {
+            throw new Error('Invalid releaseDate')
+        }
+        return this.releaseDate = value
+    }
+
+    get _initPeriod() {
+        return this.initPeriod
+    }
+
+    set _initPeriod(value) {
+        if(value == undefined) {
+            throw new Error('Invalid initPeriod')
+        }
+        return this.initPeriod = value
+    }
+
+    get _finishPeriod() {
+        return this.finishPeriod
+    }
+
+    set _finishPeriod(value) {
+        if(value == undefined) {
+            throw new Error('Invalid finishPeriod')
+        }
+        return this.finishPeriod = value
+    
     }
 
      async insert(data) {
