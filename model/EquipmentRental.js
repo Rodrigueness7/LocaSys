@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 const tbEquipmentRental = require('../constant/tbEquipmentRental')
 const condition = require('../constant/conditionDate')
+const localTime = require('../constant/localTime')
 
 
 class EquipmentRental {
@@ -30,7 +31,7 @@ class EquipmentRental {
         this._entry = data.entry
         this._output = data.output
         this._value = data.value
-        this._releaseDate = data.releaseDate
+        this.releaseDate = localTime.dateLocalTime()
         this._initPeriod = data.initPeriod
         this._finishPeriod = data.finishPeriod
     }
@@ -134,16 +135,6 @@ class EquipmentRental {
         return this.value = value
     }
 
-    get _releaseDate() {
-        return this.releaseDate
-    }
-
-    set _releaseDate(value) {
-        if(value == undefined) {
-            throw new Error('Invalid releaseDate')
-        }
-        return this.releaseDate = value
-    }
 
     get _initPeriod() {
         return this.initPeriod
@@ -153,7 +144,7 @@ class EquipmentRental {
         if(value == undefined) {
             throw new Error('Invalid initPeriod')
         }
-        return this.initPeriod = value
+        return this.initPeriod =  new Date(value.split('/').reverse().join('-'))
     }
 
     get _finishPeriod() {
@@ -164,13 +155,11 @@ class EquipmentRental {
         if(value == undefined) {
             throw new Error('Invalid finishPeriod')
         }
-        return this.finishPeriod = value
-    
+        return this.finishPeriod =  new Date(value.split('/').reverse().join('-'))
     }
 
      async insert(data) {
-       await tbEquipmentRental.create(data)
-        
+       await tbEquipmentRental.create(data)   
     }
     
     static async selectAll(res) {

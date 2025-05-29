@@ -3,7 +3,15 @@ const xlsx = require('xlsx')
 const { changeKeyObejct } = require('../../constant/changeKeyObejct')
 const EquipmentRental = require('../../model/EquipmentRental')
 
-const readXlsx = async (cell1, cell2) => {
+const readXlsx = async (req) => {
+
+    let cell1 = req.cell1
+    let cell2 = req.cell2
+    let idBranch = req.idBranch
+    let releaseDate = req.releaseDate
+    let initPeriod = req.initPeriod
+    let finishPeriod = req.finishPeriod
+
     let file = []
     const dados = await fs.readdir('./uploads')
     dados.map(values => {
@@ -30,11 +38,17 @@ const readXlsx = async (cell1, cell2) => {
         data.entry = !regex.test(data.entry) ? null : data.entry
         data.output = !regex.test(data.output) ? null : data.output
 
+       data.idBranch = idBranch,
+       data.releaseDate = releaseDate
+       data.initPeriod = initPeriod
+       data.finishPeriod = finishPeriod
+
+       
         const equipmentRental = new EquipmentRental(data)
         await equipmentRental.insert(equipmentRental)
        
     })
-     
+   
 }
 
 module.exports = { readXlsx }
