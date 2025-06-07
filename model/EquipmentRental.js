@@ -192,6 +192,12 @@ class EquipmentRental {
     static async delete(res, req) {
         let initPeriod = new Date(req.initPeriod.split('/').reverse().join('-'))
         let finishPeriod = new Date(req.finishPeriod.split('/').reverse().join('-'))
+
+        let existEquipmentRental = await tbEquipmentRental.findAll({where: {[Op.and] : [{initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch}]}})
+        if(existEquipmentRental.length == 0) {
+            throw new Error('There is no data')
+        }
+
         await tbEquipmentRental.destroy({where: {[Op.and] : [{initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch}] } })
         res.json({successMessage: 'Deleted all equipment rental'})
     }
