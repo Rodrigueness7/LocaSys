@@ -6,7 +6,7 @@ const addFile = async (req, res) => {
         await xlsx.readXlsx(req.body)
         res.json({successMessage: 'Add successfully'})
     } catch (error) {
-        res.json({ errorMessage: error.message })
+        res.json({errorMessage: error.message})
     }
 }
 
@@ -36,7 +36,7 @@ const findId = async (req, res) => {
 
 const removerAll = async (req, res) => {
     try {
-        await EquipmentRental.deleteAll(res)
+        await EquipmentRental.delete(res, req.body)
     } catch (error) {
         res.json({errorMessage: error.message})
     }

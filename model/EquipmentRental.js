@@ -189,8 +189,10 @@ class EquipmentRental {
         )
     }
 
-    static async deleteAll(res) {
-        await tbEquipmentRental.destroy({truncate: true})
+    static async delete(res, req) {
+        let initPeriod = new Date(req.initPeriod.split('/').reverse().join('-'))
+        let finishPeriod = new Date(req.finishPeriod.split('/').reverse().join('-'))
+        await tbEquipmentRental.destroy({where: {[Op.and] : [{initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch}] } })
         res.json({successMessage: 'Deleted all equipment rental'})
     }
 
