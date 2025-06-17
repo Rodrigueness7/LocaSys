@@ -163,7 +163,7 @@ class EquipmentRental {
     }
     
     static async selectAll(res) {
-        let result = (await tbEquipmentRental.findAll({attributes:['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']})).map(
+        let result = (await tbEquipmentRental.findAll({attributes:['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'finishPeriod']})).map(
             equipmentRental => equipmentRental.dataValues
         )
         res.json(result)
@@ -176,7 +176,7 @@ class EquipmentRental {
         const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd},
             [Op.and]: [condition.conditionDate('init', data.initI, data.initF), condition.conditionDate('finish', data.finishI, data.finishF),
             condition.conditionDate('entry', data.entryI, data.entryF), condition.conditionDate('output', data.outputI, data.outputF)]}, 
-            attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value' ], 
+            attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod'], 
           })).map(
             data => data.dataValues
         )
@@ -184,7 +184,7 @@ class EquipmentRental {
     }
 
     static async selectId(req, res) {
-        await tbEquipmentRental.findByPk(req, {attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value']}).then(
+        await tbEquipmentRental.findByPk(req, {attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod']}).then(
             equipmentRentalId => equipmentRentalId.dataValues
         )
     }
