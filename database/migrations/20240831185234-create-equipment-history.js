@@ -21,6 +21,30 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
+      idUser: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'idUser'
+        }
+      },
+      idSector: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Sectors',
+          key: 'idSector'
+        }
+      },
+      idBranch: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Branches',
+          key: 'idBranch'
+        }
+      },
       entryDate: {
         type: Sequelize.DATE,
         allowNull: false

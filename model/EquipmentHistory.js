@@ -1,14 +1,20 @@
 const tbEquipmentHistory = require('../constant/tbEquipmentHistory')
 const tbEquipment = require('../constant/tbEquipment')
+const tbUser = require('../constant/tbUser')
+const tbSector = require('../constant/tbSector')
+const tbBranch = require('../constant/tbBranch')
 const condition = require('../constant/conditionDate')
 const { Op } = require('sequelize')
-const AddLog = require('../constant/addLog')
+
 
 
 class EquipmentHistory {
     idEquipmentHistory
     idEquipment
     reason
+    idUser
+    idSector
+    idBranch
     entryDate
     returnDate
 
@@ -16,6 +22,9 @@ class EquipmentHistory {
         this._idEquipmentHistory = data.idEquipmentHistory
         this._idEquipment = data.idEquipment
         this._reason = data.reason
+        this._idUser = data.idUser
+        this._idSector = data.idSector
+        this._idBranch = data.idBranch
         this._entryDate = data.entryDate
         this._returnDate = data.returnDate
     }
@@ -53,6 +62,39 @@ class EquipmentHistory {
         return this.reason = value
     }
 
+    get _idUser() {
+        return this.idUser
+    }
+
+    set _idUser(value) {
+        if(value == undefined) {
+            throw new Error('Invalid idEquipment')
+        }
+        return this.idUser = value
+    }
+
+    get _idSector() {
+        return this.idSector
+    }
+
+    set _idSector(value) {
+      if(value == undefined) {
+            throw new Error('Invalid idEquipment')
+        }
+        return this.idSector = value
+    }
+
+     get _idBranch() {
+        return this.idBranch
+    }
+
+    set _idBranch(value) {
+       if(value == undefined) {
+            throw new Error('Invalid idEquipment')
+        }
+        return this.idBranch = value
+    }
+
     get _entryDate() {
         return this.entryDate
     }
@@ -82,7 +124,8 @@ class EquipmentHistory {
 
     static async selectAll(res) {
         const result = (await tbEquipmentHistory.findAll({attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'], 
-            include: {model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}})).map(
+            include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']},{model: tbUser, attributes: ['user']},
+        {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]})).map(
             values => values.dataValues
         )
         res.json(result)
@@ -90,7 +133,8 @@ class EquipmentHistory {
 
     static async selectId(req, res) {
         await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
-            include: {model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}
+            include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}, {model: tbUser, attributes: ['user']},
+            {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]
         }).then(
             idEquipmentHistory => res.json(idEquipmentHistory.dataValues)
         )
@@ -113,6 +157,9 @@ class EquipmentHistory {
             alterEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
             alterEquipmentHistory.idEquipment = data.idEquipment
             alterEquipmentHistory.reason = data.reason
+            alterEquipmentHistory.idUser = data.idUser
+            alterEquipmentHistory.idSector = data.idSector
+            alterEquipmentHistory.idBranch = data.idBranch
             alterEquipmentHistory.entryDate = data.entryDate
             alterEquipmentHistory.returnDate = data.returnDate
 
@@ -121,7 +168,6 @@ class EquipmentHistory {
 
         }
 
-    
 }
 
 module.exports = EquipmentHistory

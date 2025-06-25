@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     idEquipmentHistory: DataTypes.INTEGER,
     idEquipment: DataTypes.INTEGER,
     reason: DataTypes.STRING,
+    idUser: DataTypes.INTEGER,
+    idSector: DataTypes.INTEGER,
+    idBranch: DataTypes.INTEGER,
     returnDate: DataTypes.DATE,
     entryDate: DataTypes.DATE
   }, {
