@@ -267,7 +267,7 @@ class User {
         let permission =  (await Profile_permission.selectSection(idProfile)).map(itens => itens.dataValues.idPermission)
         
         const token = jwt.sign({idUser, user, idProfile, permission}, process.env.secret_key, {expiresIn: '24h'}) 
-        
+
         res.json({successMessage: 'Logged in user', token})  
       
     }

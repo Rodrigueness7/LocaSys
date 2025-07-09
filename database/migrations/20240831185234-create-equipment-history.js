@@ -45,6 +45,10 @@ module.exports = {
           key: 'idBranch'
         }
       },
+      value: {
+        type: Sequelize.DECIMAL(13,2),
+        allowNull: false,
+      },
       entryDate: {
         type: Sequelize.DATE,
         allowNull: false

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     idUser: DataTypes.INTEGER,
     idSector: DataTypes.INTEGER,
     idBranch: DataTypes.INTEGER,
+    value: DataTypes.DECIMAL,
     returnDate: DataTypes.DATE,
     entryDate: DataTypes.DATE
   }, {
