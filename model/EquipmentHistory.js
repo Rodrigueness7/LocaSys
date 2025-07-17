@@ -15,6 +15,7 @@ class EquipmentHistory {
     idUser
     idSector
     idBranch
+    value
     entryDate
     returnDate
 
@@ -25,6 +26,7 @@ class EquipmentHistory {
         this._idUser = data.idUser
         this._idSector = data.idSector
         this._idBranch = data.idBranch
+        this._value = data.value
         this._entryDate = data.entryDate
         this._returnDate = data.returnDate
     }
@@ -95,6 +97,17 @@ class EquipmentHistory {
         return this.idBranch = value
     }
 
+     get _value() {
+        return this.value
+    }
+
+    set _value(value) {
+        if (value == undefined) {
+            throw new Error('Invalid value')
+        }
+        return this.value = value
+    }
+
     get _entryDate() {
         return this.entryDate
     }
@@ -123,7 +136,7 @@ class EquipmentHistory {
     }
 
     static async selectAll(res) {
-        const result = (await tbEquipmentHistory.findAll({attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'], 
+        const result = (await tbEquipmentHistory.findAll({attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'], 
             include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']},{model: tbUser, attributes: ['username']},
         {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]})).map(
             values => values.dataValues
@@ -132,7 +145,7 @@ class EquipmentHistory {
     }
 
     static async selectId(req, res) {
-        await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
+        await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
             include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}, {model: tbUser, attributes: ['username']},
             {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]
         }).then(
@@ -161,6 +174,7 @@ class EquipmentHistory {
             alterEquipmentHistory.idUser = data.idUser
             alterEquipmentHistory.idSector = data.idSector
             alterEquipmentHistory.idBranch = data.idBranch
+            alterEquipmentHistory.value = data.value
             alterEquipmentHistory.entryDate = data.entryDate
             alterEquipmentHistory.returnDate = data.returnDate
 
