@@ -32,7 +32,7 @@ app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquip
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUploadFile)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentRental)
 
-app.listen(process.env.PORT, (error) => {
+app.listen(process.env.PORT,'0.0.0.0', (error) => {
     try {
         if(error) {
             throw new Error('Server is not running')
