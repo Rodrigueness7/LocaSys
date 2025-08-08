@@ -27,7 +27,7 @@ const { DecryptToken } = require("../constant/decodeToken");
         }
         next();
     } catch (error) {
-        res.json({ message: error.message });
+        res.json({ errorMessage: error.message });
     }
    }
 };

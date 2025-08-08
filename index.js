@@ -18,6 +18,7 @@ const routeEquipmentRental = require('./routes/routeEquipmentRental')
 const cors = require('cors')
 const { sendConfiguration } = require('./config/sendConfiguration')
 
+
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeBranch)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeSector)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeProfile)
@@ -32,7 +33,8 @@ app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquip
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUploadFile)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentRental)
 
-app.listen(process.env.PORT,'0.0.0.0', (error) => {
+
+app.listen(process.env.PORT, (error) => {
     try {
         if(error) {
             throw new Error('Server is not running')
@@ -51,6 +53,7 @@ app.listen(process.env.PORT,'0.0.0.0', (error) => {
             } 
             rl.close()
         })
+
         
     } catch (error) {
         console.log(error.message)
