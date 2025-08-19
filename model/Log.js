@@ -24,7 +24,7 @@ class Log {
     }
 
     set _idLog(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idLog')
         }
         return this.idLog = value
@@ -35,7 +35,7 @@ class Log {
     }
 
     set _action(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid action')
         }
         return this.action = value
@@ -46,7 +46,7 @@ class Log {
     }
 
     set _description(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid description')
         }
         return this.description = value
@@ -57,10 +57,10 @@ class Log {
     }
 
     set _actionDate(value) {
-        if(value == undefined ) {
+        if (value == undefined) {
             throw new Error('Invalid actionDate')
         }
-        
+
         return this.actionDate = locaTime.dateLocalTime()
     }
 
@@ -69,7 +69,7 @@ class Log {
     }
 
     set _idUser(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idUser')
         }
         return this.idUser = value
@@ -77,28 +77,30 @@ class Log {
 
     async insertLog(data) {
         await tbLog.create(data)
-        
+
     }
 
     static async selectAllLog(res) {
-        const result = (await tbLog.findAll({attributes: ['idLog','action','description','actionDate'], 
-            include:{model: tbUser, attributes: ['username']}})).map(
-                data => data.dataValues
-            )
-            res.json(result)
+        const result = (await tbLog.findAll({
+            attributes: ['idLog', 'action', 'description', 'actionDate'],
+            include: { model: tbUser, attributes: ['username'] }
+        })).map(
+            data => data.dataValues
+        )
+        res.status(200).json(result)
     }
 
     static async selectLog(dateInit, dateFinish, action, res) {
-       const dtInitCov = locaTime.initConv(dateInit)
-       const dtFinishCov = locaTime.finishConv(dateFinish)
-       const valueAction = action ? action : '%'
+        const dtInitCov = locaTime.initConv(dateInit)
+        const dtFinishCov = locaTime.finishConv(dateFinish)
+        const valueAction = action ? action : '%'
 
-       const result = (await tbLog.findAll({where:{action: {[Op.like]: valueAction} ,actionDate: {[Op.gte]: dtInitCov, [Op.lte]: dtFinishCov}}, attributes: ['idLog', 'action','description','actionDate'], include: {model: tbUser, attributes: ['username']}}
-       )).map(
+        const result = (await tbLog.findAll({ where: { action: { [Op.like]: valueAction }, actionDate: { [Op.gte]: dtInitCov, [Op.lte]: dtFinishCov } }, attributes: ['idLog', 'action', 'description', 'actionDate'], include: { model: tbUser, attributes: ['username'] } }
+        )).map(
             values => values.dataValues
-       )
-      res.json(result)
-    }    
+        )
+        res.status(200).json(result)
+    }
 }
 
 module.exports = Log

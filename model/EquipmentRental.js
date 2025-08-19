@@ -27,7 +27,7 @@ class EquipmentRental {
         this._proposal = data.proposal
         this._description = data.description
         this._init = data.init
-        this._finish = data.finish 
+        this._finish = data.finish
         this._entry = data.entry
         this._output = data.output
         this._value = data.value
@@ -45,14 +45,14 @@ class EquipmentRental {
     }
 
     set _idBranch(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idBranch')
         }
         return this.idBranch = value
     }
 
     set _codProd(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid codProd')
         }
         return this.codProd = value
@@ -63,18 +63,18 @@ class EquipmentRental {
     }
 
     set _proposal(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid proposal')
         }
         return this.proposal = value
     }
 
     get _description() {
-        return this.description 
+        return this.description
     }
 
     set _description(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid description')
         }
         return this.description = value
@@ -85,40 +85,40 @@ class EquipmentRental {
     }
 
     set _init(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.init = null
         }
         return this.init = new Date(value.split('/').reverse().join('-'))
     }
 
     get _finish() {
-       return this.finish
+        return this.finish
     }
 
     set _finish(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.finish = null
         }
         return this.finish = new Date(value.split('/').reverse().join('-'))
     }
 
     get _entry() {
-        return this.entry 
+        return this.entry
     }
 
     set _entry(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.entry = null
         }
         return this.entry = new Date(value.split('/').reverse().join('-'))
     }
 
     get _output() {
-        return this.output 
+        return this.output
     }
 
     set _output(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.output = null
         }
         return this.output = new Date(value.split('/').reverse().join('-'))
@@ -129,7 +129,7 @@ class EquipmentRental {
     }
 
     set _value(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid value')
         }
         return this.value = value
@@ -141,10 +141,10 @@ class EquipmentRental {
     }
 
     set _initPeriod(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid initPeriod')
         }
-        return this.initPeriod =  new Date(value.split('/').reverse().join('-'))
+        return this.initPeriod = new Date(value.split('/').reverse().join('-'))
     }
 
     get _finishPeriod() {
@@ -152,39 +152,42 @@ class EquipmentRental {
     }
 
     set _finishPeriod(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid finishPeriod')
         }
-        return this.finishPeriod =  new Date(value.split('/').reverse().join('-'))
+        return this.finishPeriod = new Date(value.split('/').reverse().join('-'))
     }
 
-     async insert(data) {
-       await tbEquipmentRental.create(data)   
+    async insert(data) {
+        await tbEquipmentRental.create(data)
     }
-    
+
     static async selectAll(res) {
-        let result = (await tbEquipmentRental.findAll({attributes:['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'finishPeriod']})).map(
+        let result = (await tbEquipmentRental.findAll({ attributes: ['idEquipmentRental', 'codProd', 'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'finishPeriod'] })).map(
             equipmentRental => equipmentRental.dataValues
         )
-        res.json(result)
-        
+        res.status(200).json(result)
+
     }
 
     static async select(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
-        
-        const result = (await tbEquipmentRental.findAll({where:{codProd: {[Op.like]: codProd},
-            [Op.and]: [condition.conditionDate('init', data.initI, data.initF), condition.conditionDate('finish', data.finishI, data.finishF),
-            condition.conditionDate('entry', data.entryI, data.entryF), condition.conditionDate('output', data.outputI, data.outputF)]}, 
-            attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod'], 
-          })).map(
+
+        const result = (await tbEquipmentRental.findAll({
+            where: {
+                codProd: { [Op.like]: codProd },
+                [Op.and]: [condition.conditionDate('init', data.initI, data.initF), condition.conditionDate('finish', data.finishI, data.finishF),
+                condition.conditionDate('entry', data.entryI, data.entryF), condition.conditionDate('output', data.outputI, data.outputF)]
+            },
+            attributes: ['idEquipmentRental', 'codProd', 'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod'],
+        })).map(
             data => data.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async selectId(req, res) {
-        await tbEquipmentRental.findByPk(req, {attributes: ['idEquipmentRental', 'codProd','proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod']}).then(
+        await tbEquipmentRental.findByPk(req, { attributes: ['idEquipmentRental', 'codProd', 'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'fnishPeriod'] }).then(
             equipmentRentalId => equipmentRentalId.dataValues
         )
     }
@@ -193,13 +196,13 @@ class EquipmentRental {
         let initPeriod = new Date(req.initPeriod.split('/').reverse().join('-'))
         let finishPeriod = new Date(req.finishPeriod.split('/').reverse().join('-'))
 
-        let existEquipmentRental = await tbEquipmentRental.findAll({where: {[Op.and] : [{initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch}]}})
-        if(existEquipmentRental.length == 0) {
+        let existEquipmentRental = await tbEquipmentRental.findAll({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch }] } })
+        if (existEquipmentRental.length == 0) {
             throw new Error('There is no data')
         }
 
-        await tbEquipmentRental.destroy({where: {[Op.and] : [{initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch}] } })
-        res.json({successMessage: 'Deleted all equipment rental'})
+        await tbEquipmentRental.destroy({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch }] } })
+        res.status(200).json({ successMessage: 'Deleted all equipment rental' })
     }
 
 }

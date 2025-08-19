@@ -36,8 +36,8 @@ class EquipmentHistory {
     }
 
     set _idEquipmentHistory(value) {
-        if(value == undefined) {
-            return this.idEquipmentHistory = 0 
+        if (value == undefined) {
+            return this.idEquipmentHistory = 0
         }
         return this.idEquipmentHistory = value
     }
@@ -47,7 +47,7 @@ class EquipmentHistory {
     }
 
     set _idEquipment(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idEquipment')
         }
         return this.idEquipment = value
@@ -58,8 +58,8 @@ class EquipmentHistory {
     }
 
     set _reason(value) {
-        if(value == undefined) {
-           return this.reason = null
+        if (value == undefined) {
+            return this.reason = null
         }
         return this.reason = value
     }
@@ -69,7 +69,7 @@ class EquipmentHistory {
     }
 
     set _idUser(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idEquipment')
         }
         return this.idUser = value
@@ -80,24 +80,24 @@ class EquipmentHistory {
     }
 
     set _idSector(value) {
-      if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idEquipment')
         }
         return this.idSector = value
     }
 
-     get _idBranch() {
+    get _idBranch() {
         return this.idBranch
     }
 
     set _idBranch(value) {
-       if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idEquipment')
         }
         return this.idBranch = value
     }
 
-     get _value() {
+    get _value() {
         return this.value
     }
 
@@ -113,7 +113,7 @@ class EquipmentHistory {
     }
 
     set _entryDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.entryDate = null
         }
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString()
@@ -124,64 +124,70 @@ class EquipmentHistory {
     }
 
     set _returnDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.returnDate = null
         }
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString()
     }
 
     async insert(data, res) {
-       await tbEquipmentHistory.create(data)
-       res.json({successMessage: 'Add successfully'})
+        await tbEquipmentHistory.create(data)
+        res.status(201).json({ successMessage: 'Add successfully' })
     }
 
     static async selectAll(res) {
-        const result = (await tbEquipmentHistory.findAll({attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'], 
-            include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']},{model: tbUser, attributes: ['username']},
-        {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]})).map(
+        const result = (await tbEquipmentHistory.findAll({
+            attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
+            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment', 'type'] }, { model: tbUser, attributes: ['username'] },
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
+        })).map(
             values => values.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async selectId(req, res) {
-        await tbEquipmentHistory.findByPk(req, {attributes:['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
-            include: [{model: tbEquipment, attributes: ['idEquipment','codProd', 'equipment', 'type']}, {model: tbUser, attributes: ['username']},
-            {model: tbSector, attributes:['sector']}, {model: tbBranch, attributes: ['branch']}]
+        await tbEquipmentHistory.findByPk(req, {
+            attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
+            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment', 'type'] }, { model: tbUser, attributes: ['username'] },
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
         }).then(
-            idEquipmentHistory => res.json(idEquipmentHistory.dataValues)
+            idEquipmentHistory => res.status(200).json(idEquipmentHistory.dataValues)
         )
     }
 
     static async select(data, res) {
         let codProd = data.codProd ? data.codProd : '%'
-      
-        const result = (await tbEquipmentHistory.findAll({where:{[Op.and]: [condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish),
-            condition.conditionDate('entryDate', data.entryDateInit, data.entryDateFinish)]},
+
+        const result = (await tbEquipmentHistory.findAll({
+            where: {
+                [Op.and]: [condition.conditionDate('returnDate', data.returnDateInit, data.returnDateFinish),
+                condition.conditionDate('entryDate', data.entryDateInit, data.entryDateFinish)]
+            },
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
-            include: [{model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: {codProd: {[Op.like]: codProd}}}, {model: tbUser, attributes: ['username']},
-        {model: tbSector, attributes: ['sector']}, {model: tbBranch, attributes: ['branch']}]
+            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: { codProd: { [Op.like]: codProd } } }, { model: tbUser, attributes: ['username'] },
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
         })).map(values => values.dataValues)
-        res.json(result)
-        }
+        res.status(200).json(result)
+    }
 
-        async update(data, req, res) {
-            const alterEquipmentHistory = await tbEquipmentHistory.findByPk(req)
+    async update(data, req, res) {
+        const alterEquipmentHistory = await tbEquipmentHistory.findByPk(req)
 
-            alterEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
-            alterEquipmentHistory.idEquipment = data.idEquipment
-            alterEquipmentHistory.reason = data.reason
-            alterEquipmentHistory.idUser = data.idUser
-            alterEquipmentHistory.idSector = data.idSector
-            alterEquipmentHistory.idBranch = data.idBranch
-            alterEquipmentHistory.value = data.value
-            alterEquipmentHistory.entryDate = data.entryDate
-            alterEquipmentHistory.returnDate = data.returnDate
+        alterEquipmentHistory.idEquipmentHistory = data.idEquipmentHistory
+        alterEquipmentHistory.idEquipment = data.idEquipment
+        alterEquipmentHistory.reason = data.reason
+        alterEquipmentHistory.idUser = data.idUser
+        alterEquipmentHistory.idSector = data.idSector
+        alterEquipmentHistory.idBranch = data.idBranch
+        alterEquipmentHistory.value = data.value
+        alterEquipmentHistory.entryDate = data.entryDate
+        alterEquipmentHistory.returnDate = data.returnDate
 
-            await alterEquipmentHistory.save()
-            res.json({successMessage: 'Updated successfully'})
+        await alterEquipmentHistory.save()
+        res.status(200).json({ successMessage: 'Updated successfully' })
 
-        }
+    }
 
 }
 

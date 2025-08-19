@@ -5,43 +5,43 @@ const add = async (req, res) => {
       const branch = new Branch(req.body)
       await branch.insert(branch, res, req)
    } catch (error) {
-      res.json({errorMessage: error.message})
+      res.status(400).json({ errorMessage: error.message })
    }
-  
+
 }
 
 const findAll = async (req, res) => {
    try {
-     await Branch.selectAll(res)
+      await Branch.selectAll(res)
    } catch (error) {
-      res.json({errorMessage: error.message})
+      res.status(400).json({ errorMessage: error.message })
    }
-} 
+}
 
 const findId = async (req, res) => {
    try {
       await Branch.selectId(req.params.idBranch, res)
    } catch (error) {
-      res.json({errorMessage: error.message})
+      res.status(400).json({ errorMessage: error.message })
    }
 }
 
 const update = async (req, res) => {
    try {
       const branch = new Branch(req.body)
-      await branch.update(req, branch, res) 
+      await branch.update(req, branch, res)
    } catch (error) {
-      res.json({errorMessage: error.message})
+      res.status(400).json({ errorMessage: error.message })
    }
-} 
+}
 
 const inactivate = async (req, res) => {
    try {
-     await Branch.inactivate(req, req.body.deletionDate, res)
+      await Branch.inactivate(req, req.body.deletionDate, res)
    } catch (error) {
-      res.json({errorMessage: error.message})
+      res.satus(400).json({ errorMessage: error.message })
    }
 }
 
 
-module.exports = {add, findAll, update, inactivate, findId}
+module.exports = { add, findAll, update, inactivate, findId }

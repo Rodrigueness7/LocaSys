@@ -5,15 +5,15 @@ const add = async (req, res) => {
         const equipment = new Equipment(req.body, req)
         await equipment.insert(equipment, res, req)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
 const findAll = async (req, res) => {
     try {
-       await Equipment.selectAll(res, req)
+        await Equipment.selectAll(res, req)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
@@ -21,15 +21,15 @@ const findId = async (req, res) => {
     try {
         await Equipment.selectId(req, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
-} 
+}
 
 const find = async (req, res) => {
     try {
         await Equipment.select(req.body, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
@@ -38,7 +38,7 @@ const update = async (req, res) => {
         const equipment = new Equipment(req.body, req)
         await equipment.update(req, equipment, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.staus(400).json({ errorMessage: error.message })
     }
 }
 
@@ -46,7 +46,7 @@ const returned = async (req, res) => {
     try {
         await Equipment.return(req, req.body.returnDate, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
@@ -55,7 +55,7 @@ const exportXlsx = async (req, res) => {
         let address = req.body.address + '\\equipment.xlsx'
         await Equipment.exportlXlsx(address, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
@@ -64,8 +64,8 @@ const exportPdf = async (req, res) => {
         let address = req.body.address + '\\equipment.pdf'
         await Equipment.export(address, req.body, res)
     } catch (error) {
-        res.json({errorMessage: error.message})
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 
-module.exports = {add, findAll, find, findId, update, returned ,exportXlsx, exportPdf}
+module.exports = { add, findAll, find, findId, update, returned, exportXlsx, exportPdf }

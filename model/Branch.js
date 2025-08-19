@@ -2,12 +2,12 @@
 const tbSector = require('../constant/tbSector')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
-const { Op, where } = require('sequelize')
+const { Op } = require('sequelize')
 const tbBranch = require('../constant/tbBranch')
 
 class Branch {
     idBranch
-    branch 
+    branch
     CNPJ
     corporateName
     uniqueIdentifier
@@ -29,7 +29,7 @@ class Branch {
     }
 
     set _idBranch(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idBranch = 0
         }
         return this.idBranch = value
@@ -40,7 +40,7 @@ class Branch {
     }
 
     set _branch(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid branch')
         }
         return this.branch = value
@@ -50,19 +50,19 @@ class Branch {
         return this.CNPJ
     }
 
-    set _CNPJ(value) { 
-        if(value == undefined) {
+    set _CNPJ(value) {
+        if (value == undefined) {
             return this.CNPJ = null
         }
-        return this.CNPJ = value 
+        return this.CNPJ = value
     }
 
-    get _coporateName() { 
+    get _coporateName() {
         return this.corporateName
     }
 
     set _coporateName(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.corporateName = null
         }
         return this.corporateName = value
@@ -73,7 +73,7 @@ class Branch {
     }
 
     set _uniqueIdentifier(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('UniqueIdentifer Invalid')
         }
         return this.uniqueIdentifier = value
@@ -84,86 +84,86 @@ class Branch {
     }
 
     set _deletionDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.deletionDate = null
         }
         return this.deletionDate = value
     }
 
 
-   async insert(data, res, req) {
-        const existBranch = await tbBranch.findOne({where: {[Op.or]: [{branch: data.branch}, {CNPJ: data.CNPJ}, {uniqueIdentifier: data.uniqueIdentifier}]}})
-            if(existBranch) {
-                throw new Error('Branch already exist')
-            }
-            await tbBranch.create(data)
-            AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
-            res.json({successMessage:'Add successfully'})   
+    async insert(data, res, req) {
+        const existBranch = await tbBranch.findOne({ where: { [Op.or]: [{ branch: data.branch }, { CNPJ: data.CNPJ }, { uniqueIdentifier: data.uniqueIdentifier }] } })
+        if (existBranch) {
+            throw new Error('Branch already exist')
+        }
+        await tbBranch.create(data)
+        AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
+        res.status(201).json({ successMessage: 'Add successfully' })
     }
 
     static async selectAll(res) {
-       const result =  (await tbBranch.findAll({where: {deletionDate: null}})).map(
+        const result = (await tbBranch.findAll({ where: { deletionDate: null } })).map(
             branch => branch.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async selectId(req, res) {
         await tbBranch.findByPk(req).then(
-            idBranch => res.json(idBranch.dataValues)
-        )  
+            idBranch => res.status(200).json(idBranch.dataValues)
+        )
     }
 
     async update(req, data, res) {
-        const existSector = await tbSector.findOne({where: {idBranch: req.params.idBranch}})
-        const existBranch = await tbBranch.findAll({where: {[Op.or] : [{CNPJ: data['CNPJ']}, {branch: data.branch}, {uniqueIdentifier: data.uniqueIdentifier}]}})
-        
-        if(existSector) {
+        const existSector = await tbSector.findOne({ where: { idBranch: req.params.idBranch } })
+        const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{ CNPJ: data['CNPJ'] }, { branch: data.branch }, { uniqueIdentifier: data.uniqueIdentifier }] } })
+
+        if (existSector) {
             throw new Error('Not was possible update, since the branch registered in the sector')
         }
 
-        if(existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
+        if (existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
             throw new Error('This branch is already registered: ' + '(' + existBranch.filter(value => value.dataValues.idBranch != req.params.idBranch)
-            .map(value => value.dataValues.branch).join(', ').concat(') '))
+                .map(value => value.dataValues.branch).join(', ').concat(') '))
         }
 
         const alterBranch = await tbBranch.findByPk(req.params.idBranch)
 
         alterBranch.idBranch = data.idBranch,
-        alterBranch.branch = data.branch
-        alterBranch.CNPJ =  data.CNPJ,
-        alterBranch.corporateName = data.corporateName,
-        alterBranch.uniqueIdentifier = data.uniqueIdentifier
+            alterBranch.branch = data.branch
+        alterBranch.CNPJ = data.CNPJ,
+            alterBranch.corporateName = data.corporateName,
+            alterBranch.uniqueIdentifier = data.uniqueIdentifier
 
         await alterBranch.save()
         AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)
-        
-        res.json({successMessage: 'Update successfully'})
-        
+
+        res.status(200).json({ successMessage: 'Update successfully' })
+
     }
 
-   static async inactivate(req, data, res) {
+    static async inactivate(req, data, res) {
         const dataBranch = await tbBranch.findByPk(req.params.idBranch)
-        const countBranchInSector = await tbSector.count({where: {idBranch: req.params.idBranch}})
-        const countBranchInEquipment = await tbEquipment.count({where: {idBranch: req.params.idBranch}})
+        const countBranchInSector = await tbSector.count({ where: { idBranch: req.params.idBranch } })
+        const countBranchInEquipment = await tbEquipment.count({ where: { idBranch: req.params.idBranch } })
 
 
-        if(countBranchInEquipment > 0) {
+        if (countBranchInEquipment > 0) {
             throw new Error('You cannot delete a Filial, as it is registered in the Equipment table')
         }
 
-        if(countBranchInSector > 0) {
+        if (countBranchInSector > 0) {
             throw new Error('You cannot delete a Filial, as it is registered in the Sector table')
         }
 
         dataBranch.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
-        
+
         await dataBranch.save()
         AddLog.CreateLog(dataBranch.dataValues.branch, 'Deletado', 'Deletado Filial', req)
-        res.json({successMessage: 'Successfully inactivated'})
+        res.status(200).json({ successMessage: 'Successfully inactivated' })
     }
 
-   
+
 }
 
 module.exports = Branch;
