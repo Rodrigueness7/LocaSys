@@ -34,41 +34,41 @@ class Profile {
     }
 
     async insert(data, res, req) {
-        const existProfile = await tbProfile.findOne({ where: { profile: data.profile}})
-            if (existProfile) {
-                throw new Error('Profile already exist')
-            }
-            await tbProfile.create(data)
-            AddLog.CreateLog(data.profile, 'Adicionado', 'Adicionado Perfil', req)
-            res.json({successMessage: 'Add successfully'})
-       
+        const existProfile = await tbProfile.findOne({ where: { profile: data.profile } })
+        if (existProfile) {
+            throw new Error('Profile already exist')
+        }
+        await tbProfile.create(data)
+        AddLog.CreateLog(data.profile, 'Adicionado', 'Adicionado Perfil', req)
+        res.status(201).json({ successMessage: 'Add successfully' })
+
     }
 
     static async selectAll(res) {
         const result = (await tbProfile.findAll()).map(
             profile => profile.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async select(req, res) {
         await tbProfile.findByPk(req).then(
-            values => res.json(values.dataValues)
+            values => res.status(200).json(values.dataValues)
         )
     }
 
     async update(req, data, res) {
-        const existProfileUser = await tbUser.findOne({where: {idProfile: req.params.id}})
-        const existProfile = await tbProfile.findAll({ where: { profile: data.profile}})
+        const existProfileUser = await tbUser.findOne({ where: { idProfile: req.params.id } })
+        const existProfile = await tbProfile.findAll({ where: { profile: data.profile } })
 
-        if(existProfileUser) {
-                throw new Error('Exist user registered in this profile')
+        if (existProfileUser) {
+            throw new Error('Exist user registered in this profile')
         }
 
-        if(existProfile.find(value => value.dataValues.idProfile != req.params.id)) {
-            throw new Error('Exist already profile registered:' + ' (' + ( existProfile.filter(value => value.dataValues.idProfile != req.params.id)
-            .map(value => value.dataValues.profile).join(', ').concat(') ')))
-       }
+        if (existProfile.find(value => value.dataValues.idProfile != req.params.id)) {
+            throw new Error('Exist already profile registered:' + ' (' + (existProfile.filter(value => value.dataValues.idProfile != req.params.id)
+                .map(value => value.dataValues.profile).join(', ').concat(') ')))
+        }
 
         const alterProfile = await tbProfile.findByPk(req.params.id)
 
@@ -79,15 +79,15 @@ class Profile {
         AddLog.CreateLog(data.profile, 'Atualizado', 'Atualizado Perfil', req)
 
 
-        res.json({successMessage: 'Updated successfully'})
+        res.status(200).json({ successMessage: 'Updated successfully' })
     }
 
     static async delete(req, res) {
-       const removerProfile =  await tbProfile.findByPk(req.params.id)
-       
-       removerProfile.destroy()
+        const removerProfile = await tbProfile.findByPk(req.params.id)
+
+        removerProfile.destroy()
         AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)
-        res.json({successMessage: 'Delete profile'})
+        res.status(200).json({ successMessage: 'Delete profile' })
     }
 
 }

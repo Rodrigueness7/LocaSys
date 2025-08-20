@@ -8,7 +8,7 @@ const exportXlsx = require('../content/export/fileXlsx')
 const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
-const { changeKeyObejct } = require('../constant/changeKeyObejct')
+
 
 
 class Equipment {
@@ -160,14 +160,14 @@ class Equipment {
     }
 
     async insert(data, res, req) {
-        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd }})
+        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd } })
 
         if (existEquipment) {
             throw new Error('exist already equipment')
         }
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
-        res.json({ successMessage: 'Add successfully' })
+        res.status(201).json({ successMessage: 'Add successfully' })
     }
 
     static async selectAll(res, req) {
@@ -184,8 +184,8 @@ class Equipment {
                 delete itens.value
             })
         }
-     
-        res.json(result)
+
+        res.status(200).json(result)
     }
 
     static async selectId(req, res) {
@@ -194,7 +194,7 @@ class Equipment {
                 if (DecryptToken(req).permission.find(itens => itens == 5) === undefined) {
                     delete idEquipment.dataValues.value
                 }
-                res.json(idEquipment.dataValues)
+                res.status(200).json(idEquipment.dataValues)
             }
         )
     }
@@ -219,16 +219,16 @@ class Equipment {
         )).map(
             value => value.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     async update(req, data, res) {
-        const existEquipment = await tbEquipment.findAll({ where: { codProd: data.codProd }})
-        
-        if(existEquipment.find(value => value.dataValues.idEquipment != req.params.idEquipment)) {
-            throw new Error('Exist already equipment registered:' + ' (' + ( existEquipment.filter(value => value.dataValues.idEquipment != req.params.id)
-            .map(value => value.dataValues.codProd).join(', ').concat(') ')))
-       }
+        const existEquipment = await tbEquipment.findAll({ where: { codProd: data.codProd } })
+
+        if (existEquipment.find(value => value.dataValues.idEquipment != req.params.idEquipment)) {
+            throw new Error('Exist already equipment registered:' + ' (' + (existEquipment.filter(value => value.dataValues.idEquipment != req.params.id)
+                .map(value => value.dataValues.codProd).join(', ').concat(') ')))
+        }
         const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
         alterEquipment.codProd = data.codProd
@@ -244,7 +244,7 @@ class Equipment {
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
-        res.json({ successMessage: 'Updated successfully' })
+        res.status(200).json({ successMessage: 'Updated successfully' })
     }
 
     static async return(req, data, res) {
@@ -254,7 +254,7 @@ class Equipment {
 
         await dataEquipment.save()
         AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
-        res.json({ successMessage: 'Returned successfully' })
+        res.status(200).json({ successMessage: 'Returned successfully' })
     }
 
     static async exportlXlsx(req, res) {
@@ -262,7 +262,7 @@ class Equipment {
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
-        res.json({ successMessage: 'File generated successfully' })
+        res.status(200).json({ successMessage: 'File generated successfully' })
     }
 
     static async export(adress, data, res) {
@@ -291,7 +291,7 @@ class Equipment {
         }
 
         equipmentReport(result, adress)
-        res.json({ successMessage: 'File generated successfully' })
+        res.status(200).json({ successMessage: 'File generated successfully' })
     }
 
 }

@@ -147,20 +147,20 @@ class Supplier {
         }
         await tbSupplier.create(data)
         AddLog.CreateLog(data.supplier, 'Adicionado', 'Adicionado Fornecedor', req)
-        res.json({successMessage: 'Add successufully'})
+        res.status(201).json({successMessage: 'Add successufully'})
     }
 
     static async selectAll(res) {
         const result = (await tbSupplier.findAll({where: {deletionDate: null}})).map(
             allSupplier => allSupplier.dataValues 
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async select(req, res) {
         await tbSupplier.findByPk(req).then(
             supplier => {
-                res.json(supplier.dataValues)
+                res.status(200).json(supplier.dataValues)
             }
         )
     }
@@ -189,10 +189,10 @@ class Supplier {
         AddLog.CreateLog(data.supplier, 'Atualizado', 'Atualizado Fornecedor', req)
 
        if(existEquipmentSupplier || existContact) {
-        res.json({successMessageObs: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier .'})
+        res.status(200).json({successMessageObs: 'Successful update - the CNPJ was not changed because equipment was already registered for this supplier .'})
         
        } else {
-        res.json({successMessage: 'Update success'})
+        res.status(200).json({successMessage: 'Update success'})
        }
        
     }
@@ -214,7 +214,7 @@ class Supplier {
 
        await dataSupplier.save() 
        AddLog.CreateLog(dataSupplier.dataValues.supplier, 'Deletado', 'Deletado Fornecedor', req)
-       res.json({successMessage: 'Successfully inactivated'})
+       res.status(200).json({successMessage: 'Successfully inactivated'})
     }
 }
 

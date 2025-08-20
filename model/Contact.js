@@ -38,7 +38,7 @@ class Contact {
     }
 
     set _idContact(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idContact = 0
         }
         return this.idContact = value
@@ -49,7 +49,7 @@ class Contact {
     }
 
     set _contact(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid contact')
         }
         return this.contact = value
@@ -60,16 +60,16 @@ class Contact {
     }
 
     set _email(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.email = null
 
-        } else if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+        } else if (!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
             throw new Error('Email is not valid')
 
-        } else{
+        } else {
             return this.email = value
-        } 
-        
+        }
+
     }
 
     get _telephone() {
@@ -77,8 +77,8 @@ class Contact {
     }
 
     set _telephone(value) {
-        if(value == undefined) {
-           return this.telephone = null
+        if (value == undefined) {
+            return this.telephone = null
         }
         return this.telephone = value
     }
@@ -88,7 +88,7 @@ class Contact {
     }
 
     set _cellPhone(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.cellPhone = null
         }
         return this.cellPhone = value
@@ -99,7 +99,7 @@ class Contact {
     }
 
     set _address(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.address = null
         }
         return this.address = value
@@ -110,7 +110,7 @@ class Contact {
     }
 
     set _number(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.number = null
         }
         return this.number = value
@@ -121,7 +121,7 @@ class Contact {
     }
 
     set _zipCode(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.zipCode = null
         }
         return this.zipCode = value
@@ -132,7 +132,7 @@ class Contact {
     }
 
     set _state(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.state = null
         }
         return this.state = value
@@ -143,7 +143,7 @@ class Contact {
     }
 
     set _county(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.county = null
         }
         return this.county = value
@@ -154,7 +154,7 @@ class Contact {
     }
 
     set _district(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.district = null
         }
         return this.district = value
@@ -165,7 +165,7 @@ class Contact {
     }
 
     set _idSupplier(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idSupplier')
         }
         return this.idSupplier = value
@@ -176,43 +176,43 @@ class Contact {
     }
 
     set _deletionDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.deletionDate = null
         }
         return this.deletionDate = value
     }
 
     async insert(data, res, req) {
-        const existContact = await tbContact.findOne({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
-        if(existContact) {
+        const existContact = await tbContact.findOne({ where: { [Op.or]: [{ contact: data.contact }, { email: data.email }] } })
+        if (existContact) {
             throw new Error('exist already contact')
         }
         await tbContact.create(data)
         AddLog.CreateLog(data.contact, 'Adicionado', 'Adicionado contato', req)
-        res.json({successMessage: 'Add successfully'})
+        res.status(201).json({ successMessage: 'Add successfully' })
     }
 
     static async selectAll(res) {
-        const allContact = (await tbContact.findAll({where: {deletionDate: null}})).map(
+        const allContact = (await tbContact.findAll({ where: { deletionDate: null } })).map(
             result => result.dataValues
         )
-        res.json(allContact)
+        res.status(200).json(allContact)
     }
 
     static async selectId(req, res) {
         await tbContact.findByPk(req).then(
-            contact => res.json(contact.dataValues)
+            contact => res.status(200).json(contact.dataValues)
         )
     }
 
     async update(data, req, res) {
-        const existContact = await tbContact.findAll({where: {[Op.or] : [{contact: data.contact}, {email: data.email}]}})
+        const existContact = await tbContact.findAll({ where: { [Op.or]: [{ contact: data.contact }, { email: data.email }] } })
 
-        if(existContact.find(value => value.dataValues.idContact != req.params.id)) {
-            throw new Error('Exist already contact registered:' + ' (' + ( existContact.filter(value => value.dataValues.idContact != req.params.id)
-            .map(value => value.dataValues.contact).join(', ').concat(') ')))
-       }
-        
+        if (existContact.find(value => value.dataValues.idContact != req.params.id)) {
+            throw new Error('Exist already contact registered:' + ' (' + (existContact.filter(value => value.dataValues.idContact != req.params.id)
+                .map(value => value.dataValues.contact).join(', ').concat(') ')))
+        }
+
         const alterContact = await tbContact.findByPk(req.params.id)
 
         alterContact.contact = data.contact
@@ -230,19 +230,19 @@ class Contact {
 
         await alterContact.save()
         AddLog.CreateLog(data.contact, 'Atualizada', 'Atualizado contato', req)
-        res.json({successMessage: 'Updated successfully'})
+        res.status(200).json({ successMessage: 'Updated successfully' })
     }
 
     static async inactivate(req, data, res) {
         const dataContact = await tbContact.findByPk(req.params.id)
-       
+
         dataContact.deletionDate = new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
-       
+
         await dataContact.save()
         AddLog.CreateLog(dataContact.dataValues.contact, 'Deletado', 'Deletado contato', req)
-        res.json({successMessage: 'Successfully inactivated'})
-    } 
-    
+        res.status(200).json({ successMessage: 'Successfully inactivated' })
+    }
+
 }
 
 

@@ -1,7 +1,7 @@
 const tbPermission = require('../constant/tbPermission')
 const tbProfile = require('../constant/tbProfile')
 const tbProfile_permission = require('../constant/tbProfile_permission')
-const AddLog = require('../constant/addLog')
+
 
 class Profile_permission {
     idProfile_permission
@@ -92,7 +92,7 @@ class Profile_permission {
             include: [{ model: tbProfile, attributes: ['profile'] }, { model: tbPermission, attributes: ['permission'] }]
         })).
             map(data => data.dataValues)
-        res.json(result)
+        res.status(200).json(result)
     }
 
 
@@ -107,7 +107,7 @@ class Profile_permission {
 
     static async selectId(req, res) {
         await tbProfile_permission.findByPk(req, { attributes: ['idProfile_permission', 'allow'], include: [{ model: tbProfile, attributes: ['profile'] }, { model: tbPermission, attributes: ['permission'] }] }).then(
-            idPermission_permission => res.json(idPermission_permission.dataValues)
+            idPermission_permission => res.status(200).json(idPermission_permission.dataValues)
         )
     }
 
@@ -118,11 +118,11 @@ class Profile_permission {
 
     static async selectPermissionIdProfile(idProfile, res) {
         const result = (await tbProfile_permission.findAll({ where: { idProfile: idProfile }, attributes: ['idProfile_permission', 'allow'], include: { model: tbPermission, attributes: ['permission', 'section'] } }))
-        res.json(result)
+        res.status(200).json(result)
     }
 
     async update(data) {
-        
+
         const alterProfile_permission = await tbProfile_permission.findByPk(data.idProfile_permission)
 
         alterProfile_permission.allow = data.allow
@@ -132,8 +132,8 @@ class Profile_permission {
     }
 
     static async delete(req, res) {
-       (await tbProfile_permission.findAll({where: {idProfile: req.params.idProfile}})).map(itens => itens.destroy())
-        res.json({successMessage: 'Deleted successfully' })
+        (await tbProfile_permission.findAll({ where: { idProfile: req.params.idProfile } })).map(itens => itens.destroy())
+        res.status(200).json({ successMessage: 'Deleted successfully' })
     }
 }
 

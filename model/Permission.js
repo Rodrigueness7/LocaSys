@@ -15,7 +15,7 @@ class Permission {
     }
 
     set _idPermission(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idPermission = 0
         }
         return this.idPermission = value
@@ -26,44 +26,44 @@ class Permission {
     }
 
     set _permission(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid permission')
         }
         return this.permission = value
     }
 
     async insert(data, res, req) {
-        const existPermission = await tbPermission.findOne({where: {permission: data.permission}})
+        const existPermission = await tbPermission.findOne({ where: { permission: data.permission } })
 
-        if(existPermission) {
+        if (existPermission) {
             throw new Error('exist already permission')
         }
         await tbPermission.create(data)
         AddLog.CreateLog(data.permission, 'Adicionado', 'Adicionado Permissão', req)
-        
-        res.json({successMessage: 'Add successufully'})
+
+        res.status(201).json({ successMessage: 'Add successufully' })
     }
 
     static async selectAll(res) {
         const result = (await tbPermission.findAll()).map(
             permissions => permissions.dataValues
         )
-        res.json(result)
+        res.status(200).json(result)
     }
 
     static async select(res, req) {
         await tbPermission.findByPk(req).then(
-            permission => res.json(permission.dataValues)
+            permission => res.status(200).json(permission.dataValues)
         )
     }
 
     async update(data, req, res) {
-        const existPermission = await tbPermission.findAll({where: {permission: data.permission}})
+        const existPermission = await tbPermission.findAll({ where: { permission: data.permission } })
 
-        if(existPermission.find(value => value.dataValues.idPermission != req.params.id)) {
-            throw new Error('Exist already permission registered:' + ' (' + ( existPermission.filter(value => value.dataValues.idPermission != req.params.id)
-            .map(value => value.dataValues.permission).join(', ').concat(') ')))
-       }
+        if (existPermission.find(value => value.dataValues.idPermission != req.params.id)) {
+            throw new Error('Exist already permission registered:' + ' (' + (existPermission.filter(value => value.dataValues.idPermission != req.params.id)
+                .map(value => value.dataValues.permission).join(', ').concat(') ')))
+        }
 
         const alterPermission = await tbPermission.findByPk(req.params.id)
 
@@ -71,16 +71,16 @@ class Permission {
 
         await alterPermission.save()
         AddLog.CreateLog(data.permission, 'Atualizado', 'Atualizado Permissão', req)
-        res.json({successMessage: 'updated successfully'})
-        
-    } 
+        res.status(200).json({ successMessage: 'updated successfully' })
+
+    }
 
     static async remover(req, res) {
         const deletePermission = await tbPermission.findByPk(req.params.id)
 
         deletePermission.destroy()
         AddLog.CreateLog(deletePermission.dataValues.permission, 'Deletado', 'Deletado Permissão', req)
-        res.json({successMessage: 'Delete successfully'})
+        res.status(200).json({ successMessage: 'Delete successfully' })
     }
 
 }

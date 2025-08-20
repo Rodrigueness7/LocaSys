@@ -1,14 +1,11 @@
-const { Op, or } = require('sequelize')
-
+const { Op } = require('sequelize')
 const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
 const tbEquipment = require('../constant/tbEquipment')
 const Profile_permission = require('../model/Profile_permission')
 const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
-
-const {DecryptToken} = require('../constant/decodeToken')
-const { changeKeyObejct } = require('../constant/changeKeyObejct')
+const { DecryptToken } = require('../constant/decodeToken')
 const tbUser = require('../constant/tbUser')
 
 class User {
@@ -36,7 +33,7 @@ class User {
         this._email = data.email
         this._confirmationEmail = data.confirmationEmail
         this._idSector = data.idSector
-        this._idProfile = data.idProfile 
+        this._idProfile = data.idProfile
         this._deletionDate = data.deletetionDate
     }
 
@@ -45,7 +42,7 @@ class User {
     }
 
     set _idUser(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.idUser = 0
         }
         return this.idUser = value
@@ -56,7 +53,7 @@ class User {
     }
 
     set _firstName(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid firstName')
         }
         return this.firstName = value
@@ -67,7 +64,7 @@ class User {
     }
 
     set _lastName(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid lastname')
         }
         return this.lastName = value
@@ -78,7 +75,7 @@ class User {
     }
 
     set _cpf(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid cpf')
         }
         return this.cpf = value
@@ -89,7 +86,7 @@ class User {
     }
 
     set _username(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid user')
         }
         return this.username = value
@@ -99,22 +96,22 @@ class User {
         return this.password
     }
 
-   
+
     set _password(value) {
-        if(value == null) {
+        if (value == null) {
             return this.password = null
         }
-        
+
         if (value.length < 8) {
             throw new Error('our password must be at least 8 characters')
         }
         if (value.search(/[a-z]/i) < 0) {
-            throw new Error("Your password must contain at least one letter."); 
+            throw new Error("Your password must contain at least one letter.");
         }
         if (value.search(/[0-9]/) < 0) {
             throw new Error("Your password must contain at least one digit.");
         }
-        if(value.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
+        if (value.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
             throw new Error('Your password must contain at least one Special symbol')
         }
         return this.password = value
@@ -125,7 +122,7 @@ class User {
     }
 
     set _confirmationPassword(value) {
-        if(value !== this._password){
+        if (value !== this._password) {
             throw new Error('Password do not match')
         }
         return this.confirmationPassword = value
@@ -136,7 +133,7 @@ class User {
     }
 
     set _email(value) {
-        if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+        if (!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
             throw new Error('Email is not valid')
         }
         return this.email = value
@@ -147,7 +144,7 @@ class User {
     }
 
     set _confirmationEmail(value) {
-        if(value !== this._email) {
+        if (value !== this._email) {
             throw new Error('Email do not match')
         }
         return this.confirmationEmail = value
@@ -158,7 +155,7 @@ class User {
     }
 
     set _idSector(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idSector')
         }
         return this.idSector = value
@@ -169,7 +166,7 @@ class User {
     }
 
     set _idProfile(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             throw new Error('Invalid idProfile')
         }
         return this.idProfile = value
@@ -180,40 +177,44 @@ class User {
     }
 
     set _deletionDate(value) {
-        if(value == undefined) {
+        if (value == undefined) {
             return this.deletionDate = null
         }
         return this.deletionDate = value
     }
 
-   async insert(data, username, email, res, req) {
-       const existUser = await tbUser.findOne({where: {[Op.or]: [{username}, {email}]}})  
-            if(existUser) {
-                throw new Error('Username or email already registered')
-            }
-            await tbUser.create(data)
-            AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
-   
-            res.json({successMessage: 'Add successfully'})   
+    async insert(data, username, email, res, req) {
+        const existUser = await tbUser.findOne({ where: { [Op.or]: [{ username }, { email }] } })
+        if (existUser) {
+            throw new Error('Username or email already registered')
+        }
+        await tbUser.create(data)
+        AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
+
+        res.status(201).json({ successMessage: 'Add successfully' })
     }
 
     static async selectId(req, res) {
-       await tbUser.findByPk(req.params.id, {attributes: ['idUser', 'username', 'firstName', 'lastName', 
-            'cpf', 'email', 'password'], include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]}).then(
-                idUser => { 
-                    if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
-                            delete idUser.dataValues.password   
-                    }
-                    res.json(idUser.dataValues)
-                }     
-            )     
+        await tbUser.findByPk(req.params.id, {
+            attributes: ['idUser', 'username', 'firstName', 'lastName',
+                'cpf', 'email', 'password'], include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }]
+        }).then(
+            idUser => {
+                if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
+                    delete idUser.dataValues.password
+                }
+                res.status(200).json(idUser.dataValues)
+            }
+        )
     }
 
     static async selectAll(res, req) {
-      
-        const result = (await tbUser.findAll({attributes:['idUser', 'username', 'firstName', 'lastName', 
-            'cpf', 'email', 'password', 'deletionDate'],
-            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}], where: {deletionDate: null}})).map(
+
+        const result = (await tbUser.findAll({
+            attributes: ['idUser', 'username', 'firstName', 'lastName',
+                'cpf', 'email', 'password', 'deletionDate'],
+            include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }], where: { deletionDate: null }
+        })).map(
             allUser => allUser.dataValues
         )
         if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
@@ -221,24 +222,28 @@ class User {
                 delete itens.password
             })
         }
-       
-        res.json(result)
+
+        res.status(200).json(result)
     }
 
     static async select(data, res) {
-        
-        let username = data.username? data.username : '%'
+
+        let username = data.username ? data.username : '%'
         let firstName = data.firstName ? data.firstName : '%'
         let lastName = data.lastName ? data.lastName : '%'
         let email = data.email ? data.email : '%'
-       
-        const result = (await tbUser.findAll({where: {[Op.and]: [{username: {[Op.like]: username}}, 
-            {firstName: {[Op.like]: firstName}},{lastName: {[Op.like]: lastName}}, {email: {[Op.like]: email}}]},
-            attributes: ['idUser', 'username', 'firstName', 'lastName', 'cpf','email'],
-            include: [{model: tbSector, attributes: ['sector']}, {model: tbProfile, attributes: ['profile']}]})).map(
-                users => users.dataValues
-            )
-            res.json(result)   
+
+        const result = (await tbUser.findAll({
+            where: {
+                [Op.and]: [{ username: { [Op.like]: username } },
+                { firstName: { [Op.like]: firstName } }, { lastName: { [Op.like]: lastName } }, { email: { [Op.like]: email } }]
+            },
+            attributes: ['idUser', 'username', 'firstName', 'lastName', 'cpf', 'email'],
+            include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }]
+        })).map(
+            users => users.dataValues
+        )
+        res.status(200).json(result)
     }
 
     static async login(username, password, res) {
@@ -247,41 +252,41 @@ class User {
             throw new Error('our password must be at least 8 characters')
         }
         if (password.search(/[a-z]/i) < 0) {
-            throw new Error("Your password must contain at least one letter."); 
+            throw new Error("Your password must contain at least one letter.");
         }
         if (password.search(/[0-9]/) < 0) {
             throw new Error("Your password must contain at least one digit.");
         }
-        if(password.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
+        if (password.search(/^(?=.*[~`´!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/) < 0) {
             throw new Error('Your password must contain at least one Special symbol')
         }
-        
-        const existUser = await tbUser.findOne({where: {username: username, password: password}})
 
-        if(!existUser) {
+        const existUser = await tbUser.findOne({ where: { username: username, password: password } })
+
+        if (!existUser) {
             throw new Error('Username or password invalid')
         }
         let idUser = existUser.dataValues.idUser
         let user = existUser.dataValues.username
         let idProfile = existUser.dataValues.idProfile
-        let permission =  (await Profile_permission.selectSection(idProfile)).map(itens => itens.dataValues.idPermission)
-        
-        const token = jwt.sign({idUser, user, idProfile, permission}, process.env.secret_key, {expiresIn: '24h'}) 
+        let permission = (await Profile_permission.selectSection(idProfile)).map(itens => itens.dataValues.idPermission)
 
-        res.json({successMessage: 'Logged in user', token})  
-      
+        const token = jwt.sign({ idUser, user, idProfile, permission }, process.env.secret_key, { expiresIn: '24h' })
+
+        res.status(200).json({ successMessage: 'Logged in user', token })
+
     }
 
     async update(data, req, res) {
-        const existEquipmentUser = await tbEquipment.findOne({where: {idUser: req.params.id}})
-       const alterUser = await tbUser.findByPk(req.params.id)
-       const existUser = await tbUser.findAll({where: {[Op.or]: [{username: data.username},{email: data.email}]}, attributes:['idUser', 'username']})
-        
+        const existEquipmentUser = await tbEquipment.findOne({ where: { idUser: req.params.id } })
+        const alterUser = await tbUser.findByPk(req.params.id)
+        const existUser = await tbUser.findAll({ where: { [Op.or]: [{ username: data.username }, { email: data.email }] }, attributes: ['idUser', 'username'] })
 
-       if(existUser.find(value => value.dataValues.idUser != req.params.id)) {
-            throw new Error('Exist already users registered:' + ' (' + ( existUser.filter(value => value.dataValues.idUser != req.params.id)
-            .map(value => value.dataValues.username).join(', ').concat(') ')))
-       }
+
+        if (existUser.find(value => value.dataValues.idUser != req.params.id)) {
+            throw new Error('Exist already users registered:' + ' (' + (existUser.filter(value => value.dataValues.idUser != req.params.id)
+                .map(value => value.dataValues.username).join(', ').concat(') ')))
+        }
 
         alterUser.firstName = existEquipmentUser ? alterUser.dataValues.firstName : data.firstName
         alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName
@@ -294,12 +299,12 @@ class User {
 
         await alterUser.save()
         AddLog.CreateLog(data.username, 'Atualizado', 'Atualizado usuário', req)
-        
-        if(existEquipmentUser) {
-            res.json({successMessageObs: 'Updated with success, but was only updated Cpf, E-mail and Profile, since exist registered of equipments for this user'})
+
+        if (existEquipmentUser) {
+            res.status(200).json({ successMessageObs: 'Updated with success, but was only updated Cpf, E-mail and Profile, since exist registered of equipments for this user' })
         } else {
-            res.json({successMessage:'Update with successfully'})
-        }  
+            res.status(200).json({ successMessage: 'Update with successfully' })
+        }
     }
 
     static async inactivate(req, data, res) {
@@ -309,7 +314,7 @@ class User {
 
         await dataUser.save()
         AddLog.CreateLog(dataUser.dataValues.username, 'Deletado', 'Deletado usuário', req)
-        res.json({successMessage: 'Successfully inactivated'})
+        res.status(200).json({ successMessage: 'Successfully inactivated' })
     }
 
 }
