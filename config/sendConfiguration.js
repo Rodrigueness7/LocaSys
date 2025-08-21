@@ -12,6 +12,7 @@ const user = require('../config/user.json')
 const { profile_permission } = require('../config/profile_permission')
 const sequelize = require('../database/db')
 const { dbMigrate } = require('../config/dbMigrate')
+const { cryptPassword } = require('../constant/crypt')
 
 
 async function sendConfiguration() {
@@ -43,6 +44,7 @@ async function sendConfiguration() {
     }
 
     if ((await tbUser.findAll()).map(values => values.dataValues).length <= 0) {
+       user.password = await cryptPassword(user.password)
       await tbUser.create(user)
     }
 

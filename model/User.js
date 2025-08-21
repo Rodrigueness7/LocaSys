@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
 const tbUser = require('../constant/tbUser')
+const { cryptPassword, checkPassword } = require('../constant/crypt')
 
 class User {
     idUser
@@ -188,6 +189,7 @@ class User {
         if (existUser) {
             throw new Error('Username or email already registered')
         }
+        data.password = await cryptPassword(data.password)
         await tbUser.create(data)
         AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
 
@@ -261,9 +263,12 @@ class User {
             throw new Error('Your password must contain at least one Special symbol')
         }
 
-        const existUser = await tbUser.findOne({ where: { username: username, password: password } })
+    
+        const existUser = await tbUser.findOne({ where: { username: username } })
 
-        if (!existUser) {
+        let passwordVerification = await checkPassword(password, existUser.dataValues.password) 
+
+        if (!existUser || !passwordVerification) {
             throw new Error('Username or password invalid')
         }
         let idUser = existUser.dataValues.idUser
@@ -288,11 +293,13 @@ class User {
                 .map(value => value.dataValues.username).join(', ').concat(') ')))
         }
 
+        let password = await cryptPassword(data.password)
+
         alterUser.firstName = existEquipmentUser ? alterUser.dataValues.firstName : data.firstName
         alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName
         alterUser.cpf = data.cpf
         alterUser.username = existEquipmentUser ? alterUser.dataValues.username : data.username
-        alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.password
+        alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : password
         alterUser.email = data.email
         alterUser.idSector = existEquipmentUser ? alterUser.dataValues.idSector : data.idSector
         alterUser.idProfile = data.idProfile
