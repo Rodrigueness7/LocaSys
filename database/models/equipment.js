@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     idEquipment: DataTypes.INTEGER,
     codProd: DataTypes.INTEGER,
     equipment: DataTypes.STRING,
-    type: DataTypes.STRING,
     idUser: DataTypes.INTEGER,
     value: DataTypes.DECIMAL,
     idBranch: DataTypes.INTEGER,
