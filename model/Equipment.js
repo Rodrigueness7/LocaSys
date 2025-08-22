@@ -10,7 +10,6 @@ const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
 
 
-
 class Equipment {
     idEquipment
     codProd

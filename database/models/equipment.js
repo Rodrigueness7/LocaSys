@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     idSector: DataTypes.INTEGER,
     idSupplier: DataTypes.INTEGER,
     entryDate: DataTypes.DATE,
-    returnDate: DataTypes.DATE
+    returnDate: DataTypes.DATE,
+    idType: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Equipment',
