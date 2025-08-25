@@ -1,4 +1,5 @@
 const db = require('../database/db')
+const {Sequelize} = require('sequelize')
 
 const tbType = db.define('Types', {
      idType: {

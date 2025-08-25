@@ -17,6 +17,10 @@ const tbEquipment = db.define('Equipments', {
     allowNull: false,
     type: Sequelize.INTEGER
   },
+  equipment: {
+    type: Sequelize.STRING(80),
+    allowNull: false
+  },
   idType: {
     type: Sequelize.INTEGER,
     allowNull: false,

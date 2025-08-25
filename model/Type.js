@@ -34,14 +34,14 @@ class Type {
     }
 
     async insert(data, res, req) {
-        const existType = tbType.findOne({ where: { type: data.type } })
+        const existType = await tbType.findOne({ where: { type: data.type }})
 
         if (existType) {
-            throw new Error('exist already equipment')
+            throw new Error('exist already type')
         }
 
         await tbType.create(data)
-        addLog.CreateLog(data.type, 'Adicionado', 'Adicionando Tipo')
+        addLog.CreateLog(data.type, 'Adicionado', 'Adicionando Tipo', req)
         res.status(201).json({ successMessage: 'Add successfully' })
     }
 
@@ -60,7 +60,7 @@ class Type {
 
     async update(req, data, res) {
         const existTypeEquipment = await tbEquipment.findOne({ where: { idType: req.params.idType } })
-        const existType = await tbType.findOne({ where: { type: data.type } })
+        const existType = await tbType.findAll({ where: { type: data.type } })
 
         if (existTypeEquipment) {
             throw new Error('Exist user registered in this profile')
@@ -87,7 +87,7 @@ class Type {
 
         removerType.destroy()
         addLog.CreateLog(removerType.dataValues.type, 'Deletado', 'Deletado Tipo', req)
-        res.status(200).json({ successMessage: 'Delete Tipo' })
+        res.status(200).json({ successMessage: 'Delete Typo' })
     }
 
 }
