@@ -1,9 +1,9 @@
-const Type = require('../model/Type')
+const TypeEquipment = require('../model/TypeEquipment')
 
 const add = async (req, res) => {
     try {
-        const type = new Type(req.body)
-        await type.insert(type, res, req)
+        const typeEquipment = new TypeEquipment(req.body)
+        await typeEquipment.insert(typeEquipment, res, req)
     } catch (error) {
         res.status(400).json({errorMessage: error.message})
     }
@@ -11,7 +11,7 @@ const add = async (req, res) => {
 
 const findAll = async (req, res) => {
     try {
-        await Type.selectAll(res)
+        await TypeEquipment.selectAll(res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }
@@ -19,7 +19,7 @@ const findAll = async (req, res) => {
 
 const findId = async (req, res) => {
     try {
-        await Type.selectId(req, res)
+        await TypeEquipment.selectId(req, res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }
@@ -27,8 +27,8 @@ const findId = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const type = new Type(req.body)
-        await type.update(req, type, res)
+        const typeEquipment = new TypeEquipment(req.body)
+        await typeEquipment.update(req, typeEquipment, res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }
@@ -36,7 +36,7 @@ const update = async (req, res) => {
 
 const remover = async (req, res) => {
     try {
-        await Type.delete(req, res)
+        await TypeEquipment.delete(req, res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }

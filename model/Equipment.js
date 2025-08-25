@@ -8,14 +8,14 @@ const exportXlsx = require('../content/export/fileXlsx')
 const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
-const tbType = require('../constant/tbType')
+const tbTypeEquipment = require('../constant/tbTypeEquipment')
 
 
 class Equipment {
     idEquipment
     codProd
     equipment
-    idType
+    idTypeEquipment
     idUser
     value
     idBranch
@@ -28,7 +28,7 @@ class Equipment {
         this._idEquipment = data.idEquipment
         this._codProd = data.codProd
         this._equipment = data.equipment
-        this._idType = data.idType
+        this._idTypeEquipment = data.idTypeEquipment
         this._idUser = data.idUser
         this._value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? 0 : data.value
         this._idBranch = data.idBranch
@@ -71,15 +71,15 @@ class Equipment {
         return this.equipment = value
     }
 
-    get _idType() {
-        return this.idType
+    get _idTypeEquipment() {
+        return this.idTypeEquipment
     }
 
-    set _idType(value) {
+    set _idTypeEquipment(value) {
         if (value == undefined) {
-            throw new Error('Invalid idType')
+            throw new Error('Invalid idTypeEquipment')
         }
-        return this.idType = value
+        return this.idTypeEquipment = value
     }
 
     get _idUser() {
@@ -174,7 +174,7 @@ class Equipment {
         const result = (await tbEquipment.findAll({
             attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
-            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, {model: tbType, attributes: ['idType', 'type']}]
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
         })).map(
             equipment => equipment.dataValues
         )
@@ -189,7 +189,7 @@ class Equipment {
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbType, attributes: ['idType', 'type']}]}).then(
+        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
             idEquipment => {
                 if (DecryptToken(req).permission.find(itens => itens == 5) === undefined) {
                     delete idEquipment.dataValues.value
@@ -203,19 +203,19 @@ class Equipment {
 
         let codProd = data.codProd ? data.codProd : '%'
         let equipment = data.equipment ? data.equipment : '%'
-        let idType = data.idType ? data.idType : '%'
+        let idTypeEquipment = data.idTypeEquipment ? data.idTypeEquipment : '%'
         let idUser = data.idUser ? data.idUser : '%'
         let idBranch = data.idBranch ? data.idBranch : '%'
 
         const result = (await tbEquipment.findAll({
             where: {
                 returnDate: null, [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
-                { idType: { [Op.like]: idType } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
+                { idTypeEquipment: { [Op.like]: idTypeEquipment } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
             },
             attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, 
-            {model: tbType, attributes: ['idType', 'type']}]
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
         }
         )).map(
             value => value.dataValues
@@ -234,7 +234,7 @@ class Equipment {
 
         alterEquipment.codProd = data.codProd
         alterEquipment.equipment = data.equipment
-        alterEquipment.idType = data.idType
+        alterEquipment.idTypeEquipment = data.idTypeEquipment
         alterEquipment.idUser = data.idUser
         alterEquipment.value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? alterEquipment.dataValues.value : data.value
         alterEquipment.idBranch = data.idBranch
@@ -259,7 +259,7 @@ class Equipment {
     }
 
     static async exportlXlsx(req, res) {
-        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate'], include: {model: tbType, attributes:['idType', 'type']}})).map(
+        const result = (await tbEquipment.findAll({attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate'], include: {model: tbTypeEquipment, attributes:['idTypeEquipment', 'typeEquipment']}})).map(
             data => data.dataValues
         )
         exportXlsx.fileXlsx(result, req)
@@ -270,19 +270,19 @@ class Equipment {
 
         let codProd = data.codProd ? data.codProd : '%'
         let equipment = data.equipment ? data.equipment : '%'
-        let idType = data.idType ? data.idType : '%'
+        let idTypeEquipment = data.idTypeEquipment ? data.idTypeEquipment : '%'
         let idUser = data.idUser ? data.idUser : '%'
         let idBranch = data.idBranch ? data.idBranch : '%'
 
         const result = (await tbEquipment.findAll({
             where: {
                 [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
-                { idType: { [Op.like]: idType } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
+                { idTypeEquipment: { [Op.like]: idTypeEquipment } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
             },
             attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, 
-            {model: tbType, attributes: ['idType', 'type']}]
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
         }
         )).map(
             value => value.dataValues

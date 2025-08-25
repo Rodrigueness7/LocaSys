@@ -4,7 +4,7 @@ const tbuser = require('./tbUser')
 const tbBranch = require('./tbBranch')
 const tbSector = require('./tbSector')
 const tbSupplier = require('./tbSupplier')
-const tbType = require('./tbType')
+const tbTypeEquipment = require('./tbTypeEquipment')
 
 const tbEquipment = db.define('Equipments', {
   idEquipment: {
@@ -21,12 +21,12 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.STRING(80),
     allowNull: false
   },
-  idType: {
+  idTypeEquipment: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
-      model: 'Types',
-      key: 'idType'
+      model: 'TypeEquipments',
+      key: 'idTypeEquipment'
     }
   },
   idUser: {
@@ -80,6 +80,6 @@ tbEquipment.belongsTo(tbuser, { foreignKey: 'idUser' })
 tbEquipment.belongsTo(tbBranch, { foreignKey: 'idBranch' })
 tbEquipment.belongsTo(tbSector, { foreignKey: 'idSector' })
 tbEquipment.belongsTo(tbSupplier, { foreignKey: 'idSupplier' })
-tbEquipment.belongsTo(tbType, { foreignKey: 'idType' })
+tbEquipment.belongsTo(tbTypeEquipment, { foreignKey: 'idTypeEquipment' })
 
 module.exports = tbEquipment;

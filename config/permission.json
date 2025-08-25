@@ -237,21 +237,21 @@
     {
         "idPermission": 48,
         "permission": "Ler",
-        "section": "type"
+        "section": "typeEquipment"
     },
     {
         "idPermission": 49,
         "permission": "Gravar",
-        "section": "type"
+        "section": "typeEquipment"
     },
     {
         "idPermission": 50,
         "permission": "Atualizar",
-        "section": "type"
+        "section": "typeEquipment"
     },
     {
         "idPermission": 51,
         "permission": "Deletar",
-        "section": "type"
+        "section": "typeEquipment"
     }   
 ]
