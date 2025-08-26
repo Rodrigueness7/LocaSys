@@ -34,7 +34,7 @@ class TypeEquipment {
     }
 
     async insert(data, res, req) {
-        const existTypeEquipment = await tbTypeEquipment.findOne({ where: { type: data.typeEquipment }})
+        const existTypeEquipment = await tbTypeEquipment.findOne({ where: { typeEquipment: data.typeEquipment }})
 
         if (existTypeEquipment) {
             throw new Error('exist already typeEquipment')
@@ -59,8 +59,8 @@ class TypeEquipment {
     }
 
     async update(req, data, res) {
-        const existTypeInEquipment = await tbEquipment.findOne({ where: { idType: req.params.idTypeEquipment} })
-        const existTypeEquipment = await tbTypeEquipment.findAll({ where: { type: data.typeEquipment } })
+        const existTypeInEquipment = await tbEquipment.findOne({ where: { idTypeEquipment: req.params.idTypeEquipment} })
+        const existTypeEquipment = await tbTypeEquipment.findAll({ where: { typeEquipment: data.typeEquipment } })
 
         if (existTypeInEquipment) {
             throw new Error('Exist equipment registered in this type')
@@ -86,7 +86,7 @@ class TypeEquipment {
         const removeTypeEquipment = await tbTypeEquipment.findByPk(req.params.idTypeEquipment)
 
         removeTypeEquipment.destroy()
-        addLog.CreateLog(removeTypeEquipment.dataValues.type, 'Deletado', 'Deletado Tipo de Equipamento', req)
+        addLog.CreateLog(removeTypeEquipment.dataValues.typeEquipment, 'Deletado', 'Deletado Tipo de Equipamento', req)
         res.status(200).json({ successMessage: 'Delete Type Equipment' })
     }
 
