@@ -9,7 +9,7 @@ function profile_permission() {
 
         idPermission = contador
 
-        let array = [1,6,10,15,19,23,27,44,48]
+        let array = [1,6,10,19,23,27,44]
 
         if (contador >= 51) {
             contador = 0
