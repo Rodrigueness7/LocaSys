@@ -138,7 +138,7 @@ class EquipmentHistory {
     static async selectAll(res) {
         const result = (await tbEquipmentHistory.findAll({
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
-            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment', 'type'] }, { model: tbUser, attributes: ['username'] },
+            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment'] }, { model: tbUser, attributes: ['username'] },
             { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
         })).map(
             values => values.dataValues
@@ -149,7 +149,7 @@ class EquipmentHistory {
     static async selectId(req, res) {
         await tbEquipmentHistory.findByPk(req, {
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
-            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment', 'type'] }, { model: tbUser, attributes: ['username'] },
+            include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment'] }, { model: tbUser, attributes: ['username'] },
             { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
         }).then(
             idEquipmentHistory => res.status(200).json(idEquipmentHistory.dataValues)
