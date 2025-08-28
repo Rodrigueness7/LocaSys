@@ -84,6 +84,11 @@ class TypeEquipment {
 
     static async delete(req, res) {
         const removeTypeEquipment = await tbTypeEquipment.findByPk(req.params.idTypeEquipment)
+        const countTypeEquipmentInEquipment = await tbEquipment.count({where: {idTypeEquipment: req.params.idTypeEquipment}})
+
+        if(countTypeEquipmentInEquipment) {
+            throw new Error('You cannot delete a type Equipment, as it is registered in the Equipment table')
+        }
 
         removeTypeEquipment.destroy()
         addLog.CreateLog(removeTypeEquipment.dataValues.typeEquipment, 'Deletado', 'Deletado Tipo de Equipamento', req)

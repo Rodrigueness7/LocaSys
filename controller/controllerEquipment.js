@@ -38,7 +38,7 @@ const update = async (req, res) => {
         const equipment = new Equipment(req.body, req)
         await equipment.update(req, equipment, res)
     } catch (error) {
-        res.staus(400).json({ errorMessage: error.message })
+        res.status(400).json({ errorMessage: error.message })
     }
 }
 

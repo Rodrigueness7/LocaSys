@@ -39,7 +39,7 @@ const inactivate = async (req, res) => {
    try {
       await Branch.inactivate(req, req.body.deletionDate, res)
    } catch (error) {
-      res.satus(400).json({ errorMessage: error.message })
+      res.status(400).json({ errorMessage: error.message })
    }
 }
 

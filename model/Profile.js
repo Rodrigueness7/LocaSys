@@ -84,6 +84,15 @@ class Profile {
 
     static async delete(req, res) {
         const removerProfile = await tbProfile.findByPk(req.params.id)
+        const countProfileInUser = await tbUser.count({where: {idProfile: req.params.id}})
+        
+        if(req.params.id == 1 || req.params.id == 2) {
+            throw new Error('This profile not can removed')
+        }
+
+        if(countProfileInUser) {
+            throw new Error('You cannot delete a Profile, as it is registered in the User table')
+        }
 
         removerProfile.destroy()
         AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)

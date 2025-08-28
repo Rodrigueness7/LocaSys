@@ -132,6 +132,11 @@ class Profile_permission {
     }
 
     static async delete(req, res) {
+
+        if(req.params.idProfile == 1 || req.params.idProfile == 2 ){
+            throw new Error('cannot delete permission for this profile')
+        }
+
         (await tbProfile_permission.findAll({ where: { idProfile: req.params.idProfile } })).map(itens => itens.destroy())
         res.status(200).json({ successMessage: 'Deleted successfully' })
     }
