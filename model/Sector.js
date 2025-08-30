@@ -34,7 +34,7 @@ class Sector {
     }
 
     set _sector(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             throw new Error('Invalid sector')
         }
         return this.sector = value
@@ -46,7 +46,7 @@ class Sector {
 
     set _idBranch(value) {
         if (value == undefined) {
-            throw new Error('Invalid idBranch')
+            throw new Error('Invalid Branch id')
         }
         return this.idBranch = value
     }

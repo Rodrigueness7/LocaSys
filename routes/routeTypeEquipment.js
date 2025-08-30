@@ -1,6 +1,6 @@
 const express = require('express')
 const routeTypeEquipment = express.Router()
-const controller = require('../controller/controllerType')
+const controller = require('../controller/controllerTypeEquipment')
 const {verifyToken} = require('../controller/auth')
 const {checkAcess} = require('../controller/checkAcess')
 

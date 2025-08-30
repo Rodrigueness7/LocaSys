@@ -48,7 +48,7 @@ class EquipmentHistory {
 
     set _idEquipment(value) {
         if (value == undefined) {
-            throw new Error('Invalid idEquipment')
+            throw new Error('Invalid Equipment id')
         }
         return this.idEquipment = value
     }
@@ -70,7 +70,7 @@ class EquipmentHistory {
 
     set _idUser(value) {
         if (value == undefined) {
-            throw new Error('Invalid idEquipment')
+            throw new Error('Invalid User id')
         }
         return this.idUser = value
     }
@@ -81,7 +81,7 @@ class EquipmentHistory {
 
     set _idSector(value) {
         if (value == undefined) {
-            throw new Error('Invalid idEquipment')
+            throw new Error('Invalid Sector id')
         }
         return this.idSector = value
     }
@@ -92,7 +92,7 @@ class EquipmentHistory {
 
     set _idBranch(value) {
         if (value == undefined) {
-            throw new Error('Invalid idEquipment')
+            throw new Error('Invalid Branch id')
         }
         return this.idBranch = value
     }

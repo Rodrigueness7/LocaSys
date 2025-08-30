@@ -45,7 +45,7 @@ class Supplier {
     }
 
     set _supplier(value) {
-        if(value == undefined) {
+        if(value == undefined || value == '') {
             throw new Error('Invalid supplier')
         }
         return this.supplier = value
@@ -56,6 +56,10 @@ class Supplier {
     }
 
     set _email(value) {
+        if(value == undefined || value == '') {
+            return this.email = null
+        }
+
         if(!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
             throw new Error('Email is not valid')
         }
@@ -67,8 +71,8 @@ class Supplier {
     }
 
     set _contact(value) {
-        if(value == undefined) {
-            throw new Error('Invalid contact')
+        if(value == undefined || value == '') {
+            return this.contact = null
         }
         return this.contact = value
     }
@@ -78,7 +82,7 @@ class Supplier {
     }
 
     set _CNPJ(value) {
-        if(value == undefined) {
+        if(value == undefined || value == '') {
             throw new Error('Invalid CNPJ')
         }
         return this.CNPJ = value
@@ -89,8 +93,8 @@ class Supplier {
     }
 
     set _address(value) {
-        if(value == undefined) {
-            throw new Error('Invalid address')
+        if(value == undefined || value == '') {
+            return this.address = null
         }
         return this.address = value
     }
@@ -100,8 +104,8 @@ class Supplier {
     }
 
     set _zipCode(value) {
-        if(value == undefined) {
-            throw new Error('Invalid zipCode')
+        if(value == undefined || value == '') {
+            throw new Error('Invalid zip Code')
         }
         return this.zipCode = value
     }
@@ -111,7 +115,7 @@ class Supplier {
     }
 
     set _state(value) {
-        if(value == undefined) {
+        if(value == undefined || value == '') {
             throw new Error('Invalid state')
         }
         return this.state = value
@@ -122,7 +126,7 @@ class Supplier {
     }
 
     set _city(value) {
-        if(value == undefined) { 
+        if(value == undefined || value == '') { 
             throw new Error('Invalid city')
         }
         return this.city = value    
@@ -133,7 +137,7 @@ class Supplier {
     }
 
     set _deletionDate(value) {
-        if(value == undefined) {
+        if(value == undefined || value == '') {
             return this.deletionDate = null
         }
         return this.deletionDate = value

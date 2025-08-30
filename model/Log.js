@@ -25,7 +25,7 @@ class Log {
 
     set _idLog(value) {
         if (value == undefined) {
-            throw new Error('Invalid idLog')
+            throw new Error('Invalid Log id')
         }
         return this.idLog = value
     }
@@ -58,7 +58,7 @@ class Log {
 
     set _actionDate(value) {
         if (value == undefined) {
-            throw new Error('Invalid actionDate')
+            throw new Error('Invalid action Date')
         }
 
         return this.actionDate = locaTime.dateLocalTime()
@@ -70,7 +70,7 @@ class Log {
 
     set _idUser(value) {
         if (value == undefined) {
-            throw new Error('Invalid idUser')
+            throw new Error('Invalid User id')
         }
         return this.idUser = value
     }

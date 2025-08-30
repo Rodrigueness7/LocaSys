@@ -29,7 +29,7 @@ class Branch {
     }
 
     set _idBranch(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             return this.idBranch = 0
         }
         return this.idBranch = value
@@ -40,7 +40,7 @@ class Branch {
     }
 
     set _branch(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             throw new Error('Invalid branch')
         }
         return this.branch = value
@@ -51,7 +51,7 @@ class Branch {
     }
 
     set _CNPJ(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             return this.CNPJ = null
         }
         return this.CNPJ = value
@@ -62,7 +62,7 @@ class Branch {
     }
 
     set _coporateName(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             return this.corporateName = null
         }
         return this.corporateName = value
@@ -73,8 +73,8 @@ class Branch {
     }
 
     set _uniqueIdentifier(value) {
-        if (value == undefined) {
-            throw new Error('UniqueIdentifer Invalid')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid unique identifier')
         }
         return this.uniqueIdentifier = value
     }
@@ -92,10 +92,12 @@ class Branch {
 
 
     async insert(data, res, req) {
-        const existBranch = await tbBranch.findOne({ where: { [Op.or]: [{ branch: data.branch }, { CNPJ: data.CNPJ }, { uniqueIdentifier: data.uniqueIdentifier }] } })
+        const existBranch = await tbBranch.findOne({ where: { [Op.or]: [{[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}, {[Op.and]: [{branch: data.branch}, {branch: {[Op.ne]: null}}]}, {[Op.and]: [{uniqueIdentifier: data.uniqueIdentifier}, {uniqueIdentifier: {[Op.ne]: null}}]}]}})
+      
         if (existBranch) {
             throw new Error('Branch already exist')
         }
+
         await tbBranch.create(data)
         AddLog.CreateLog(data.branch, 'Adicionado', 'Adicionado Filial', req)
         res.status(201).json({ successMessage: 'Add successfully' })
@@ -116,7 +118,8 @@ class Branch {
 
     async update(req, data, res) {
         const existSector = await tbSector.findOne({ where: { idBranch: req.params.idBranch } })
-        const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{ CNPJ: data['CNPJ'] }, { branch: data.branch }, { uniqueIdentifier: data.uniqueIdentifier }] } })
+        const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}, {[Op.and]: [{branch: data.branch}, {branch: {[Op.ne]: null}}]}, {[Op.and]: [{uniqueIdentifier: data.uniqueIdentifier}, {uniqueIdentifier: {[Op.ne]: null}}]}]}})
+      
 
         if (existSector) {
             throw new Error('Not was possible update, since the branch registered in the sector')
@@ -130,10 +133,10 @@ class Branch {
         const alterBranch = await tbBranch.findByPk(req.params.idBranch)
 
         alterBranch.idBranch = data.idBranch,
-            alterBranch.branch = data.branch
+        alterBranch.branch = data.branch
         alterBranch.CNPJ = data.CNPJ,
-            alterBranch.corporateName = data.corporateName,
-            alterBranch.uniqueIdentifier = data.uniqueIdentifier
+        alterBranch.corporateName = data.corporateName,
+        alterBranch.uniqueIdentifier = data.uniqueIdentifier
 
         await alterBranch.save()
         AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)

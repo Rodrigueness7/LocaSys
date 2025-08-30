@@ -34,8 +34,8 @@ class Profile_permission {
     }
 
     set _idProfile(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idProfile')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Profile id')
         }
         return this.idProfile = value
     }
@@ -45,8 +45,8 @@ class Profile_permission {
     }
 
     set _idPermission(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idPermission')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Permission id')
         }
         return this.idPermission = value
     }
@@ -56,8 +56,8 @@ class Profile_permission {
     }
 
     set _allow(value) {
-        if (value === undefined) {
-            throw new Error('Invalid allwo')
+        if (value == undefined) {
+            return this.allow = false
         }
         return this.allow = value
     }
@@ -67,7 +67,7 @@ class Profile_permission {
             let idProfile = await tbProfile.findOne({ where: { profile: profile }, attributes: ['idProfile'] })
 
             if (!idProfile) {
-                throw new Error('IdProfile invalid')
+                throw new Error('invalid Profile Id')
             }
 
             data.idProfile = idProfile.dataValues.idProfile
@@ -76,10 +76,7 @@ class Profile_permission {
                 throw new Error('Permission already exists for this profile')
             }
 
-            setTimeout(async () => {
-                await tbProfile_permission.create(data)
-
-            }, 5000)
+            await tbProfile_permission.create(data)
 
         } catch (error) {
             throw error

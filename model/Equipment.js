@@ -54,8 +54,8 @@ class Equipment {
     }
 
     set _codProd(value) {
-        if (value == undefined) {
-            throw new Error('Invalid codProd')
+        if (value == undefined || value == '') {
+            throw new Error('invalid product code ')
         }
         return this.codProd = value
     }
@@ -65,8 +65,8 @@ class Equipment {
     }
 
     set _equipment(value) {
-        if (value == undefined) {
-            return this.equipment = null
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Equipment')
         }
         return this.equipment = value
     }
@@ -76,8 +76,8 @@ class Equipment {
     }
 
     set _idTypeEquipment(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idTypeEquipment')
+        if (value == undefined || value == '') {
+            throw new Error('invalid equipment type id')
         }
         return this.idTypeEquipment = value
     }
@@ -87,8 +87,8 @@ class Equipment {
     }
 
     set _idUser(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idUser')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid User id')
         }
         return this.idUser = value
     }
@@ -98,7 +98,7 @@ class Equipment {
     }
 
     set _value(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             throw new Error('Invalid value')
         }
         return this.value = value
@@ -109,8 +109,8 @@ class Equipment {
     }
 
     set _idBranch(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idBranch')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Branch id')
         }
         return this.idBranch = value
     }
@@ -120,8 +120,8 @@ class Equipment {
     }
 
     set _idSector(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idSector')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Sector id ')
         }
         return this.idSector = value
     }
@@ -131,8 +131,8 @@ class Equipment {
     }
 
     set _idSupplier(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idSupplier')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Supplier id')
         }
         return this.idSupplier = value
     }
@@ -142,8 +142,8 @@ class Equipment {
     }
 
     set _entryDate(value) {
-        if (value == undefined) {
-            throw new Error('Invalid entryDate')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid entry Date')
         }
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
@@ -153,7 +153,7 @@ class Equipment {
     }
 
     set _returnDate(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             return this.returnDate = null
         }
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]

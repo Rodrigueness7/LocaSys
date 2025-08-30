@@ -27,8 +27,8 @@ class TypeEquipment {
     }
 
     set _typeEquipment(value) {
-        if (value == undefined) {
-            throw new Error('Invalid typeEquipment')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid type Equipment')
         }
         return this.typeEquipment = value
     }
@@ -68,7 +68,7 @@ class TypeEquipment {
 
         if (existTypeEquipment.find(value => value.dataValues.idTypeEquipment != req.params.idTypeEquipment)) {
             throw new Error('Exist already type equipment registered:' + ' (' + (existTypeEquipment.filter(value => value.dataValues.idTypeEquipment != req.params.idTypeEquipment)
-                .map(value => value.dataValues.idTypeEquipment).join(', ').concat(') ')))
+                .map(value => value.dataValues.typeEquipment).join(', ').concat(') ')))
         }
 
         const alterTypeEquipment = await tbTypeEquipment.findByPk(req.params.idTypeEquipment)

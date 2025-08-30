@@ -27,7 +27,7 @@ class Profile {
     }
 
     set _profile(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             throw new Error('Invalid profile')
         }
         return this.profile = value
@@ -60,6 +60,10 @@ class Profile {
     async update(req, data, res) {
         const existProfileUser = await tbUser.findOne({ where: { idProfile: req.params.id } })
         const existProfile = await tbProfile.findAll({ where: { profile: data.profile } })
+
+        if(req.params.id == 1 && data.profile != 'Administrador'  || req.params.id == 2 && data.profile != 'Usuario') {
+            throw new Error('This profile not can altered name')
+        }
 
         if (existProfileUser) {
             throw new Error('Exist user registered in this profile')
