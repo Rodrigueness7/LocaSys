@@ -163,7 +163,7 @@ class Equipment {
         const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd } })
 
         if (existEquipment) {
-            throw new Error('exist already equipment')
+            throw new Error('Exist already equipment')
         }
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)

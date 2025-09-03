@@ -2,6 +2,7 @@ const tbSupplier = require('../constant/tbSupplier')
 const tbContact = require('../constant/tbContact')
 const tbEquipment = require('../constant/tbEquipment')
 const AddLog = require('../constant/addLog')
+const { Op } = require('sequelize')
 
 class Supplier {
 
@@ -144,7 +145,7 @@ class Supplier {
     }
 
     async insert(data, res, req) {
-        const existSupplier = await tbSupplier.findOne({where: {supplier: data.supplier} })
+        const existSupplier = await tbSupplier.findOne({ where: { [Op.or]: [{[Op.and]: [{supplier: data.supplier}, {supplier: {[Op.ne]: null}}]}, {[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}]}})
 
         if(existSupplier) {
             throw new Error('Exist already supplier')

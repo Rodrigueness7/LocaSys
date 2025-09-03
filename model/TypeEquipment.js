@@ -37,7 +37,7 @@ class TypeEquipment {
         const existTypeEquipment = await tbTypeEquipment.findOne({ where: { typeEquipment: data.typeEquipment }})
 
         if (existTypeEquipment) {
-            throw new Error('exist already typeEquipment')
+            throw new Error('Exist already type Equipment')
         }
 
         await tbTypeEquipment.create(data)
