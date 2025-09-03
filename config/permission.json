@@ -233,6 +233,25 @@
         "idPermission": 47,
         "permission": "Deletar",
         "section": "supplier"
-    }
-   
+    },
+    {
+        "idPermission": 48,
+        "permission": "Ler",
+        "section": "typeEquipment"
+    },
+    {
+        "idPermission": 49,
+        "permission": "Gravar",
+        "section": "typeEquipment"
+    },
+    {
+        "idPermission": 50,
+        "permission": "Atualizar",
+        "section": "typeEquipment"
+    },
+    {
+        "idPermission": 51,
+        "permission": "Deletar",
+        "section": "typeEquipment"
+    }   
 ]

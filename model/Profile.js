@@ -27,7 +27,7 @@ class Profile {
     }
 
     set _profile(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             throw new Error('Invalid profile')
         }
         return this.profile = value
@@ -61,6 +61,10 @@ class Profile {
         const existProfileUser = await tbUser.findOne({ where: { idProfile: req.params.id } })
         const existProfile = await tbProfile.findAll({ where: { profile: data.profile } })
 
+        if(req.params.id == 1 && data.profile != 'Administrador'  || req.params.id == 2 && data.profile != 'Usuario') {
+            throw new Error('This profile not can altered name')
+        }
+
         if (existProfileUser) {
             throw new Error('Exist user registered in this profile')
         }
@@ -84,6 +88,15 @@ class Profile {
 
     static async delete(req, res) {
         const removerProfile = await tbProfile.findByPk(req.params.id)
+        const countProfileInUser = await tbUser.count({where: {idProfile: req.params.id}})
+        
+        if(req.params.id == 1 || req.params.id == 2) {
+            throw new Error('This profile not can removed')
+        }
+
+        if(countProfileInUser) {
+            throw new Error('You cannot delete a Profile, as it is registered in the User table')
+        }
 
         removerProfile.destroy()
         AddLog.CreateLog(removerProfile.dataValues.profile, 'Deletado', 'Deletado Perfil', req)

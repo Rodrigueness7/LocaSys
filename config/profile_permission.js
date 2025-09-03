@@ -4,18 +4,18 @@ function profile_permission() {
     let allow = false
     let arrayPermission = []
 
-    for (let idPermission_profile = 1; idPermission_profile <= 94; idPermission_profile++) {
+    for (let idPermission_profile = 1; idPermission_profile <= 102; idPermission_profile++) {
         let idPermission
 
         idPermission = contador
 
-        let array = [1,6,10,15,19,23,27,44]
+        let array = [1,6,10,19,23,27,44]
 
-        if (contador >= 47) {
+        if (contador >= 51) {
             contador = 0
         }
 
-        if (idPermission_profile >= 48) {
+        if (idPermission_profile >= 52) {
             idProfile = 2
         }
         if (idProfile == 1) {

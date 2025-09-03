@@ -46,14 +46,14 @@ class EquipmentRental {
 
     set _idBranch(value) {
         if (value == undefined) {
-            throw new Error('Invalid idBranch')
+            throw new Error('Invalid Branch id')
         }
         return this.idBranch = value
     }
 
     set _codProd(value) {
         if (value == undefined) {
-            throw new Error('Invalid codProd')
+            throw new Error('Invalid product code')
         }
         return this.codProd = value
     }
@@ -142,7 +142,7 @@ class EquipmentRental {
 
     set _initPeriod(value) {
         if (value == undefined) {
-            throw new Error('Invalid initPeriod')
+            throw new Error('Invalid initial Period')
         }
         return this.initPeriod = new Date(value.split('/').reverse().join('-'))
     }
@@ -153,7 +153,7 @@ class EquipmentRental {
 
     set _finishPeriod(value) {
         if (value == undefined) {
-            throw new Error('Invalid finishPeriod')
+            throw new Error('Invalid finish Period')
         }
         return this.finishPeriod = new Date(value.split('/').reverse().join('-'))
     }

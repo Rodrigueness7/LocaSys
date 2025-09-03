@@ -1,9 +1,10 @@
 const db = require('../database/db')
-const {Sequelize} = require('sequelize')
+const { Sequelize } = require('sequelize')
 const tbuser = require('./tbUser')
 const tbBranch = require('./tbBranch')
 const tbSector = require('./tbSector')
 const tbSupplier = require('./tbSupplier')
+const tbTypeEquipment = require('./tbTypeEquipment')
 
 const tbEquipment = db.define('Equipments', {
   idEquipment: {
@@ -20,9 +21,13 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.STRING(80),
     allowNull: false
   },
-  type: {
-    type: Sequelize.STRING(80),
-    allowNull: false
+  idTypeEquipment: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'TypeEquipments',
+      key: 'idTypeEquipment'
+    }
   },
   idUser: {
     type: Sequelize.INTEGER,
@@ -33,7 +38,7 @@ const tbEquipment = db.define('Equipments', {
     }
   },
   value: {
-    type: Sequelize.DECIMAL(13,2),
+    type: Sequelize.DECIMAL(13, 2),
     allowNull: false
   },
   idBranch: {
@@ -67,12 +72,14 @@ const tbEquipment = db.define('Equipments', {
   returnDate: {
     type: Sequelize.DATE,
     allowNull: true
-  }
+  },
+
 })
 
-tbEquipment.belongsTo(tbuser, {foreignKey: 'idUser'})
-tbEquipment.belongsTo(tbBranch, {foreignKey: 'idBranch'})
-tbEquipment.belongsTo(tbSector, {foreignKey: 'idSector'})
-tbEquipment.belongsTo(tbSupplier, {foreignKey: 'idSupplier'})
+tbEquipment.belongsTo(tbuser, { foreignKey: 'idUser' })
+tbEquipment.belongsTo(tbBranch, { foreignKey: 'idBranch' })
+tbEquipment.belongsTo(tbSector, { foreignKey: 'idSector' })
+tbEquipment.belongsTo(tbSupplier, { foreignKey: 'idSupplier' })
+tbEquipment.belongsTo(tbTypeEquipment, { foreignKey: 'idTypeEquipment' })
 
 module.exports = tbEquipment;

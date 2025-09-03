@@ -54,8 +54,8 @@ class User {
     }
 
     set _firstName(value) {
-        if (value == undefined) {
-            throw new Error('Invalid firstName')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid First Name')
         }
         return this.firstName = value
     }
@@ -65,8 +65,8 @@ class User {
     }
 
     set _lastName(value) {
-        if (value == undefined) {
-            throw new Error('Invalid lastname')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Last Name')
         }
         return this.lastName = value
     }
@@ -87,8 +87,8 @@ class User {
     }
 
     set _username(value) {
-        if (value == undefined) {
-            throw new Error('Invalid user')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid User')
         }
         return this.username = value
     }
@@ -99,12 +99,12 @@ class User {
 
 
     set _password(value) {
-        if (value == null) {
+        if (value == undefined || value == '') {
             return this.password = null
         }
 
         if (value.length < 8) {
-            throw new Error('our password must be at least 8 characters')
+            throw new Error('Our password must be at least 8 characters')
         }
         if (value.search(/[a-z]/i) < 0) {
             throw new Error("Your password must contain at least one letter.");
@@ -123,6 +123,10 @@ class User {
     }
 
     set _confirmationPassword(value) {
+        if(this._password == null) {
+            return this.confirmationPassword = null
+        }
+
         if (value !== this._password) {
             throw new Error('Password do not match')
         }
@@ -134,6 +138,10 @@ class User {
     }
 
     set _email(value) {
+        if(value == undefined || value == '') {
+            return this.email = null
+        }
+
         if (!value.match(/^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
             throw new Error('Email is not valid')
         }
@@ -145,6 +153,10 @@ class User {
     }
 
     set _confirmationEmail(value) {
+        if(this._email == null) {
+            return this.confirmationEmail = null
+        }
+    
         if (value !== this._email) {
             throw new Error('Email do not match')
         }
@@ -156,8 +168,8 @@ class User {
     }
 
     set _idSector(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idSector')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Sector id')
         }
         return this.idSector = value
     }
@@ -167,8 +179,8 @@ class User {
     }
 
     set _idProfile(value) {
-        if (value == undefined) {
-            throw new Error('Invalid idProfile')
+        if (value == undefined || value == '') {
+            throw new Error('Invalid Profile id')
         }
         return this.idProfile = value
     }
@@ -178,7 +190,7 @@ class User {
     }
 
     set _deletionDate(value) {
-        if (value == undefined) {
+        if (value == undefined || value == '') {
             return this.deletionDate = null
         }
         return this.deletionDate = value
@@ -189,7 +201,8 @@ class User {
         if (existUser) {
             throw new Error('Username or email already registered')
         }
-        data.password = await cryptPassword(data.password)
+        
+        data.password == null? data.password : data.password = await cryptPassword(data.password)
         await tbUser.create(data)
         AddLog.CreateLog(data.username, 'Adicionado', 'Adicionado usuário', req)
 
@@ -285,15 +298,14 @@ class User {
     async update(data, req, res) {
         const existEquipmentUser = await tbEquipment.findOne({ where: { idUser: req.params.id } })
         const alterUser = await tbUser.findByPk(req.params.id)
-        const existUser = await tbUser.findAll({ where: { [Op.or]: [{ username: data.username }, { email: data.email }] }, attributes: ['idUser', 'username'] })
-
+        const existUser = await tbUser.findAll({ where: { [Op.or]: [{[Op.and]: [{username: data.username}, {username: {[Op.ne]: null}}]}, {[Op.and]: [{email: data.email}, {email: {[Op.ne]: null}}]}]}, attributes: ['idUser', 'username']})
 
         if (existUser.find(value => value.dataValues.idUser != req.params.id)) {
             throw new Error('Exist already users registered:' + ' (' + (existUser.filter(value => value.dataValues.idUser != req.params.id)
                 .map(value => value.dataValues.username).join(', ').concat(') ')))
         }
 
-        let password = await cryptPassword(data.password)
+        let password = data.password == null? data.password : await cryptPassword(data.password)
 
         alterUser.firstName = existEquipmentUser ? alterUser.dataValues.firstName : data.firstName
         alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName

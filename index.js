@@ -15,8 +15,10 @@ const routeEquipment = require('./routes/routeEquipment')
 const routeEquipmentHistory = require('./routes/routeEquipmentHistory')
 const routeUploadFile = require('./routes/routeUploadFile')
 const routeEquipmentRental = require('./routes/routeEquipmentRental')
+const routeTypeEquipment = require('./routes/routeTypeEquipment')
 const cors = require('cors')
 const { sendConfiguration } = require('./config/sendConfiguration')
+
 
 
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeBranch)
@@ -32,7 +34,7 @@ app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquip
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentHistory)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUploadFile)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentRental)
-
+app.use(express.urlencoded({extended: true}), express.json(), cors(), routeTypeEquipment)
 
 app.listen(process.env.PORT, (error) => {
     try {

@@ -166,7 +166,7 @@ class Contact {
 
     set _idSupplier(value) {
         if (value == undefined) {
-            throw new Error('Invalid idSupplier')
+            throw new Error('Invalid Supplier id')
         }
         return this.idSupplier = value
     }
