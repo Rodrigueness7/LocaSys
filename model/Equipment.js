@@ -98,7 +98,7 @@ class Equipment {
     }
 
     set _value(value) {
-        if (value == undefined || value == '') {
+        if (value == undefined || value === '') {
             throw new Error('Invalid value')
         }
         return this.value = value
