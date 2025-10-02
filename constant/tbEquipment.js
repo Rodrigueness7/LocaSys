@@ -14,7 +14,7 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.INTEGER
   },
   codProd: {
-    allowNull: false,
+    allowNull: true,
     type: Sequelize.INTEGER
   },
   equipment: {

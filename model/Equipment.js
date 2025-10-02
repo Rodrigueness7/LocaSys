@@ -54,7 +54,7 @@ class Equipment {
     }
 
     set _codProd(value) {
-        if (value == undefined || value == '') {
+        if (value == '' || value == 0) {
             throw new Error('invalid product code ')
         }
         return this.codProd = value
@@ -160,10 +160,12 @@ class Equipment {
     }
 
     async insert(data, res, req) {
-        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd } })
+        const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd}})
 
         if (existEquipment) {
-            throw new Error('Exist already equipment')
+            if (existEquipment.dataValues.codProd !== null) {
+                throw new Error('Exist already equipment')
+            } 
         }
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
