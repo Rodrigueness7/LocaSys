@@ -311,7 +311,9 @@ class User {
         alterUser.lastName = existEquipmentUser ? alterUser.dataValues.lastName : data.lastName
         alterUser.cpf = data.cpf
         alterUser.username = existEquipmentUser ? alterUser.dataValues.username : data.username
-        alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : password
+        if(data.password != "" && data.password != undefined) {
+            alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : password
+        }
         alterUser.email = data.email
         alterUser.idSector = existEquipmentUser ? alterUser.dataValues.idSector : data.idSector
         alterUser.idProfile = data.idProfile
