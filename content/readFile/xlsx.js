@@ -17,7 +17,7 @@ const readXlsx = async (req) => {
     dados.map(values => {
         file.push(values)
     })
-    const workbook = xlsx.readFile(`./uploads/${file[0]}`)
+    const workbook = xlsx.readFile(`./uploads/${file[file.length - 1]}`)
     const sheetName = workbook.SheetNames[0]
     const sheet = workbook.Sheets[sheetName]
     const jsonData = xlsx.utils.sheet_to_json(sheet, {range: `${cell1}:${cell2}`})
