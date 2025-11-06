@@ -1,7 +1,6 @@
 const fs = require('fs').promises
 const xlsx = require('xlsx')
 const { changeKeyObejct } = require('../../constant/changeKeyObejct')
-const EquipmentRental = require('../../model/EquipmentRental')
 
 const readXlsx = async (req) => {
 
@@ -13,6 +12,7 @@ const readXlsx = async (req) => {
     let finishPeriod = req.finishPeriod
 
     let file = []
+    let dataXlsx = []
     const dados = await fs.readdir('./uploads')
     dados.map(values => {
         file.push(values)
@@ -43,12 +43,11 @@ const readXlsx = async (req) => {
        data.initPeriod = initPeriod
        data.finishPeriod = finishPeriod
 
-       
-        const equipmentRental = new EquipmentRental(data)
-        await equipmentRental.insert(equipmentRental)
+        return dataXlsx.push(data)
        
     })
    
+    return dataXlsx
 }
 
 module.exports = { readXlsx }

@@ -1,11 +1,19 @@
 const xlsx = require('../content/readFile/xlsx')
 const EquipmentRental = require('../model/EquipmentRental')
+const storage = require('../content/storageFile/storage')
 
 const addFile = async (req, res) => {
     try {
-        await xlsx.readXlsx(req.body)
-        res.status(201).json({ successMessage: 'Add successfully' })
+        const items = await xlsx.readXlsx(req.body);
+
+        items.map(items => {
+            const equipmentRental = new EquipmentRental(items)
+            equipmentRental.insert(equipmentRental)
+        })
+        storage.deleteFile()
+        res.status(200).json({successMessage: 'Add successfuly'})
     } catch (error) {
+        storage.deleteFile()
         res.status(400).json({ errorMessage: error.message })
     }
 }
