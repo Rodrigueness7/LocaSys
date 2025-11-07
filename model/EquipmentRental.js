@@ -160,10 +160,10 @@ class EquipmentRental {
     }
 
      async insert(data) {
-        const findDate = await tbEquipmentRental.findOne({where: {[Op.and]: [{initPeriod: data.initPeriod}, {finishPeriod: data.finishPeriod}, {idBranch: data.idBranch}]}})
+        const findDate = await tbEquipmentRental.findAll({where: {[Op.and]: [{initPeriod: data.initPeriod}, {finishPeriod: data.finishPeriod}, {idBranch: data.idBranch}]}})
 
         if(findDate) {
-            throw new Error('these period already exist')
+            throw new Error('This period already exists for this branch.')
         }
  
         await tbEquipmentRental.create(data)
