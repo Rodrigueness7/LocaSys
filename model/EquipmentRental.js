@@ -2,7 +2,6 @@ const { Op } = require('sequelize')
 const tbEquipmentRental = require('../constant/tbEquipmentRental')
 const condition = require('../constant/conditionDate')
 const localTime = require('../constant/localTime')
-const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
 
 class EquipmentRental {
@@ -162,7 +161,8 @@ class EquipmentRental {
      async insert(data) {
         const findDate = await tbEquipmentRental.findAll({where: {[Op.and]: [{initPeriod: data.initPeriod}, {finishPeriod: data.finishPeriod}, {idBranch: data.idBranch}]}})
 
-        if(findDate) {
+        
+        if(findDate.length > 0) {
             throw new Error('This period already exists for this branch.')
         }
  

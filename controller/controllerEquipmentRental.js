@@ -1,6 +1,8 @@
 const xlsx = require('../content/readFile/xlsx')
 const EquipmentRental = require('../model/EquipmentRental')
 const storage = require('../content/storageFile/storage')
+const addLog = require('../constant/addLog');
+const tbBranch = require('../constant/tbBranch');
 
 const addFile = async (req, res) => {
   try {
@@ -11,8 +13,13 @@ const addFile = async (req, res) => {
       await equipmentRental.insert(equipmentRental);
     }));
 
+    const branch = await tbBranch.findOne({where: {idBranch: req.body.idBranch}})
+    const initPeriod = new Date(items.find(item => item).initPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})
+    const finishPeriod = new Date(items.find(item => item).finishPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})
+    
+    addLog.CreateLog(branch.dataValues.branch, 'Adicionado', `Importado a tabela do período: ${initPeriod} à ${finishPeriod} da`, req)
     storage.deleteFile();
-    res.status(200).json({ successMessage: 'Added successfully' });
+    res.status(200).json({ successMessage: 'Add successfully' });
 
   } catch (error) {
     storage.deleteFile();
