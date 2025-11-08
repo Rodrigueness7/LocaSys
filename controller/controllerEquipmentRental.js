@@ -1,14 +1,31 @@
 const xlsx = require('../content/readFile/xlsx')
 const EquipmentRental = require('../model/EquipmentRental')
+const storage = require('../content/storageFile/storage')
+const addLog = require('../constant/addLog');
+const tbBranch = require('../constant/tbBranch');
 
 const addFile = async (req, res) => {
-    try {
-        await xlsx.readXlsx(req.body)
-        res.status(201).json({ successMessage: 'Add successfully' })
-    } catch (error) {
-        res.status(400).json({ errorMessage: error.message })
-    }
-}
+  try {
+    const items = await xlsx.readXlsx(req.body);
+
+    await Promise.all(items.map(async item => {
+      const equipmentRental = new EquipmentRental(item);
+      await equipmentRental.insert(equipmentRental);
+    }));
+
+    const branch = await tbBranch.findOne({where: {idBranch: req.body.idBranch}})
+    const initPeriod = new Date(items.find(item => item).initPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})
+    const finishPeriod = new Date(items.find(item => item).finishPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})
+    
+    addLog.CreateLog(branch.dataValues.branch, 'Adicionado', `Importado a tabela do período: ${initPeriod} à ${finishPeriod} da`, req)
+    storage.deleteFile();
+    res.status(200).json({ successMessage: 'Add successfully' });
+
+  } catch (error) {
+    storage.deleteFile();
+    res.status(400).json({ errorMessage: error.message });
+  }
+};
 
 const findAll = async (req, res) => {
     try {

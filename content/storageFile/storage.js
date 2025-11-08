@@ -1,21 +1,13 @@
 const fs = require('fs').promises
 const multer = require('multer')
 
-const deleteFile = async (res) => {
-    const file = []
-    const dados = await fs.readdir('./uploads')
-    dados.map(values => {
-        file.push(values)
+const deleteFile = () => {
+       fs.readdir('./uploads').then(files => {
+            files.map(file =>
+            fs.unlink(`./uploads/${file}`)
+            )
     })
-    file.map(files =>
-        fs.unlink(`./uploads/${files}`)
-    )
-    if (file.length == 0) {
-        return res.json({ message: 'There is no file' })
-    }
-    res.json({ message: 'files was deleted successfully' })
 }
-
 
 const uploadFiles = () => {
 

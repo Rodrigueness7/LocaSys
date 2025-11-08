@@ -52,7 +52,7 @@ class EquipmentRental {
     }
 
     set _codProd(value) {
-        if (value == undefined) {
+        if (value == undefined || typeof value == 'string') {
             throw new Error('Invalid product code')
         }
         return this.codProd = value
@@ -63,7 +63,7 @@ class EquipmentRental {
     }
 
     set _proposal(value) {
-        if (value == undefined) {
+        if (value == undefined || typeof value == 'number') {
             throw new Error('Invalid proposal')
         }
         return this.proposal = value
@@ -74,7 +74,7 @@ class EquipmentRental {
     }
 
     set _description(value) {
-        if (value == undefined) {
+        if (value == undefined || typeof value == 'number') {
             throw new Error('Invalid description')
         }
         return this.description = value
@@ -158,7 +158,14 @@ class EquipmentRental {
         return this.finishPeriod = new Date(value.split('/').reverse().join('-'))
     }
 
-    async insert(data) {
+     async insert(data) {
+        const findDate = await tbEquipmentRental.findAll({where: {[Op.and]: [{initPeriod: data.initPeriod}, {finishPeriod: data.finishPeriod}, {idBranch: data.idBranch}]}})
+
+        
+        if(findDate.length > 0) {
+            throw new Error('This period already exists for this branch.')
+        }
+ 
         await tbEquipmentRental.create(data)
     }
 
