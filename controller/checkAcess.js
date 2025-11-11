@@ -22,8 +22,16 @@ function checkAcess(section) {
             const profileId = DecryptToken(req).idProfile;
             const permissions = await Profile_permission.select(profileId, action(), section);
 
-            if (permissions.dataValues.allow !== true) {
+            
+           if(permissions.dataValues['Permission'].permission == action()) {
+                permissions.dataValues.allow = true
+           }
+
+
+            if (permissions.dataValues.allow !== true ) {
+                
                 throw new Error('Usuário sem permissão')
+                
             }
             next();
         } catch (error) {

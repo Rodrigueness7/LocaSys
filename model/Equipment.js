@@ -193,9 +193,6 @@ class Equipment {
     static async selectId(req, res) {
         await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
             idEquipment => {
-                if (DecryptToken(req).permission.find(itens => itens == 5) === undefined) {
-                    delete idEquipment.dataValues.value
-                }
                 res.status(200).json(idEquipment.dataValues)
             }
         )
