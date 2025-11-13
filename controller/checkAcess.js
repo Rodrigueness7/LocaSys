@@ -9,7 +9,7 @@ function checkAcess(section) {
                     case 'GET':
                         return 'Ler';
                     case 'POST':
-                        return 'Gravar';
+                        return 'Adicionar';
                     case 'PUT':
                         return 'Atualizar';
                     case 'DELETE':
