@@ -53,7 +53,7 @@ const findId = async (req, res) => {
 
 const removerAll = async (req, res) => {
     try {
-        await EquipmentRental.delete(res, req.body)
+        await EquipmentRental.delete(res, req)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }
