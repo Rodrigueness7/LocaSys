@@ -253,7 +253,7 @@ class Equipment {
         dataEquipment.returnDate = data == null ? null : new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
 
         await dataEquipment.save()
-        AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Deletado', 'Deletado Código', req)
+        AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
         res.status(200).json({ successMessage: 'Returned successfully' })
     }
 

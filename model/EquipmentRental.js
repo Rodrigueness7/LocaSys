@@ -2,7 +2,8 @@ const { Op } = require('sequelize')
 const tbEquipmentRental = require('../constant/tbEquipmentRental')
 const condition = require('../constant/conditionDate')
 const localTime = require('../constant/localTime')
-
+const tbBranch = require('../constant/tbBranch')
+const addLog = require('../constant/addLog')
 
 class EquipmentRental {
     idEquipmentRental
@@ -170,7 +171,9 @@ class EquipmentRental {
     }
 
     static async selectAll(res) {
-        let result = (await tbEquipmentRental.findAll({ attributes: ['idEquipmentRental', 'codProd', 'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'finishPeriod'] })).map(
+        let result = (await tbEquipmentRental.findAll({ attributes: ['idEquipmentRental', 'codProd', 'proposal', 'description', 'init', 'finish', 'entry', 'output', 'value', 'initPeriod', 'finishPeriod'], include:{model:
+            tbBranch, attributes: ['idBranch', 'branch']
+        }})).map(
             equipmentRental => equipmentRental.dataValues
         )
         res.status(200).json(result)
@@ -200,16 +203,18 @@ class EquipmentRental {
     }
 
     static async delete(res, req) {
-        let initPeriod = new Date(req.initPeriod.split('/').reverse().join('-'))
-        let finishPeriod = new Date(req.finishPeriod.split('/').reverse().join('-'))
+        let initPeriod = new Date(req.body.initPeriod.split('/').reverse().join('-'))
+        let finishPeriod = new Date(req.body.finishPeriod.split('/').reverse().join('-'))
+        const branch = await tbBranch.findOne({where: {idBranch: req.body.idBranch}})
 
-        let existEquipmentRental = await tbEquipmentRental.findAll({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch }] } })
+        let existEquipmentRental = await tbEquipmentRental.findAll({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.body.idBranch }] } })
         if (existEquipmentRental.length == 0) {
             throw new Error('There is no data')
         }
 
-        await tbEquipmentRental.destroy({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.idBranch }] } })
+        await tbEquipmentRental.destroy({ where: { [Op.and]: [{ initPeriod: initPeriod, finishPeriod: finishPeriod, idBranch: req.body.idBranch }] } })
         res.status(200).json({ successMessage: 'Deleted all equipment rental' })
+        addLog.CreateLog(branch.dataValues.branch, 'Deletado', `Deletado a tabela do período: ${new Date(initPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})} à ${new Date(finishPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})} da`, req)
     }
 
 }

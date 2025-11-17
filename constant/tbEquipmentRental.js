@@ -1,5 +1,6 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
+const tbBranch = require('./tbBranch')
 
 const tbEquipmentRental = db.define('EquipmentRentals', {
   idEquipmentRental: {
@@ -62,4 +63,5 @@ const tbEquipmentRental = db.define('EquipmentRentals', {
       }
 })
 
+tbEquipmentRental.belongsTo(tbBranch, {foreignKey: 'idBranch'})
 module.exports = tbEquipmentRental
