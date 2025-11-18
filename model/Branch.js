@@ -8,6 +8,7 @@ const tbBranch = require('../constant/tbBranch')
 class Branch {
     idBranch
     branch
+    headquarter
     CNPJ
     corporateName
     uniqueIdentifier
@@ -17,6 +18,7 @@ class Branch {
     constructor(data) {
         this._idBranch = data.idBranch
         this._branch = data.branch
+        this._headquarter = data.headquarter
         this._CNPJ = data.CNPJ
         this._coporateName = data.corporateName
         this._uniqueIdentifier = data.uniqueIdentifier
@@ -44,6 +46,18 @@ class Branch {
             throw new Error('Invalid branch')
         }
         return this.branch = value
+    }
+
+    get _headquarter() {
+        return this.headquarter
+    }
+
+    set _headquarter(value) {
+        if(value == undefined) {
+           return this.headquarter = null
+        }
+
+        return this.headquarter = value
     }
 
     get _CNPJ() {
@@ -134,6 +148,7 @@ class Branch {
 
         alterBranch.idBranch = data.idBranch,
         alterBranch.branch = data.branch
+        alterBranch.headQuarter = data.headQuarter
         alterBranch.CNPJ = data.CNPJ,
         alterBranch.corporateName = data.corporateName,
         alterBranch.uniqueIdentifier = data.uniqueIdentifier

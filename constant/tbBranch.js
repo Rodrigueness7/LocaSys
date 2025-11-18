@@ -12,6 +12,10 @@ const tbBranch = db.define('Branches', {
     type: Sequelize.STRING(80),
     allowNull: false
   },
+  headquarter: {
+    type: Sequelize.INTEGER,
+    allowNull: true
+  },
   CNPJ: {
     type: Sequelize.STRING(14),
     allowNull: true
