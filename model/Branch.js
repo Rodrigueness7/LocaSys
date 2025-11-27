@@ -135,7 +135,8 @@ class Branch {
         const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}, {[Op.and]: [{branch: data.branch}, {branch: {[Op.ne]: null}}]}, {[Op.and]: [{uniqueIdentifier: data.uniqueIdentifier}, {uniqueIdentifier: {[Op.ne]: null}}]}]}})
       
 
-        if (existSector) {
+
+        if (existSector || (existBranch[0].dataValues.headquarter != null && existBranch[0].dataValues.CNPJ != null && existBranch[0].dataValues.corporateName != null)) {
             throw new Error('Not was possible update, since the branch registered in the sector')
         }
 
@@ -148,7 +149,7 @@ class Branch {
 
         alterBranch.idBranch = data.idBranch,
         alterBranch.branch = data.branch
-        alterBranch.headQuarter = data.headQuarter
+        alterBranch.headquarter = data.headquarter
         alterBranch.CNPJ = data.CNPJ,
         alterBranch.corporateName = data.corporateName,
         alterBranch.uniqueIdentifier = data.uniqueIdentifier
