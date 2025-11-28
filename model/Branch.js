@@ -135,10 +135,11 @@ class Branch {
         const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}, {[Op.and]: [{branch: data.branch}, {branch: {[Op.ne]: null}}]}, {[Op.and]: [{uniqueIdentifier: data.uniqueIdentifier}, {uniqueIdentifier: {[Op.ne]: null}}]}]}})
       
 
-
-        if (existSector || (existBranch[0].dataValues.headquarter != null && existBranch[0].dataValues.CNPJ != null && existBranch[0].dataValues.corporateName != null)) {
-            throw new Error('Not was possible update, since the branch registered in the sector')
+       if(existBranch[0].dataValues.branch != data.branch) {
+        if (existSector) {
+            throw new Error('You cannot change the branch name, as it is registered in the Sector table')
         }
+       }
 
         if (existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
             throw new Error('This branch is already registered: ' + '(' + existBranch.filter(value => value.dataValues.idBranch != req.params.idBranch)
