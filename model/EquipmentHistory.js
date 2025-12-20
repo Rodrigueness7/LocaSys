@@ -139,7 +139,7 @@ class EquipmentHistory {
         const result = (await tbEquipmentHistory.findAll({
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
             include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment'] }, { model: tbUser, attributes: ['username'] },
-            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['idBranch', 'branch', 'headquarter'] }]
         })).map(
             values => values.dataValues
         )
@@ -150,7 +150,7 @@ class EquipmentHistory {
         await tbEquipmentHistory.findByPk(req, {
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate', 'value'],
             include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd', 'equipment'] }, { model: tbUser, attributes: ['username'] },
-            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['idBranch', 'branch', 'headquarter'] }]
         }).then(
             idEquipmentHistory => res.status(200).json(idEquipmentHistory.dataValues)
         )
@@ -166,7 +166,7 @@ class EquipmentHistory {
             },
             attributes: ['idEquipmentHistory', 'reason', 'entryDate', 'returnDate'],
             include: [{ model: tbEquipment, attributes: ['idEquipment', 'codProd'], where: { codProd: { [Op.like]: codProd } } }, { model: tbUser, attributes: ['username'] },
-            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['branch'] }]
+            { model: tbSector, attributes: ['sector'] }, { model: tbBranch, attributes: ['idBranch', 'branch', 'headquarter'] }]
         })).map(values => values.dataValues)
         res.status(200).json(result)
     }
