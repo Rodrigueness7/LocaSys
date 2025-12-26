@@ -8,6 +8,7 @@ const tbBranch = require('../constant/tbBranch')
 class Branch {
     idBranch
     branch
+    headquarter
     CNPJ
     corporateName
     uniqueIdentifier
@@ -17,6 +18,7 @@ class Branch {
     constructor(data) {
         this._idBranch = data.idBranch
         this._branch = data.branch
+        this._headquarter = data.headquarter
         this._CNPJ = data.CNPJ
         this._coporateName = data.corporateName
         this._uniqueIdentifier = data.uniqueIdentifier
@@ -44,6 +46,18 @@ class Branch {
             throw new Error('Invalid branch')
         }
         return this.branch = value
+    }
+
+    get _headquarter() {
+        return this.headquarter
+    }
+
+    set _headquarter(value) {
+        if(value == undefined) {
+           return this.headquarter = null
+        }
+
+        return this.headquarter = value
     }
 
     get _CNPJ() {
@@ -121,9 +135,11 @@ class Branch {
         const existBranch = await tbBranch.findAll({ where: { [Op.or]: [{[Op.and]: [{CNPJ: data['CNPJ']}, {CNPJ: {[Op.ne]: null}}]}, {[Op.and]: [{branch: data.branch}, {branch: {[Op.ne]: null}}]}, {[Op.and]: [{uniqueIdentifier: data.uniqueIdentifier}, {uniqueIdentifier: {[Op.ne]: null}}]}]}})
       
 
+       if(existBranch[0].dataValues.branch != data.branch) {
         if (existSector) {
-            throw new Error('Not was possible update, since the branch registered in the sector')
+            throw new Error('You cannot change the branch name, as it is registered in the Sector table')
         }
+       }
 
         if (existBranch.find(value => value.dataValues.idBranch != req.params.idBranch)) {
             throw new Error('This branch is already registered: ' + '(' + existBranch.filter(value => value.dataValues.idBranch != req.params.idBranch)
@@ -134,6 +150,7 @@ class Branch {
 
         alterBranch.idBranch = data.idBranch,
         alterBranch.branch = data.branch
+        alterBranch.headquarter = data.headquarter
         alterBranch.CNPJ = data.CNPJ,
         alterBranch.corporateName = data.corporateName,
         alterBranch.uniqueIdentifier = data.uniqueIdentifier
