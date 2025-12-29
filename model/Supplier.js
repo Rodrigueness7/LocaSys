@@ -10,6 +10,7 @@ class Supplier {
     supplier
     email
     contact
+    telephone
     CNPJ
     address
     zipCode
@@ -22,6 +23,7 @@ class Supplier {
         this._supplier = data.supplier
         this._email = data.email
         this._contact = data.contact
+        this._telephone = data.telephone
         this._CNPJ = data.CNPJ
         this._address = data.address
         this._zipCode = data.zipCode
@@ -76,6 +78,17 @@ class Supplier {
             return this.contact = null
         }
         return this.contact = value
+    }
+
+    get _telephone() {
+        return this.telephone  
+    }
+
+    set _telephone(value) {
+        if(value == undefined || value == '') {
+            return this.telephone = null
+        }
+        return this.telephone = value
     }
 
     get _CNPJ() {
@@ -184,6 +197,7 @@ class Supplier {
         alterSupplier.supplier = data.supplier
         alterSupplier.email = data.email
         alterSupplier.contact = data.contact
+        alterSupplier.telephone = data.telephone
         alterSupplier.CNPJ = existEquipmentSupplier ? alterSupplier.dataValues['CNPJ'] : data['CNPJ']
         alterSupplier.address = data.address
         alterSupplier.zipCode = data.zipCode
