@@ -1,9 +1,13 @@
 Locasys é um backend para controle de equipamento alugados, contendo cadastros dos equipamentos, usuário, perfil, setor, empresa e fornecedor.
 
 Antes de Rodar, crie o usuário adminstrador do sistema, dá seguinte forma:
+
 cd config
+
 touch user.json
+
 .nano user.json
+
 dentro dele coloque os campos  abaixo, Exemplo:
 
  {
