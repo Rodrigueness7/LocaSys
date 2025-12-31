@@ -35,6 +35,7 @@ dentro dele coloque os campos  abaixo, Exemplo:
   "createdAt": "Data atual no formato: YYYY-MM-DD",  
   
   "updatedAt": "Data atual no formato: YYYY-MM-DD"
+  
 }
 
 
