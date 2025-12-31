@@ -20,6 +20,10 @@ const tbSupplier = db.define('Suppliers', {
     type: Sequelize.STRING(45),
     allowNull: true
   },
+  telephone: {
+    type: Sequelize.STRING(11),
+    allowNull: true
+  },
   CNPJ: {
     type: Sequelize.STRING(45),
     allowNull: false
