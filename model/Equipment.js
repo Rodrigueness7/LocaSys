@@ -241,10 +241,26 @@ class Equipment {
         alterEquipment.idSupplier = data.idSupplier
         alterEquipment.entryDate = data.entryDate
         alterEquipment.returnDate = data.returnDate
+        alterEquipment.deletedAt = data.deletedAt
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
         res.status(200).json({ successMessage: 'Updated successfully' })
+    }
+
+    static async transfer(req, data, res) {
+        const transferEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+       
+        transferEquipment.idBranch = data.idBranch,
+        transferEquipment.idUser = data.idUser,
+        transferEquipment.idSector = data.idSector,
+        transferEquipment.idTypeEquipment = data.idTypeEquipment,
+        transferEquipment.idSupplier = data.idSupplier
+
+        await transferEquipment.save()
+        AddLog.CreateLog(transferEquipment.dataValues.codProd, 'Transferido', 'Transferido Código', req)
+        res.status(200).json({successMessage: 'Updated successfully'})
+
     }
 
     static async return(req, data, res) {
