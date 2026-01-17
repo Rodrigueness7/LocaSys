@@ -13,6 +13,7 @@ routeEquipment.post('/exportFilePdf', verifyToken ,controller.exportPdf)
 routeEquipment.put('/updateEquipment/:idEquipment', verifyToken, checkAcess('equipment'), controller.update)
 routeEquipment.put('/transferEquipment/:idEquipment', verifyToken, checkAcess('equipment'), controller.transfer)
 routeEquipment.put('/returnEquipment/:idEquipment', verifyToken, checkAcess('equipment'), controller.returned)
+routeEquipment.put('/deleteEquipment/:idEquipment', verifyToken, checkAcess('equipment'), controller.remover)
 
 
 module.exports = routeEquipment

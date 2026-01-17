@@ -23,6 +23,7 @@ class Equipment {
     idSupplier
     entryDate
     returnDate
+    deletedAt
 
     constructor(data, req) {
         this._idEquipment = data.idEquipment
@@ -36,6 +37,7 @@ class Equipment {
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
         this._returnDate = data.returnDate
+        this._deletedAt = data.deletedAt
     }
 
     get _idEquipment() {
@@ -159,6 +161,17 @@ class Equipment {
         return this.returnDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
+    get _deletedAt() {
+        return this.deletedAt
+    }
+
+   set _deletedAt(value) {
+    if(value == undefined || value == '') {
+        return this.deletedAt = null
+    }
+    return this.deletedAt = value
+   }
+
     async insert(data, res, req) {
         const existEquipment = await tbEquipment.findOne({ where: { codProd: data.codProd}})
 
@@ -174,7 +187,7 @@ class Equipment {
 
     static async selectAll(res, req) {
         const result = (await tbEquipment.findAll({
-            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'],
+            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
         })).map(
@@ -191,7 +204,7 @@ class Equipment {
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
+        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
             idEquipment => {
                 res.status(200).json(idEquipment.dataValues)
             }
@@ -211,7 +224,7 @@ class Equipment {
                 returnDate: null, [Op.and]: [{ codProd: { [Op.like]: codProd } }, { equipment: { [Op.like]: equipment } },
                 { idTypeEquipment: { [Op.like]: idTypeEquipment } }, { idUser: { [Op.like]: idUser } }, { idBranch: { [Op.like]: idBranch } }]
             },
-            attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate'],
+            attributes: ['idEquipment', 'codProd', 'equipment', 'value', 'entryDate', 'returnDate', 'deletedAt'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
             { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, 
             {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
@@ -271,6 +284,17 @@ class Equipment {
         await dataEquipment.save()
         AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
         res.status(200).json({ successMessage: 'Returned successfully' })
+    }
+
+    static async remover(req, data, res) {
+        let alterDeletedAt = await tbEquipment.findByPk(req.params.idEquipment)
+
+        alterDeletedAt.deletedAt = data.deletedAt
+
+        await alterDeletedAt.save()
+        AddLog.CreateLog(alterDeletedAt.dataValues.codProd, 'Deletado', 'Deletado Código', req)
+        res.status(200).json({successMessage: 'Deleted successfully'})
+
     }
 
     static async exportlXlsx(req, res) {

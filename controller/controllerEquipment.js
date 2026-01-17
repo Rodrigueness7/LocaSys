@@ -58,6 +58,14 @@ const returned = async (req, res) => {
     }
 }
 
+const remover = async (req, res) => {
+    try {
+        await Equipment.remover(req, req.body, res)
+    } catch (error) {
+        res.status(400).json({errorMessage: error.message})
+    }
+}
+
 const exportXlsx = async (req, res) => {
     try {
         let address = req.body.address + '\\equipment.xlsx'
@@ -76,4 +84,4 @@ const exportPdf = async (req, res) => {
     }
 }
 
-module.exports = { add, findAll, find, findId, update, transfer, returned, exportXlsx, exportPdf }
+module.exports = { add, findAll, find, findId, update, transfer, returned, exportXlsx, exportPdf, remover}
