@@ -73,6 +73,10 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.DATE,
     allowNull: true
   },
+  deletedAt: {
+    type: Sequelize.DATE,
+    allowNull: true
+  }
 
 })
 

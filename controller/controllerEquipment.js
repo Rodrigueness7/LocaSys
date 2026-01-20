@@ -42,11 +42,27 @@ const update = async (req, res) => {
     }
 }
 
+const transfer = async (req, res) => {
+    try {
+        Equipment.transfer(req, req.body, res)
+    } catch (error) {
+        res.status(400).json({ errorMessage: error.message })
+    }
+}
+
 const returned = async (req, res) => {
     try {
         await Equipment.return(req, req.body.returnDate, res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
+    }
+}
+
+const remover = async (req, res) => {
+    try {
+        await Equipment.remover(req, req.body, res)
+    } catch (error) {
+        res.status(400).json({errorMessage: error.message})
     }
 }
 
@@ -68,4 +84,4 @@ const exportPdf = async (req, res) => {
     }
 }
 
-module.exports = { add, findAll, find, findId, update, returned, exportXlsx, exportPdf }
+module.exports = { add, findAll, find, findId, update, transfer, returned, exportXlsx, exportPdf, remover}
