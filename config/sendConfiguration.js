@@ -4,11 +4,13 @@ const tbProfile = require('../constant/tbProfile')
 const tbPermission = require('../constant/tbPermission')
 const tbProfile_permission = require('../constant/tbProfile_permission')
 const tbUser = require('../constant/tbUser')
+const tbSituation = require('../constant/tbSituation')
 const branch = require('../config/branch.json')
 const sector = require('../config/sector.json')
 const profile = require('../config/profile.json')
 const permission = require('../config/permission.json')
 const user = require('../config/user.json')
+const situation = require('../config/situation.json')
 const { profile_permission } = require('../config/profile_permission')
 const sequelize = require('../database/db')
 const { dbMigrate } = require('../config/dbMigrate')
@@ -46,6 +48,10 @@ async function sendConfiguration() {
     if ((await tbUser.findAll()).map(values => values.dataValues).length <= 0) {
        user.password = await cryptPassword(user.password)
       await tbUser.create(user)
+    }
+
+    if ((await tbSituation.findAll()).map(values => values.dataValues).length <= 0) {
+      situation.map(values => tbSituation.create(values))
     }
 
     }, 5000)
