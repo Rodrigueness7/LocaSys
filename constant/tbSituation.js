@@ -15,3 +15,7 @@ const tbSituation = db.define('Situations', {
 })
 
 module.exports = tbSituation;
+
+
+    
+
