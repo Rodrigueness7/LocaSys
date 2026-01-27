@@ -5,6 +5,7 @@ const tbBranch = require('./tbBranch')
 const tbSector = require('./tbSector')
 const tbSupplier = require('./tbSupplier')
 const tbTypeEquipment = require('./tbTypeEquipment')
+const tbSituation = require('./tbSituation')
 
 const tbEquipment = db.define('Equipments', {
   idEquipment: {
@@ -69,6 +70,18 @@ const tbEquipment = db.define('Equipments', {
     type: Sequelize.DATE,
     allowNull: false
   },
+  idSituation: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'Situations',
+      key: 'idSituation'
+    }
+  },
+  dtSituation: {
+    type: Sequelize.DATE,
+    allowNull: true
+  },
   returnDate: {
     type: Sequelize.DATE,
     allowNull: true
@@ -85,5 +98,6 @@ tbEquipment.belongsTo(tbBranch, { foreignKey: 'idBranch' })
 tbEquipment.belongsTo(tbSector, { foreignKey: 'idSector' })
 tbEquipment.belongsTo(tbSupplier, { foreignKey: 'idSupplier' })
 tbEquipment.belongsTo(tbTypeEquipment, { foreignKey: 'idTypeEquipment' })
+tbEquipment.belongsTo(tbSituation, { foreignKey: 'idSituation' })
 
 module.exports = tbEquipment;

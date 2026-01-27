@@ -9,6 +9,7 @@ const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
 const tbTypeEquipment = require('../constant/tbTypeEquipment')
+const tbSituation = require('../constant/tbSituation')
 
 
 class Equipment {
@@ -22,6 +23,8 @@ class Equipment {
     idSector
     idSupplier
     entryDate
+    idSituation
+    dtSituation
     returnDate
     deletedAt
 
@@ -36,6 +39,8 @@ class Equipment {
         this._idSector = data.idSector
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
+        this._idSituation = data.idSituation
+        this._dtSituation = data.dtSituation
         this._returnDate = data.returnDate
         this._deletedAt = data.deletedAt
     }
@@ -150,6 +155,28 @@ class Equipment {
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
     }
 
+    get _idSituation() {
+        return this.idSituation
+    }
+
+    set _idSituation(value) {
+        if (value == undefined || value == '') {
+            return this.idSituation = null
+        }
+        return this.idSituation = value
+    }
+
+    get _dtSituation() {
+        return this.dtSituation
+    }
+
+    set _dtSituation(value) {
+        if (value == undefined || value == '') {
+            return this.dtSituation = null
+        }   
+        return this.dtSituation = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
+    }
+
     get _returnDate() {
         return this.returnDate
     }
@@ -187,9 +214,11 @@ class Equipment {
 
     static async selectAll(res, req) {
         const result = (await tbEquipment.findAll({
-            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'],
+            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'dtSituation', 'returnDate', 'deletedAt'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
-            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, 
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']},
+            { model: tbSituation, attributes: ['idSituation', 'situation'] }]
         })).map(
             equipment => equipment.dataValues
         )
@@ -204,7 +233,13 @@ class Equipment {
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
+        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate','dtSituation','returnDate', 'deletedAt'], 
+            include: [{ model: tbUser, attributes: ['idUser', 'username']}, 
+            {model: tbBranch, attributes: ['idBranch', 'branch']}, 
+            {model: tbSector, attributes: ['idSector', 'sector']}, 
+            {model: tbSupplier, attributes: ['idSupplier', 'supplier']}, 
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']},
+            {model: tbSituation, attributes: ['idSituation', 'situation']}]}).then(
             idEquipment => {
                 res.status(200).json(idEquipment.dataValues)
             }
@@ -253,6 +288,8 @@ class Equipment {
         alterEquipment.idSector = data.idSector
         alterEquipment.idSupplier = data.idSupplier
         alterEquipment.entryDate = data.entryDate
+        alterEquipment.idSituation = data.idSituation
+        alterEquipment.dtSituation = data.dtSituation
         alterEquipment.returnDate = data.returnDate
         alterEquipment.deletedAt = data.deletedAt
 

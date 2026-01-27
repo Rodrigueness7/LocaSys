@@ -6,7 +6,7 @@
     },
     {
         "idPermission": 2,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "equipment"
     },
     {
@@ -31,7 +31,7 @@
     },
     {
         "idPermission": 7,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "branch"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
         "idPermission": 11,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "user"
     },
     {
@@ -76,7 +76,7 @@
     },
     {
         "idPermission": 16,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "profile"
     },
     {
@@ -96,7 +96,7 @@
     },
     {
         "idPermission": 20,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "sector"
     },
     {
@@ -116,7 +116,7 @@
     },
     {
         "idPermission": 24,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "contact"
     },
     {
@@ -136,7 +136,7 @@
     },
     {
         "idPermission": 28,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "equipmentHistory"
     },
     {
@@ -156,7 +156,7 @@
     },
     {
         "idPermission": 32,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "equipmentRental"
     },
     {
@@ -181,7 +181,7 @@
     },
     {
         "idPermission": 37,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "permission"
     },
     {
@@ -201,7 +201,7 @@
     },
     {
         "idPermission": 41,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "profile_permission"
     },
     {
@@ -221,7 +221,7 @@
     },
     {
         "idPermission": 45,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "supplier"
     },
     {
@@ -241,7 +241,7 @@
     },
     {
         "idPermission": 49,
-        "permission": "Gravar",
+        "permission": "Adicionar",
         "section": "typeEquipment"
     },
     {
