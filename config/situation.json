@@ -1,24 +1,28 @@
 [
     {
         "idSituation": 1,
-        "situation": "Ativo" 
+        "situation": "Ativo",
+        "createdAt": "2024-06-15T12:00:00Z",
+        "updatedAt": "2024-06-15T12:00:00Z"
         
     },
     {
         "idSituation": 2,
-        "situation": "Inativo"
+        "situation": "Inativo",
+        "createdAt": "2024-06-15T12:00:00Z",
+        "updatedAt": "2024-06-15T12:00:00Z"
     },
     {
         "idSituation": 3,
-        "situation": "Pendente"
+        "situation": "Pendente",
+        "createdAt": "2024-06-15T12:00:00Z",
+        "updatedAt": "2024-06-15T12:00:00Z"
     },
     {
         "idSituation": 4,
-        "situation": "Reserva"
-    },
-    {
-        "idSituation": 5,
-        "situation": "Devolvido"
+        "situation": "Reserva",
+        "createdAt": "2024-06-15T12:00:00Z",
+        "updatedAt": "2024-06-15T12:00:00Z"
     }
 
 ]

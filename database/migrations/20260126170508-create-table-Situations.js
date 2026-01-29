@@ -13,6 +13,14 @@ module.exports = {
       situation: {
         type: Sequelize.STRING(80),
         allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     }); 
   },
