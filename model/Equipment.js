@@ -40,7 +40,7 @@ class Equipment {
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
         this._idSituation = data.idSituation
-        this._dtSituation = data.dtSituation
+        this.dtSituation = new Date().toISOString()
         this._returnDate = data.returnDate
         this._deletedAt = data.deletedAt
     }
@@ -95,7 +95,7 @@ class Equipment {
 
     set _idUser(value) {
         if (value == undefined || value == '') {
-            throw new Error('Invalid User id')
+            return this.idUser = null
         }
         return this.idUser = value
     }
@@ -128,7 +128,7 @@ class Equipment {
 
     set _idSector(value) {
         if (value == undefined || value == '') {
-            throw new Error('Invalid Sector id ')
+            return this.idSector = null
         }
         return this.idSector = value
     }
@@ -166,17 +166,6 @@ class Equipment {
         return this.idSituation = value
     }
 
-    get _dtSituation() {
-        return this.dtSituation
-    }
-
-    set _dtSituation(value) {
-        if (value == undefined || value == '') {
-            return this.dtSituation = null
-        }   
-        return this.dtSituation = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
-    }
-
     get _returnDate() {
         return this.returnDate
     }
@@ -207,6 +196,7 @@ class Equipment {
                 throw new Error('Exist already equipment')
             } 
         }
+        
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
         res.status(201).json({ successMessage: 'Add successfully' })
@@ -291,7 +281,9 @@ class Equipment {
         alterEquipment.idSituation = data.idSituation
         alterEquipment.dtSituation = data.dtSituation
         alterEquipment.returnDate = data.returnDate
-        alterEquipment.deletedAt = data.deletedAt
+        alterEquipment.deletedAt = data.deletedAt,
+        alterEquipment.idSituation = data.idSituation,
+        alterEquipment.dtSituation = new Date().toISOString()
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)

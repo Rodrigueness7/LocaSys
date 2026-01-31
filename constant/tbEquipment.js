@@ -32,7 +32,7 @@ const tbEquipment = db.define('Equipments', {
   },
   idUser: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'Users',
       key: 'idUser'
@@ -52,7 +52,7 @@ const tbEquipment = db.define('Equipments', {
   },
   idSector: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'Sectors',
       key: 'idSector'
