@@ -69,8 +69,8 @@ class EquipmentHistory {
     }
 
     set _idUser(value) {
-        if (value == undefined) {
-            throw new Error('Invalid User id')
+        if (value == undefined || value == '') {
+            return this.idUser = null
         }
         return this.idUser = value
     }
@@ -80,8 +80,8 @@ class EquipmentHistory {
     }
 
     set _idSector(value) {
-        if (value == undefined) {
-            throw new Error('Invalid Sector id')
+        if (value == undefined || value == '') {
+            return this.idSector = null
         }
         return this.idSector = value
     }

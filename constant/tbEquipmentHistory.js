@@ -26,7 +26,7 @@ const equipmentHistory = db.define('equipmentHistorys', {
       },
       idUser: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Users',
           key: 'idUser'
@@ -34,7 +34,7 @@ const equipmentHistory = db.define('equipmentHistorys', {
       },
       idSector: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Sectors',
           key: 'idSector'

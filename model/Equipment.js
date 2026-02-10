@@ -272,10 +272,10 @@ class Equipment {
         alterEquipment.codProd = data.codProd
         alterEquipment.equipment = data.equipment
         alterEquipment.idTypeEquipment = data.idTypeEquipment
-        alterEquipment.idUser = data.idUser
+        alterEquipment.idUser = data.idUser ===  '' ? null : data.idUser
         alterEquipment.value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? alterEquipment.dataValues.value : data.value
         alterEquipment.idBranch = data.idBranch
-        alterEquipment.idSector = data.idSector
+        alterEquipment.idSector = data.idSector === '' ? null : data.idSector
         alterEquipment.idSupplier = data.idSupplier
         alterEquipment.entryDate = data.entryDate
         alterEquipment.idSituation = data.idSituation
@@ -289,7 +289,7 @@ class Equipment {
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
         res.status(200).json({ successMessage: 'Updated successfully' })
     }
-
+    
     static async transfer(req, data, res) {
         const transferEquipment = await tbEquipment.findByPk(req.params.idEquipment)
        
@@ -304,15 +304,30 @@ class Equipment {
         res.status(200).json({successMessage: 'Updated successfully'})
 
     }
-
+    
     static async return(req, data, res) {
-        let dataEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+        const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
-        dataEquipment.returnDate = data == null ? null : new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
-
-        await dataEquipment.save()
-        AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
+        alterEquipment.returnDate = data.returnDate == null ? null : new Date(data.returnDate.split('/').reverse().join('-')).toISOString().split('T')[0]
+        alterEquipment.idSituation = data.idSituation
+        alterEquipment.dtSituation = new Date().toISOString()
+ 
+        await alterEquipment.save()
+        AddLog.CreateLog(alterEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
         res.status(200).json({ successMessage: 'Returned successfully' })
+    }
+
+    static async reactive(req, data, res) {
+        const reactiveEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+
+        reactiveEquipment.returnDate = null
+        reactiveEquipment.entryDate = new Date(data.entryDate.split('/').reverse().join('-')).toISOString().split('T')[0]
+        reactiveEquipment.idSituation = data.idSituation
+        reactiveEquipment.dtSituation = new Date().toISOString()
+    
+        await reactiveEquipment.save()
+        AddLog.CreateLog(reactiveEquipment.dataValues.codProd, 'Reativado', 'Reativado Código', req)
+        res.status(200).json({ successMessage: 'Reactivated successfully' })
     }
 
     static async remover(req, data, res) {
