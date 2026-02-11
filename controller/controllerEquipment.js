@@ -52,10 +52,18 @@ const transfer = async (req, res) => {
 
 const returned = async (req, res) => {
     try {
-        await Equipment.return(req, req.body.returnDate, res)
+        await Equipment.return(req, req.body, res)
     } catch (error) {
         res.status(400).json({ errorMessage: error.message })
     }
+}
+
+const reactive = async (req, res) => {
+    try {
+        await Equipment.reactive(req, req.body, res)        
+    } catch (error) {
+        res.status(400).json({ errorMessage: error.message })
+    }   
 }
 
 const remover = async (req, res) => {
@@ -84,4 +92,4 @@ const exportPdf = async (req, res) => {
     }
 }
 
-module.exports = { add, findAll, find, findId, update, transfer, returned, exportXlsx, exportPdf, remover}
+module.exports = { add, findAll, find, findId, update, transfer, returned, reactive, exportXlsx, exportPdf, remover}

@@ -9,6 +9,7 @@ const { equipmentReport } = require('../content/export/reports/equipmentReport')
 const AddLog = require('../constant/addLog')
 const { DecryptToken } = require('../constant/decodeToken')
 const tbTypeEquipment = require('../constant/tbTypeEquipment')
+const tbSituation = require('../constant/tbSituation')
 
 
 class Equipment {
@@ -22,6 +23,8 @@ class Equipment {
     idSector
     idSupplier
     entryDate
+    idSituation
+    dtSituation
     returnDate
     deletedAt
 
@@ -36,6 +39,8 @@ class Equipment {
         this._idSector = data.idSector
         this._idSupplier = data.idSupplier
         this._entryDate = data.entryDate
+        this._idSituation = data.idSituation
+        this.dtSituation = new Date().toISOString()
         this._returnDate = data.returnDate
         this._deletedAt = data.deletedAt
     }
@@ -90,7 +95,7 @@ class Equipment {
 
     set _idUser(value) {
         if (value == undefined || value == '') {
-            throw new Error('Invalid User id')
+            return this.idUser = null
         }
         return this.idUser = value
     }
@@ -123,7 +128,7 @@ class Equipment {
 
     set _idSector(value) {
         if (value == undefined || value == '') {
-            throw new Error('Invalid Sector id ')
+            return this.idSector = null
         }
         return this.idSector = value
     }
@@ -148,6 +153,17 @@ class Equipment {
             throw new Error('Invalid entry Date')
         }
         return this.entryDate = new Date(value.split('/').reverse().join('-')).toISOString().split('T')[0]
+    }
+
+    get _idSituation() {
+        return this.idSituation
+    }
+
+    set _idSituation(value) {
+        if (value == undefined || value == '') {
+            return this.idSituation = null
+        }
+        return this.idSituation = value
     }
 
     get _returnDate() {
@@ -180,6 +196,7 @@ class Equipment {
                 throw new Error('Exist already equipment')
             } 
         }
+        
         await tbEquipment.create(data)
         AddLog.CreateLog(data.codProd, 'Adicionado', 'Adicionado Código', req)
         res.status(201).json({ successMessage: 'Add successfully' })
@@ -187,9 +204,11 @@ class Equipment {
 
     static async selectAll(res, req) {
         const result = (await tbEquipment.findAll({
-            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'],
+            attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'dtSituation', 'returnDate', 'deletedAt'],
             include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] },
-            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]
+            { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier'] }, 
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']},
+            { model: tbSituation, attributes: ['idSituation', 'situation'] }]
         })).map(
             equipment => equipment.dataValues
         )
@@ -204,7 +223,13 @@ class Equipment {
     }
 
     static async selectId(req, res) {
-        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate', 'returnDate', 'deletedAt'], include: [{ model: tbUser, attributes: ['idUser', 'username'] }, { model: tbBranch, attributes: ['idBranch', 'branch'] }, { model: tbSector, attributes: ['idSector', 'sector'] }, { model: tbSupplier, attributes: ['idSupplier', 'supplier']}, {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']}]}).then(
+        await tbEquipment.findByPk(req.params.idEquipment, { attributes: ['idEquipment', 'codProd', 'equipment','value', 'entryDate','dtSituation','returnDate', 'deletedAt'], 
+            include: [{ model: tbUser, attributes: ['idUser', 'username']}, 
+            {model: tbBranch, attributes: ['idBranch', 'branch']}, 
+            {model: tbSector, attributes: ['idSector', 'sector']}, 
+            {model: tbSupplier, attributes: ['idSupplier', 'supplier']}, 
+            {model: tbTypeEquipment, attributes: ['idTypeEquipment', 'typeEquipment']},
+            {model: tbSituation, attributes: ['idSituation', 'situation']}]}).then(
             idEquipment => {
                 res.status(200).json(idEquipment.dataValues)
             }
@@ -247,20 +272,24 @@ class Equipment {
         alterEquipment.codProd = data.codProd
         alterEquipment.equipment = data.equipment
         alterEquipment.idTypeEquipment = data.idTypeEquipment
-        alterEquipment.idUser = data.idUser
+        alterEquipment.idUser = data.idUser ===  '' ? null : data.idUser
         alterEquipment.value = (DecryptToken(req).permission.find(itens => itens == 5) === undefined) ? alterEquipment.dataValues.value : data.value
         alterEquipment.idBranch = data.idBranch
-        alterEquipment.idSector = data.idSector
+        alterEquipment.idSector = data.idSector === '' ? null : data.idSector
         alterEquipment.idSupplier = data.idSupplier
         alterEquipment.entryDate = data.entryDate
+        alterEquipment.idSituation = data.idSituation
+        alterEquipment.dtSituation = data.dtSituation
         alterEquipment.returnDate = data.returnDate
-        alterEquipment.deletedAt = data.deletedAt
+        alterEquipment.deletedAt = data.deletedAt,
+        alterEquipment.idSituation = data.idSituation,
+        alterEquipment.dtSituation = new Date().toISOString()
 
         await alterEquipment.save()
         AddLog.CreateLog(data.codProd, 'Atualizado', 'Atualizado Código', req)
         res.status(200).json({ successMessage: 'Updated successfully' })
     }
-
+    
     static async transfer(req, data, res) {
         const transferEquipment = await tbEquipment.findByPk(req.params.idEquipment)
        
@@ -275,15 +304,30 @@ class Equipment {
         res.status(200).json({successMessage: 'Updated successfully'})
 
     }
-
+    
     static async return(req, data, res) {
-        let dataEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+        const alterEquipment = await tbEquipment.findByPk(req.params.idEquipment)
 
-        dataEquipment.returnDate = data == null ? null : new Date(data.split('/').reverse().join('-')).toISOString().split('T')[0]
-
-        await dataEquipment.save()
-        AddLog.CreateLog(dataEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
+        alterEquipment.returnDate = data.returnDate == null ? null : new Date(data.returnDate.split('/').reverse().join('-')).toISOString().split('T')[0]
+        alterEquipment.idSituation = data.idSituation
+        alterEquipment.dtSituation = new Date().toISOString()
+ 
+        await alterEquipment.save()
+        AddLog.CreateLog(alterEquipment.dataValues.codProd, 'Devolvido', 'Devolvido Código', req)
         res.status(200).json({ successMessage: 'Returned successfully' })
+    }
+
+    static async reactive(req, data, res) {
+        const reactiveEquipment = await tbEquipment.findByPk(req.params.idEquipment)
+
+        reactiveEquipment.returnDate = null
+        reactiveEquipment.entryDate = new Date(data.entryDate.split('/').reverse().join('-')).toISOString().split('T')[0]
+        reactiveEquipment.idSituation = data.idSituation
+        reactiveEquipment.dtSituation = new Date().toISOString()
+    
+        await reactiveEquipment.save()
+        AddLog.CreateLog(reactiveEquipment.dataValues.codProd, 'Reativado', 'Reativado Código', req)
+        res.status(200).json({ successMessage: 'Reactivated successfully' })
     }
 
     static async remover(req, data, res) {
