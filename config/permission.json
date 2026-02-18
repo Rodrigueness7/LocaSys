@@ -253,5 +253,10 @@
         "idPermission": 51,
         "permission": "Deletar",
         "section": "typeEquipment"
+    },
+    {
+        "idPermission": 52,
+        "permission": "Ler",
+        "section": "situation"
     }   
 ]
