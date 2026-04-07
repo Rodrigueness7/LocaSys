@@ -297,7 +297,6 @@ class Equipment {
         transferEquipment.idUser = data.idUser,
         transferEquipment.idSector = data.idSector,
         transferEquipment.idTypeEquipment = data.idTypeEquipment,
-        transferEquipment.idSupplier = data.idSupplier,
         transferEquipment.idSituation = data.idSituation
 
         await transferEquipment.save()
