@@ -21,12 +21,12 @@ class Situation {
 
    static async select(res) {
         const result = (await tbSituation.findAll({attributes: ['idSituation', 'situation']})).map(situation => situation.dataValues)
-        res.status(200).json({sucessMessage: result})
+        res.status(200).json(result)
     }
 
     static async find(id, res) {
         const result = await tbSituation.findOne({ where: { idSituation: id } })    
-        res.status(200).json({sucessMessage: result})
+        res.status(200).json(result)
     }
 
 

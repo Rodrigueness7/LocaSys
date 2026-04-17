@@ -212,7 +212,7 @@ class User {
     static async selectId(req, res) {
         await tbUser.findByPk(req.params.id, {
             attributes: ['idUser', 'username', 'firstName', 'lastName',
-                'cpf', 'email', 'password'], include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }]
+                'cpf', 'email', 'password'], include: [{ model: tbSector, attributes: ['idSector','sector'] }, { model: tbProfile, attributes: ['profile'] }]
         }).then(
             idUser => {
                 if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
@@ -228,7 +228,7 @@ class User {
         const result = (await tbUser.findAll({
             attributes: ['idUser', 'username', 'firstName', 'lastName',
                 'cpf', 'email', 'password', 'deletionDate'],
-            include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }], where: { deletionDate: null }
+            include: [{ model: tbSector, attributes: ['idSector','sector'] }, { model: tbProfile, attributes: ['idProfile','profile'] }], where: { deletionDate: null }
         })).map(
             allUser => allUser.dataValues
         )
