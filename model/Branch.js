@@ -156,7 +156,7 @@ class Branch {
         alterBranch.uniqueIdentifier = data.uniqueIdentifier
 
         await alterBranch.save()
-        AddLog.CreateLog(data.branch, 'Atualizando', 'Atualizando Filial', req)
+        AddLog.CreateLog(data.branch, 'Atualizado', 'Atualizado Filial', req)
 
         res.status(200).json({ successMessage: 'Update successfully' })
 
