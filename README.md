@@ -7,6 +7,7 @@ Esse sistema foi criado para controlar equipamento alugados, facilitando a busca
 - Express.js
 - MariaDB
 - JWT
+- Sequelize
 
 ## Configurações
 Antes de executar o projeto, crie os seguintes arquivos:
