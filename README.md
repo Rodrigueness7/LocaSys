@@ -1,56 +1,83 @@
-Locasys é um backend para controle de equipamento alugados, contendo cadastros dos equipamentos, usuário, perfil, setor, empresa e fornecedor.
+# Locasys
 
-Antes de Rodar, crie o usuário adminstrador do sistema, dá seguinte forma:
+Esse sistema foi criado para controlar equipamento alugados, facilitando a buscar do equipamentos, a localização e com quem se encontra.
 
-cd config
+## Tecnologias
+- Node.js
+- Express.js
+- MariaDB
+- JWT
 
-touch user.json
+## Configurações
+Antes de executar o projeto, crie os seguintes arquivos:
 
-.nano user.json
+### Arquivos necessários
 
-dentro dele coloque os campos  abaixo, Exemplo:
+Crie os seguintes arquivos antes de iniciar o projeto:
 
- {
- 
-  "idUser": 0,
-  
-  "firstName": " Nome administrador",
-  
-  "lastName": "Sobrenome do adminstrador", 
+#### `.env`
 
-  "cpf": CPF do adminstrador, 
-  
-  "username": "Usuário do administrador ",
-  
-  "password": "Senha do Adminstrador",
-  
-  "email": Email do adminstrador,
-  
-  "idSector": 1, é padrão 
-  
-  "idProfile": 1, é padrão
-  
-  "deletionDate": null, é padrão
-  
-  "createdAt": "Data atual no formato: YYYY-MM-DD",  
-  
-  "updatedAt": "Data atual no formato: YYYY-MM-DD"
-  
+Arquivo na raiz do projetos: 
+
+```env
+PORT = port_seu_server
+secret_key = sua_secret
+db_host = 127.0.0.1
+db_name = seu_database
+db_username = seu_username
+db_password = sua_password_database
+db_dialect = seu_dialect
+db_port = port_seu_database
+```
+
+Ao iniciar o sistema pela primeira vez, um usuário administrador e criado automaticamente usando os dados do arquivo:
+
+#### `config/user.json`
+
+```json
+{
+    "idUser": 1,
+    "firstName": primeiro_nome_admim,
+    "lastName": segundo_nome_admin,
+    "cpf": cpf_admin,
+    "username": username_admin,
+    "password": password_admin,
+    "email": email_admin,
+    "idSector": 1, - PADRÂO
+    "idProfile": 1, - PADRÂO
+    "deletionDate": null,
+    "creationDate": "2023-11-01T00:00:00",
+    "updateDate": "2023-11-01T00:00:00"  
 }
+```
+
+## Instalação
+
+```bash
+git clone https://github.com/Rodrigueness7/LocaSys.git
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Inicie a aplicação: 
+
+```bash
+node index
+```
+
+Ao executar o comando pela primeira vez, o sistem perguntará se deseja criar as tabelas do banco de dados:
+
+```bash
+Runs as tables: S/Y
+```
+Digite: 
+
+- `S` para criar as tabelas
+- `Y` caso esteja usando teclado/layout em inglês
 
 
 
-Depois de ter feito isso, vá para raiz do repositório e digite seguinte comando:
-
-node index, assim que roda o comando irá aparecer mensagem abaixo:
-
-Server is running in port:3001
-
-Runs as tables: S/Y, insira uma dessas teclas e aperte enter, pois irá criar o banco com as tabelas
-
-Observação: aperte as teclas só quando for a implantação do sistema, pois banco e as tabelas já estarão criadas.
-
-
-
-
- 
