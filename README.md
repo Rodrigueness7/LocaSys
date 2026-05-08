@@ -2,13 +2,18 @@
 
 Esse sistema foi criado para controlar equipamento alugados, facilitando a buscar do equipamentos, a localização e com quem se encontra.
 
+## Front-end do projeto
+
+A interface web deste sistema está disponível no repostório abaixo:
+
+- Front-end-Locasys: https://github.com/Rodrigueness7/Front-end-LocaSys
+
 ## Tecnologias
 - Node.js.
 - Express.js.
 - MariaDB.
 - JWT.
 - Sequelize.
-
 
 ## Funcionalidade
 
