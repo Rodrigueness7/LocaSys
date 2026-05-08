@@ -3,12 +3,66 @@
 Esse sistema foi criado para controlar equipamento alugados, facilitando a buscar do equipamentos, a localização e com quem se encontra.
 
 ## Tecnologias
-- Node.js
-- Express.js
-- MariaDB
-- JWT
-- Sequelize
+- Node.js.
+- Express.js.
+- MariaDB.
+- JWT.
+- Sequelize.
 
+
+## Funcionalidade
+
+### Segurança
+- Autenticação JWT.
+- Rotas protegidas.
+  
+### Filial
+- Cadastro de filiais.
+- Atualização de filiais.
+- Exclusão de filiais.
+- Relatório de filiais.
+
+### Setor
+- Cadastro de setores.
+- Atualização de setores.
+- Exclusão de setores.
+- Relatório de setores.
+
+### Usuário
+- Cadastro de usuários.
+- Atualização de usuários.
+- Exclusão de usuários.
+- Relatório de usuários.
+
+### Equipamentos
+- Cadastro de equipamentos.
+- Atualização de equipamentos.
+- Exclusão de equipamentos.
+- Relatório de equipamentos.
+
+### Tipo de Equipamento
+- Cadastro de tipo de equipamento
+- Atualização de tipo de equipamento.
+- Exclusão de tipo de equipamento.
+
+### Perfil
+- Cadastro de perfil.
+- Atualização de perfil.
+- Exclusão de perfil.
+
+### Fornecedor
+- Cadastro de fornecedor.
+- Atualização de fornecedor.
+- Exclusão de fornecedor.
+- Relatório de fornecedor.
+
+### Logs
+- Logs de movimentação do usuários.
+
+### Histórico de Equipamentos.
+- Histórico de equipamento.
+  
+  
 ## Configurações
 Antes de executar o projeto, crie os seguintes arquivos:
 
