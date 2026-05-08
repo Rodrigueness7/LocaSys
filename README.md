@@ -61,6 +61,17 @@ Esse sistema foi criado para controlar equipamento alugados, facilitando a busca
 
 ### Histórico de Equipamentos.
 - Histórico de equipamento.
+
+### Arquivo
+- Importa arquivo xlsx.
+- Deleta arquivo xlsx.
+
+### Relatórios Comparativo de Equipamentos
+- Comparativo de equipamentos.
+- Valores de equipamentos iguais.
+- Divergência de equipamentos.
+- Divergência de equipamentos local.
+- Divergência de equipamentos alugados.
   
   
 ## Configurações
