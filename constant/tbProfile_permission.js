@@ -35,4 +35,5 @@ const tbProfile_permission = db.define('Profile_permissions', {
 tbProfile_permission.belongsTo(tbProfile, { foreignKey: 'idProfile' })
 tbProfile_permission.belongsTo(tbPermission, { foreignKey: 'idPermission' })
 
+
 module.exports = tbProfile_permission;

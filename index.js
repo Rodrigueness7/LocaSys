@@ -17,6 +17,7 @@ const routeUploadFile = require('./routes/routeUploadFile')
 const routeEquipmentRental = require('./routes/routeEquipmentRental')
 const routeTypeEquipment = require('./routes/routeTypeEquipment')
 const routeSituation = require('./routes/routerSituation')
+const routeUsers_sectors = require('./routes/routerUsers_sectors')
 const cors = require('cors')
 const { sendConfiguration } = require('./config/sendConfiguration')
 
@@ -37,6 +38,9 @@ app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUploa
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeEquipmentRental)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeTypeEquipment)
 app.use(express.urlencoded({extended: true}), express.json(), cors(), routeSituation)
+app.use(express.urlencoded({extended: true}), express.json(), cors(), routeUsers_sectors)
+
+
 
 app.listen(process.env.PORT, (error) => {
     try {

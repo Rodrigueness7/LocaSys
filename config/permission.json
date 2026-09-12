@@ -258,5 +258,25 @@
         "idPermission": 52,
         "permission": "Ler",
         "section": "situation"
-    }   
+    },
+    {
+        "idPermission": 53,
+        "permission": "Adicionar",
+        "section": "users_sectors"
+    },
+    {
+        "idPermission": 54,
+        "permission": "Ler",
+        "section": "users_sectors"
+    },
+    {
+        "idPermission": 55,
+        "permission": "Atualizar",
+        "section": "users_sectors"
+    },
+    {
+        "idPermission": 56,
+        "permission": "Deletar",
+        "section": "users_sectors"
+    }
 ]
