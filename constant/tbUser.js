@@ -1,6 +1,5 @@
 const db = require('../database/db')
 const {Sequelize} = require('sequelize')
-const tbSector = require('./tbSector')
 const tbProfile = require('./tbProfile')
 
 const tbUser = db.define('Users', {
@@ -34,14 +33,6 @@ const tbUser = db.define('Users', {
     type: Sequelize.STRING(50),
     allowNull: true
   },
-  idSector: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Sectors',
-      key: 'idSector'
-    }
-  },
   idProfile: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -56,7 +47,7 @@ const tbUser = db.define('Users', {
   }
 })
 
-tbUser.belongsTo(tbSector, {foreignKey: 'idSector'})
+
 tbUser.belongsTo(tbProfile, {foreignKey: 'idProfile'})
 
 module.exports = tbUser;

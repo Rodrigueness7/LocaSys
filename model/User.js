@@ -1,5 +1,4 @@
 const { Op } = require('sequelize')
-const tbSector = require('../constant/tbSector')
 const tbProfile = require('../constant/tbProfile')
 const tbEquipment = require('../constant/tbEquipment')
 const Profile_permission = require('../model/Profile_permission')
@@ -19,7 +18,6 @@ class User {
     confirmationPassword
     email
     confirmationEmail
-    idSector
     idProfile
     deletionDate
 
@@ -32,8 +30,7 @@ class User {
         this._password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.password
         this._confirmationPassword = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : data.confirmationPassword
         this._email = data.email
-        this._confirmationEmail = data.confirmationEmail
-        this._idSector = data.idSector
+        this._confirmationEmail = data.confirmationEmail 
         this._idProfile = data.idProfile
         this._deletionDate = data.deletetionDate
     }
@@ -163,17 +160,6 @@ class User {
         return this.confirmationEmail = value
     }
 
-    get _idSector() {
-        return this.idSector
-    }
-
-    set _idSector(value) {
-        if (value == undefined || value == '') {
-            throw new Error('Invalid Sector id')
-        }
-        return this.idSector = value
-    }
-
     get _idProfile() {
         return this.idProfile
     }
@@ -212,7 +198,7 @@ class User {
     static async selectId(req, res) {
         await tbUser.findByPk(req.params.id, {
             attributes: ['idUser', 'username', 'firstName', 'lastName',
-                'cpf', 'email', 'password'], include: [{ model: tbSector, attributes: ['idSector','sector'] }, { model: tbProfile, attributes: ['profile'] }]
+                'cpf', 'email', 'password'], include: [{ model: tbProfile, attributes: ['profile'] }]
         }).then(
             idUser => {
                 if (DecryptToken(req).permission.find(itens => itens == 14) === undefined) {
@@ -228,7 +214,7 @@ class User {
         const result = (await tbUser.findAll({
             attributes: ['idUser', 'username', 'firstName', 'lastName',
                 'cpf', 'email', 'password', 'deletionDate'],
-            include: [{ model: tbSector, attributes: ['idSector','sector'] }, { model: tbProfile, attributes: ['idProfile','profile'] }], where: { deletionDate: null }
+            include: [{ model: tbProfile, attributes: ['idProfile','profile'] }], where: { deletionDate: null }
         })).map(
             allUser => allUser.dataValues
         )
@@ -254,7 +240,7 @@ class User {
                 { firstName: { [Op.like]: firstName } }, { lastName: { [Op.like]: lastName } }, { email: { [Op.like]: email } }]
             },
             attributes: ['idUser', 'username', 'firstName', 'lastName', 'cpf', 'email'],
-            include: [{ model: tbSector, attributes: ['sector'] }, { model: tbProfile, attributes: ['profile'] }]
+            include: [{ model: tbProfile, attributes: ['profile']}]
         })).map(
             users => users.dataValues
         )
@@ -315,7 +301,6 @@ class User {
             alterUser.password = (DecryptToken(req).permission.find(itens => itens == 14) === undefined) ? null : password
         }
         alterUser.email = data.email
-        alterUser.idSector = existEquipmentUser ? alterUser.dataValues.idSector : data.idSector
         alterUser.idProfile = data.idProfile
 
         await alterUser.save()
