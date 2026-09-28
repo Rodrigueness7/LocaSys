@@ -19,46 +19,55 @@ const { cryptPassword } = require('../constant/crypt')
 
 async function sendConfiguration() {
   try {
-    const tables = (await sequelize.getQueryInterface().showAllTables()).length === 0
+    const tables =
+      (await sequelize.getQueryInterface().showAllTables()).length === 0
+
     if (tables) {
-      dbMigrate() 
+      await dbMigrate()
     }
 
-    setTimeout(async() => {
-      if ((await tbBranch.findAll()).map(values => values.dataValues).length <= 0) {
-      await tbBranch.create(branch)
-    }
+    setTimeout(async () => {
 
-    if ((await tbSector.findAll()).map(values => values.dataValues).length <= 0) {
-      await tbSector.create(sector)
-    }
+      if ((await tbBranch.count()) === 0) {
+        await tbBranch.create(branch)
+      }
 
-    if ((await tbProfile.findAll()).map(values => values.dataValues).length <= 0) {
-      profile.map(values => tbProfile.create(values))
-    }
+      if ((await tbSector.count()) === 0) {
+        await tbSector.create(sector)
+      }
 
-    if ((await tbPermission.findAll()).map(values => values.dataValues).length <= 0) {
-      permission.map(values => tbPermission.create(values))
-    }
+      
+      await tbProfile.bulkCreate(profile, {
+        ignoreDuplicates: true
+      })
 
-    if ((await tbProfile_permission.findAll()).map(values => values.dataValues).length <= 0) {
-      profile_permission().map(values => tbProfile_permission.create(values))
-    }
+      
+      await tbPermission.bulkCreate(permission, {
+        ignoreDuplicates: true
+      })
 
-    if ((await tbUser.findAll()).map(values => values.dataValues).length <= 0) {
-       user.password = await cryptPassword(user.password)
-      await tbUser.create(user)
-    }
+      
+      await tbProfile_permission.bulkCreate(profile_permission(), {
+        ignoreDuplicates: true
+      })
 
-    if ((await tbSituation.findAll()).map(values => values.dataValues).length <= 0) {
-      situation.map(values => tbSituation.create(values))
-    }
+      if ((await tbUser.count()) === 0) {
+        user.password = await cryptPassword(user.password)
+        await tbUser.create(user)
+      }
+
+      if ((await tbSituation.count()) === 0) {
+        await tbSituation.bulkCreate(situation, {
+          ignoreDuplicates: true
+        })
+      }
 
     }, 5000)
-    
+
   } catch (error) {
     console.log(error.message)
   }
 }
+
 
 module.exports = { sendConfiguration }
